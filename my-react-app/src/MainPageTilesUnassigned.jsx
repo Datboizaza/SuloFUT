@@ -1,9 +1,20 @@
-import "./MainPageTiles.css";
+import "./MainPageTilesUnassigned.css";
 
-function MainPageTiles() {
+function MainPageTilesUnassigned() {
   return (
     <>
       <div className="col-lg-9 col-12" id="tileContainer">
+        <div className="row" id="tileRow0">
+          <a className="col-12" id="tile0" href="">
+            <div id="tileTexts" className="col-8">
+              <h3>Unassigned Items</h3>
+              <p>5 Items Remaining</p>
+            </div>
+            <div id="tileImages" className="col-4">
+              <h1>Kép</h1>
+            </div>
+          </a>
+        </div>
         <div className="row" id="tileRow1">
           <a className="col-12" id="tile1" href="">
             <div id="tileTexts" className="col-8">
@@ -66,4 +77,4 @@ function MainPageTiles() {
   );
 }
 
-export default MainPageTiles;
+export default MainPageTilesUnassigned;
