@@ -91,6 +91,23 @@
   transition: transform 100ms ease-in-out;
 }
 
+/*-------------------Ikonok--------------------------*/
+#unassignedPacksIcon {
+  width: 18vw;
+}
+
+#hubLogo {
+  width: 6vw;
+}
+
+#sbcLogo {
+  width: 7vw;
+}
+
+#draftLogo {
+  height: 8vh;
+}
+
 /*------------------Media queries---------------------*/
 @media screen and (max-width: 600px) {
   #tileContainer {

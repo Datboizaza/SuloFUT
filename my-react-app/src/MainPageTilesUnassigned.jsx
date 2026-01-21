@@ -1,4 +1,8 @@
 import "./MainPageTilesUnassigned.css";
+import UnassignedPacks from "./assets/packs.png";
+import HubLogo from "./assets/eafclogo.png";
+import SbcLogo from "./assets/sbc.png";
+import DraftLogo from "./assets/draft.png";
 
 function MainPageTilesUnassigned() {
   return (
@@ -11,7 +15,11 @@ function MainPageTilesUnassigned() {
               <p>5 Items Remaining</p>
             </div>
             <div id="tileImages" className="col-4">
-              <h1>Kép</h1>
+              <img
+                src={UnassignedPacks}
+                alt="Unassigned Packs Icon"
+                id="unassignedPacksIcon"
+              />
             </div>
           </a>
         </div>
@@ -22,7 +30,7 @@ function MainPageTilesUnassigned() {
               <p>Check daily objectives and seasonal rewards.</p>
             </div>
             <div id="tileImages" className="col-4">
-              <h1>Kép</h1>
+              <img src={HubLogo} alt="SuloFUT Hub Logo" id="hubLogo" />
             </div>
           </a>
           <a className="col-12" id="tile1" href="">
@@ -31,7 +39,11 @@ function MainPageTilesUnassigned() {
               <p>Exchange squads for rewards.</p>
             </div>
             <div id="tileImages" className="col-4">
-              <h1>Kép</h1>
+              <img
+                src={SbcLogo}
+                alt="Squad Building Challenges Logo"
+                id="sbcLogo"
+              />
             </div>
           </a>
         </div>
@@ -46,7 +58,7 @@ function MainPageTilesUnassigned() {
               </p>
             </div>
             <div id="tileImages" className="col-12">
-              <h1>Kép</h1>
+              <img src={DraftLogo} alt="Draft Logo" id="draftLogo" />
             </div>
           </a>
           <a className="col-12" id="tile2" href="">

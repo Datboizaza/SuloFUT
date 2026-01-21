@@ -13,6 +13,6 @@ createRoot(document.getElementById("root")).render(
 
 createRoot(document.getElementById("root2")).render(
   <StrictMode>
-    <MainPageTiles />
+    <MainPageTilesUnassigned />
   </StrictMode>,
 );
