@@ -1,63 +1,68 @@
 import "./MainPageTiles.css";
+import UnassignedPacks from "./assets/packs.png";
+import HubLogo from "./assets/eafclogo.png";
+import SbcLogo from "./assets/sbc.png";
+import DraftLogo from "./assets/draft.png";
+import ObjectivesLogo from "./assets/objectives.png";
 
 function MainPageTiles() {
   return (
     <>
-      <div className="col-lg-9 col-12" id="tileContainer">
+      <div id="tileContainer">
         <div className="row" id="tileRow1">
           <a className="col-12" id="tile1" href="">
-            <div id="tileTexts" className="col-8">
+            <div id="tileTexts1" className="col-8">
               <h3>SuloFUT Hub</h3>
               <p>Check daily objectives and seasonal rewards.</p>
             </div>
-            <div id="tileImages" className="col-4">
-              <h1>Kép</h1>
+            <div id="tileImages1" className="col-4">
+              <img src={HubLogo} alt="SuloFUT Hub Logo" id="hubLogo" />
             </div>
           </a>
           <a className="col-12" id="tile1" href="">
-            <div id="tileTexts" className="col-8">
+            <div id="tileTexts1" className="col-8">
               <h3>SBC</h3>
               <p>Exchange squads for rewards.</p>
             </div>
-            <div id="tileImages" className="col-4">
-              <h1>Kép</h1>
+            <div id="tileImages1" className="col-4">
+              <img
+                src={SbcLogo}
+                alt="Squad Building Challenges Logo"
+                id="sbcLogo"
+              />
             </div>
           </a>
         </div>
         <div className="row" id="tileRow2">
           <a className="col-12" id="tile2" href="">
-            <div id="tileTexts" className="col-12">
+            <div id="tileTexts2" className="col-12 col-md-8">
               <h3>Draft Mode</h3>
+              <p>Build a team from randomly selected players.</p>
             </div>
-            <div id="tileTexts" className="col-12">
-              <p>
-                Build a team from randomly selected players at each position.
-              </p>
-            </div>
-            <div id="tileImages" className="col-12">
-              <h1>Kép</h1>
+            <div id="tileImages2" className="col-12 col-md-4">
+              <img src={DraftLogo} alt="Draft Logo" id="draftLogo" />
             </div>
           </a>
           <a className="col-12" id="tile2" href="">
-            <div id="tileTexts" className="col-12">
+            <div id="tileTexts2" className="col-12  col-md-8">
               <h3>Store</h3>
-            </div>
-            <div id="tileTexts" className="col-12">
               <p>Open packs to obtain new cards.</p>
             </div>
-            <div id="tileImages" className="col-12">
-              <h1>Kép</h1>
+            <div id="tileImages2" className="col-12 col-md-4">
+              <img src={UnassignedPacks} alt="Store Logo" id="storeLogo" />
             </div>
           </a>
           <a className="col-12" id="tile2" href="">
-            <div id="tileTexts" className="col-12">
-              <h3>Challenges</h3>
-            </div>
-            <div id="tileTexts" className="col-12">
+            <div id="tileTexts2" className="col-12  col-md-8">
+              <h3>Objectives</h3>
               <p>Complete tasks to earn packs or coins.</p>
             </div>
-            <div id="tileImages" className="col-12">
-              <h1>Kép</h1>
+            <div id="tileImages2" className="col-12 col-md-4">
+              <img
+                src={ObjectivesLogo}
+                alt="Objectives Logo"
+                id="objectivesLogo"
+              />
             </div>
           </a>
         </div>

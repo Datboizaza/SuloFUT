@@ -1,10 +1,15 @@
 import "./SideBar.css";
+import NavbarIcon from "./assets/navbarIcon.png";
+import HubLogo from "./assets/eafclogo.png";
 
 function SideBar() {
   return (
     <>
-      <nav className="navbar navbar-expand-lg col-lg-3" id="sideBar">
-        <h3>sulofut</h3>
+      <nav className="navbar navbar-expand-lg" id="sideBar">
+        <div id="logoDiv">
+          <img src={HubLogo} alt="SuloFUT Logo" id="sulofutLogo" />
+          <h3>sulofut</h3>
+        </div>
         <button
           className="navbarIcon d-lg-none"
           type="button"
@@ -13,11 +18,11 @@ function SideBar() {
           aria-controls="offcanvasNavbar"
           aria-label="Toggle navigation"
         >
-          <img src="./assets/navbarIcon.png" alt="Menu" id="navbarIcon"></img>
+          <img src={NavbarIcon} alt="Menu" id="navbarIcon"></img>
         </button>
         <div
           className="offcanvas offcanvas-end"
-          tabindex="-1"
+          tabIndex="-1"
           id="offcanvasNavbar"
           aria-labelledby="offcanvasNavbarLabel"
         >
@@ -31,14 +36,9 @@ function SideBar() {
             ></button>
           </div>
           <div className="offcanvas-body">
-            <ul className="navbar-nav flex-grow-1">
+            <ul className="navbar-nav">
               <li className="nav-item">
-                <a
-                  className="nav-link disabled"
-                  id="navbarItem"
-                  aria-current="page"
-                  href="#"
-                >
+                <a className="nav-link" id="navbarItem" href="">
                   Home
                 </a>
               </li>

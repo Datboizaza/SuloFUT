@@ -18,7 +18,17 @@ body {
 }
 
 /*------------------Media queries---------------------*/
-@media screen and (max-width: 600px) {
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  #rootDiv {
+    flex-direction: column;
+  }
+
+  #root2 {
+    width: 100vw;
+  }
+}
+
+@media screen and (max-width: 767px) {
   #rootDiv {
     flex-direction: column;
   }

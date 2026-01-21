@@ -5,7 +5,7 @@ import SideBar from "./SideBar.jsx";
 import MainPageTiles from "./MainPageTiles.jsx";
 import MainPageTilesUnassigned from "./MainPageTilesUnassigned.jsx";
 
-createRoot(document.getElementById("root")).render(
+createRoot(document.getElementById("root1")).render(
   <StrictMode>
     <SideBar />
   </StrictMode>,
