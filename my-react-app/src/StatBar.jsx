@@ -1,0 +1,26 @@
+import "./StatBar.css";
+import Coins from "./assets/coins.png";
+import BackIcon from "./assets/back-icon.png";
+
+function StatBar() {
+  return (
+    <>
+      <div id="statBarDiv">
+        <div id="div1">
+          <img src={BackIcon} alt="Go back" id="backIcon" />
+        </div>
+        <div id="div2">
+          <h4 id="actualPage">Leaderboard</h4>
+        </div>
+        <div id="div3">
+          <div id="coinsDiv">
+            <img src={Coins} alt="Coins" id="coinsImage" />
+            <p id="coinCounter">123 456</p>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default StatBar;
