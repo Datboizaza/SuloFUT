@@ -10,11 +10,22 @@ body {
   justify-content: space-between;
 }
 
-#root2 {
+#root2and3Div {
   display: flex;
+  flex-direction: column;
   align-items: center;
   width: 80vw;
-  justify-content: center;
+  justify-content: space-between;
+}
+
+#root2 {
+  height: 8vh;
+}
+
+#root3 {
+  height: 92vh;
+  display: flex;
+  align-items: center;
 }
 
 /*------------------Media queries---------------------*/
@@ -23,8 +34,16 @@ body {
     flex-direction: column;
   }
 
-  #root2 {
+  #root2and3Div {
     width: 100vw;
+  }
+
+  #root2 {
+    height: 7vh;
+  }
+
+  #root3 {
+    flex-direction: column;
   }
 }
 
@@ -33,7 +52,15 @@ body {
     flex-direction: column;
   }
 
-  #root2 {
+  #root2and3Div {
     width: 100vw;
+  }
+
+  #root2 {
+    height: 7vh;
+  }
+
+  #root3 {
+    flex-direction: column;
   }
 }

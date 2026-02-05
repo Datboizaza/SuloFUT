@@ -1,6 +1,6 @@
 /*-------------Főoldal csempék------------------*/
 #tileContainer {
-  width: 60vw;
+  min-width: 60vw;
   padding-top: 5vh;
   padding-bottom: 5vh;
   padding-left: 5vh;

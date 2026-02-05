@@ -1,16 +1,13 @@
 import "./StatBar.css";
 import Coins from "./assets/coins.png";
-import BackIcon from "./assets/back-icon.png";
 
 function StatBar() {
   return (
     <>
       <div id="statBarDiv">
-        <div id="div1">
-          <img src={BackIcon} alt="Go back" id="backIcon" />
-        </div>
+        <div id="div1"></div>
         <div id="div2">
-          <h4 id="actualPage">Leaderboard</h4>
+          <h4 id="actualPage">Home</h4>
         </div>
         <div id="div3">
           <div id="coinsDiv">
