@@ -41,4 +41,7 @@ router.get('/testsql', async (request, response) => {
     }
 });
 
+//!PRÓBA 
+const readJsonFile = async (filePath) => { try { const raw = await fs.readFile(filePath, "utf-8"); return JSON.parse(raw); // JS objektum/tömb } catch (error) { throw new Error(`Olvasási hiba (json): ${error.message}`); } }; router.get("/players", async (request, response) => { try { const data = await readJsonFile("../backend/api/files/data.json"); response.status(200).json({ data: data }); } catch (error) { console.log("GET /api/players error:", error); response.status(500).json({ error: "Internal server error" }); } });
+
 module.exports = router;
