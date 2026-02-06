@@ -1,6 +1,9 @@
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 import { useEffect, useState } from "react";
 import "./FormationSelect.css";
 import FormationPlaceholder from "./assets/formationPlaceholder.jpg";
+import Draft from "./Draft.jsx";
 
 function FormationSelect() {
   const [formation1, setFormation1] = useState(null);
@@ -41,6 +44,7 @@ function FormationSelect() {
                 className="formationSelectBtn"
                 id="formationSelectBtn"
                 onMouseOver={(e) => formationFunction(e)}
+                onClick={(e) => startDraft(e)}
               >
                 <img
                   src={FormationPlaceholder}
@@ -56,6 +60,7 @@ function FormationSelect() {
                 className="formationSelectBtn"
                 id="formationSelectBtn"
                 onMouseOver={(e) => formationFunction(e)}
+                onClick={(e) => startDraft(e)}
               >
                 <img
                   src={FormationPlaceholder}
@@ -72,6 +77,7 @@ function FormationSelect() {
                 className="formationSelectBtn"
                 id="formationSelectBtn"
                 onMouseOver={(e) => formationFunction(e)}
+                onClick={(e) => startDraft(e)}
               >
                 <img
                   src={FormationPlaceholder}
@@ -88,6 +94,7 @@ function FormationSelect() {
                 className="formationSelectBtn"
                 id="formationSelectBtn"
                 onMouseOver={(e) => formationFunction(e)}
+                onClick={(e) => startDraft(e)}
               >
                 <img
                   src={FormationPlaceholder}
@@ -104,6 +111,7 @@ function FormationSelect() {
                 className="formationSelectBtn"
                 id="formationSelectBtn"
                 onMouseOver={(e) => formationFunction(e)}
+                onClick={(e) => startDraft(e)}
               >
                 <img
                   src={FormationPlaceholder}
@@ -129,6 +137,19 @@ const formationFunction = (e) => {
   const btnValue = e.currentTarget.querySelector(".formationText").innerHTML;
   const formationName = document.getElementById("formationName");
   formationName.innerHTML = "Formation: " + btnValue;
+};
+
+const startDraft = (e) => {
+  const draftFormation =
+    e.currentTarget.querySelector(".formationText").innerHTML;
+  console.log(draftFormation);
+  const formationSelectDiv = document.getElementById("formationSelectDiv");
+  formationSelectDiv.parentNode.innerHTML = "";
+  createRoot(document.getElementById("root2")).render(
+    <StrictMode>
+      <Draft />
+    </StrictMode>,
+  );
 };
 
 const getMethodFetch = async (url) => {

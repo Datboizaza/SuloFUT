@@ -5,7 +5,7 @@ function Leaderboard() {
     <>
       <div id="leaderboardDiv">
         <div className="row" id="leaderboardRow1">
-          <h3 className="col-12" id="actualLeaderboard">
+          <h3 className="col-12 mt-3" id="actualLeaderboard">
             Top Squad
           </h3>
         </div>
@@ -15,9 +15,13 @@ function Leaderboard() {
               name="selectLeaderboard"
               id="selectLeaderboard"
               aria-label="Select leaderboard"
+              onChange={actualLeaderboard}
             >
               <option defaultValue>Top Squad</option>
-              <option value="1">Club Value</option>
+              <option value="Club Value">Club Value</option>
+              <option value="Best Draft">Best Draft</option>
+              <option value="Cards opened">Cards opened</option>
+              <option value="Total earnings">Total earnings</option>
             </select>
             <button type="button" className="btn" id="searchBtn">
               Search
@@ -144,5 +148,12 @@ function Leaderboard() {
     </>
   );
 }
+
+const actualLeaderboard = () => {
+  const selectedLeaderboard =
+    document.getElementById("selectLeaderboard").value;
+  const leaderboardTitle = document.getElementById("actualLeaderboard");
+  leaderboardTitle.innerHTML = selectedLeaderboard;
+};
 
 export default Leaderboard;
