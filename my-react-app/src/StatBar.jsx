@@ -2,7 +2,7 @@ import "./StatBar.css";
 import Coins from "./assets/coins.png";
 import BackIcon from "./assets/back-icon.png";
 
-function StatBar() {
+function StatBar({ title }) {
   return (
     <>
       <div id="statBarDiv">
@@ -12,7 +12,7 @@ function StatBar() {
           </a>
         </div>
         <div id="div2">
-          <h4 id="actualPage">Leaderboard</h4>
+          <h4 id="actualPage">{title}</h4>
         </div>
         <div id="div3">
           <div id="coinsDiv">

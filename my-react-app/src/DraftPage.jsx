@@ -6,7 +6,7 @@ import StatBar from "./StatBar.jsx";
 
 createRoot(document.getElementById("root1")).render(
   <StrictMode>
-    <StatBar />
+    <StatBar title="Draft" />
   </StrictMode>,
 );
 
