@@ -1,0 +1,64 @@
+#formationSelectDiv {
+  width: 80vw;
+  height: 80vh;
+}
+
+#chooseFormation {
+  border-radius: 30px 0px 0px 30px;
+  border-top: 2px solid rgba(0, 0, 0, 0.658);
+  border-left: 2px solid rgba(0, 0, 0, 0.658);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.658);
+  background-color: rgba(0, 0, 0, 0.342);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  color: white;
+  padding-left: 30px;
+}
+
+#formationImage {
+  color: white;
+  height: 80vh;
+  background-color: rgba(0, 0, 0, 0.658);
+  border-radius: 0px 30px 30px 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+#formationName {
+  padding-left: 70px;
+  padding-top: 30px;
+}
+
+#formationImg {
+  width: 45vw;
+  height: fit-content;
+  align-self: center;
+}
+
+#buttonFormation {
+  height: 10vh;
+}
+
+#formationSelectBtn {
+  color: rgba(255, 255, 255, 0.575);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 95%;
+  background-color: transparent;
+  border: none;
+  border-radius: 10px;
+  height: 110%;
+  transition: all 200ms ease-in-out;
+}
+
+#formationSelectBtn:hover {
+  background-color: rgba(0, 0, 0, 0.534);
+  border: 1px solid #58e7e0;
+  border-radius: 20px;
+  color: white;
+  transform: scale(1.05);
+}

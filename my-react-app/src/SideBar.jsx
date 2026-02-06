@@ -38,7 +38,7 @@ function SideBar() {
           <div className="offcanvas-body">
             <ul className="navbar-nav">
               <li className="nav-item">
-                <a className="nav-link" id="navbarItem" href="">
+                <a className="nav-link" id="navbarItem" href="../index.html">
                   Home
                 </a>
               </li>
@@ -53,7 +53,7 @@ function SideBar() {
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" id="navbarItem" href="">
+                <a className="nav-link" id="navbarItem" href="../draft.html">
                   Draft
                 </a>
               </li>
@@ -68,7 +68,11 @@ function SideBar() {
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" id="navbarItem" href="">
+                <a
+                  className="nav-link"
+                  id="navbarItem"
+                  href="../leaderboard.html"
+                >
                   Leaderboards
                 </a>
               </li>

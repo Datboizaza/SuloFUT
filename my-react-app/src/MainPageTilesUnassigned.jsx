@@ -49,7 +49,7 @@ function MainPageTilesUnassigned() {
           </a>
         </div>
         <div className="row" id="tileRow2">
-          <a className="col-12" id="tile2" href="">
+          <a className="col-12" id="tile2" href="../draft.html">
             <div id="tileTexts2" className="col-12 col-md-8">
               <h3>Draft Mode</h3>
               <p>Build a team from randomly selected players.</p>

@@ -2,7 +2,7 @@
 #statBarDiv {
   background-color: rgba(17, 38, 39, 0.459);
   height: 8vh;
-  width: 100vw;
+  width: 80vw;
   color: white;
   display: flex;
   flex-direction: row;
@@ -51,6 +51,8 @@
 @media screen and (min-width: 768px) and (max-width: 991px) {
   /*---------Elendezések és alapvető formázások-----------*/
   #statBarDiv {
+    height: 7vh;
+    width: 100vw;
     padding-left: 20px;
     padding-right: 20px;
   }
@@ -84,6 +86,8 @@
 @media screen and (max-width: 767px) {
   /*---------Elendezések és alapvető formázások-----------*/
   #statBarDiv {
+    height: 7vh;
+    width: 100vw;
     padding-left: 20px;
     padding-right: 20px;
   }
