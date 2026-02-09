@@ -19,6 +19,13 @@
   padding-left: 30px;
 }
 
+.miniFormationLayout {
+  position: relative;
+  background-color: green;
+  height: 10vh;
+  width: 8vw;
+}
+
 /*----------------Jobboldali formázások-----------------*/
 
 #formationImage {
@@ -36,10 +43,21 @@
   padding-top: 30px;
 }
 
-#formationImg {
+.formationLayout {
+  position: relative;
+  background-color: rgb(7, 85, 7);
+  height: 60vh;
   width: 45vw;
-  height: fit-content;
   align-self: center;
+}
+
+.pos {
+  position: absolute;
+  width: 5%;
+  height: 5%;
+  border-radius: 50%;
+  background-color: white;
+  transform: translate(-50%, -50%);
 }
 
 /*---------------Gombok és azon belüli formázások---------------*/
