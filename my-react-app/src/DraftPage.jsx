@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./DraftPage.css";
-import FormationSelect from "./FormationSelect.jsx";
+import Draft from "./Draft.jsx";
 import StatBar from "./StatBar.jsx";
 
 createRoot(document.getElementById("root1")).render(
@@ -12,6 +12,6 @@ createRoot(document.getElementById("root1")).render(
 
 createRoot(document.getElementById("root2")).render(
   <StrictMode>
-    <FormationSelect />
+    <Draft />
   </StrictMode>,
 );
