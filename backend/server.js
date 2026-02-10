@@ -24,7 +24,7 @@ app.use(
   }),
 );
 
-//!Routing ÍRD ÁT
+//!Routing
 //?Főoldal:
 router.get("/", (request, response) => {
   response.sendFile(path.join(__dirname, "../my-react-app/szerver.html"));

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const database = require("../sql/database.js");
 const fs = require("fs/promises");
+const bcrypt = require("bcrypt");
 
 //!Multer
 const multer = require("multer"); //?npm install multer
@@ -38,6 +39,46 @@ router.get("/testsql", async (request, response) => {
     response.status(500).json({
       message: "Ez a végpont nem működik.",
     });
+  }
+});
+
+//? Users /api/users
+const users = [];
+router.get("/users", (request, response) => {
+  try {
+    response.status(200).json({ users });
+  } catch (error) {
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.post("/users", async (request, response) => {
+  try {
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(request.body.password, salt);
+
+    const user = { name: request.body.name, password: hashedPassword };
+    users.push(user);
+
+    response.status(200).send();
+  } catch (error) {
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.post("/users/login", async (request, response) => {
+  const user = users.find((user) => (user.name = request.body.name));
+  if (user == null) {
+    return response.status(400).json({ message: "Invalid username" });
+  }
+  try {
+    if (await bcrypt.compare(request.body.password, user.password)) {
+      response.status(200).json({ message: "Successful login" });
+    } else {
+      response.status(400).json({ message: "Unsuccessful login" });
+    }
+  } catch (error) {
+    response.status(500).json({ message: "Internal server error" });
   }
 });
 
