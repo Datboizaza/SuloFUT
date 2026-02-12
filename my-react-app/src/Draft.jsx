@@ -1,332 +1,281 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
 import { useEffect, useState } from "react";
 import "./Draft.css";
 
 function Draft() {
-  const [formation1, setFormation1] = useState(null);
-  const [formation2, setFormation2] = useState(null);
-  const [formation3, setFormation3] = useState(null);
-  const [formation4, setFormation4] = useState(null);
-  const [formation5, setFormation5] = useState(null);
-  const [layout1, setLayout1] = useState(null);
-  const [layout2, setLayout2] = useState(null);
-  const [layout3, setLayout3] = useState(null);
-  const [layout4, setLayout4] = useState(null);
-  const [layout5, setLayout5] = useState(null);
+  const [formations, setFormations] = useState([]);
+  const [selectedFormation, setSelectedFormation] = useState(null);
+  const [gameLayout, setGameLayout] = useState(null);
 
+  const [showCaptainModal, setShowCaptainModal] = useState(false);
+  const [captainOptions, setCaptainOptions] = useState([]);
+  const [assignedPlayers, setAssignedPlayers] = useState({});
+
+  const [draftStarted, setDraftStarted] = useState(false);
+
+  // FORMATIONS BETÖLTÉSE
   useEffect(() => {
     const fetchData = async () => {
       try {
         const result = await getMethodFetch(
           "http://127.0.0.1:3000/api/randomformations",
         );
-        setFormation1(Object.values(result.randomformations[0].formation));
-        setFormation2(Object.values(result.randomformations[1].formation));
-        setFormation3(Object.values(result.randomformations[2].formation));
-        setFormation4(Object.values(result.randomformations[3].formation));
-        setFormation5(Object.values(result.randomformations[4].formation));
 
-        setLayout1(result.randomformations[0].layout);
-        setLayout2(result.randomformations[1].layout);
-        setLayout3(result.randomformations[2].layout);
-        setLayout4(result.randomformations[3].layout);
-        setLayout5(result.randomformations[4].layout);
+        const formationsData = result.randomformations;
+
+        setFormations(formationsData);
+
+        if (formationsData.length > 0) {
+          setSelectedFormation(formationsData[0]);
+        }
       } catch (error) {
         console.log(error);
       }
     };
+
     fetchData();
   }, []);
 
+  // FORMATION SELECT
+  const handleFormationHover = (formation) => {
+    setSelectedFormation(formation);
+  };
+
+  const startDraft = async (formation) => {
+    setGameLayout(formation.layout);
+    setSelectedFormation(formation);
+    setDraftStarted(true);
+
+    setTimeout(async () => {
+      await chooseCaptain();
+      setShowCaptainModal(true);
+    }, 500);
+  };
+
+  // CAPTAIN OPTIONS BETÖLTÉSE
+  const chooseCaptain = async () => {
+    try {
+      const result = await getMethodFetch(
+        "http://127.0.0.1:3000/api/randomplayers",
+      );
+      setCaptainOptions(result.randomjatekosok);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // CAPTAIN KIVÁLASZTÁS
+  const handleCaptainSelect = async (player) => {
+    try {
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/draftselectedplayers",
+        player,
+      );
+
+      setShowCaptainModal(false);
+
+      assignCaptain();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // CAPTAIN HOZZÁRENDELÉS
+  const assignCaptain = async () => {
+    try {
+      const result = await getMethodFetch(
+        "http://127.0.0.1:3000/api/draftselectedplayers",
+      );
+
+      const player = result.draftselectedplayers[0];
+      const mainPosition = player.player_positions.split(", ")[0];
+
+      const firstIndex = gameLayout.findIndex((p) => p.pos === mainPosition);
+      console.log();
+      if (firstIndex === -1) {
+        let alternateIndex;
+        for (let i = 0; i < player.player_positions.split(", ").length; i++) {
+          alternateIndex = gameLayout.findIndex(
+            (p) => p.pos === player.player_positions.split(", ")[i],
+          );
+        }
+        if (alternateIndex === -1) {
+          console.log(
+            "Nincs olyan pozíció, amelyben ez a játékos játszani tud.",
+          );
+          return;
+        } else {
+          console.log("Van olyan alternatív pozíciója, amiben tud játszani.");
+          return;
+        }
+      }
+
+      setAssignedPlayers((prev) => ({
+        ...prev,
+        [firstIndex]: player,
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
-      <div id="formationSelectDiv">
-        <div className="row">
-          <div className="col-4" id="chooseFormation">
-            <div className="row">
+      {/* ----------------- FORMATION SELECT ----------------- */}
+      {!draftStarted && (
+        <div id="formationSelectDiv">
+          <div className="row">
+            {/* BAL OLDAL */}
+            <div className="col-4" id="chooseFormation">
               <h3>Choose a formation</h3>
+
+              {formations.map((formation, index) => {
+                const formationArray = Object.values(formation.formation);
+
+                return (
+                  <button
+                    key={index}
+                    className="formationSelectBtn"
+                    onMouseOver={() => handleFormationHover(formation)}
+                    onClick={() => startDraft(formation)}
+                  >
+                    <div className="miniFormationLayout">
+                      {formation.layout.map((p, i) => (
+                        <div
+                          key={i}
+                          className="pos"
+                          style={{ left: p.x + "%", top: p.y + "%" }}
+                          id={p.pos}
+                        />
+                      ))}
+                    </div>
+                    <h5 className="formationText">{formationArray}</h5>
+                  </button>
+                );
+              })}
             </div>
-            <div className="row">
-              <button
-                type="button"
-                className="formationSelectBtn"
-                id="formationSelectBtn"
-                onMouseOver={(e) => formationFunction(e)}
-                onClick={(e) => startDraft(e)}
-              >
-                <div className="miniFormationLayout">
-                  {layout1 &&
-                    layout1.map((p, i) => (
+
+            {/* JOBB OLDAL */}
+            <div className="col-8" id="formationImage">
+              {selectedFormation && (
+                <>
+                  <h2>
+                    Formation: {Object.values(selectedFormation.formation)}
+                  </h2>
+
+                  <div className="formationLayout">
+                    {selectedFormation.layout.map((p, i) => (
                       <div
                         key={i}
                         className="pos"
                         style={{ left: p.x + "%", top: p.y + "%" }}
-                        id={p.pos}
-                      />
+                      >
+                        {assignedPlayers[p.pos] && (
+                          <div className="assignedPlayer">
+                            {assignedPlayers[p.pos].short_name}
+                          </div>
+                        )}
+                      </div>
                     ))}
-                </div>
-                <h5 className="formationText">{formation1}</h5>
-              </button>
-            </div>
-            <div className="row">
-              <button
-                type="button"
-                className="formationSelectBtn"
-                id="formationSelectBtn"
-                onMouseOver={(e) => formationFunction(e)}
-                onClick={(e) => startDraft(e)}
-              >
-                <div className="miniFormationLayout">
-                  {layout2 &&
-                    layout2.map((p, i) => (
-                      <div
-                        key={i}
-                        className="pos"
-                        style={{ left: p.x + "%", top: p.y + "%" }}
-                        id={p.pos}
-                      />
-                    ))}
-                </div>
-                <h5 className="formationText">{formation2}</h5>
-              </button>
-            </div>
-            <div className="row">
-              <button
-                type="button"
-                className="formationSelectBtn"
-                id="formationSelectBtn"
-                onMouseOver={(e) => formationFunction(e)}
-                onClick={(e) => startDraft(e)}
-              >
-                <div className="miniFormationLayout">
-                  {layout3 &&
-                    layout3.map((p, i) => (
-                      <div
-                        key={i}
-                        className="pos"
-                        style={{ left: p.x + "%", top: p.y + "%" }}
-                        id={p.pos}
-                      />
-                    ))}
-                </div>
-                <h5 className="formationText">{formation3}</h5>
-              </button>
-            </div>
-            <div className="row">
-              <button
-                type="button"
-                className="formationSelectBtn"
-                id="formationSelectBtn"
-                onMouseOver={(e) => formationFunction(e)}
-                onClick={(e) => startDraft(e)}
-              >
-                <div className="miniFormationLayout">
-                  {layout4 &&
-                    layout4.map((p, i) => (
-                      <div
-                        key={i}
-                        className="pos"
-                        style={{ left: p.x + "%", top: p.y + "%" }}
-                        id={p.pos}
-                      />
-                    ))}
-                </div>
-                <h5 className="formationText">{formation4}</h5>
-              </button>
-            </div>
-            <div className="row">
-              <button
-                type="button"
-                className="formationSelectBtn"
-                id="formationSelectBtn"
-                onMouseOver={(e) => formationFunction(e)}
-                onClick={(e) => startDraft(e)}
-              >
-                <div className="miniFormationLayout">
-                  {layout5 &&
-                    layout5.map((p, i) => (
-                      <div
-                        key={i}
-                        className="pos"
-                        style={{ left: p.x + "%", top: p.y + "%" }}
-                        id={p.pos}
-                      />
-                    ))}
-                </div>
-                <h5 className="formationText">{formation5}</h5>
-              </button>
-            </div>
-          </div>
-          <div className="col-8" id="formationImage">
-            <h2 id="formationName">Formation: {formation1}</h2>
-            <div className="formationLayout">
-              {layout1 &&
-                layout1.map((p, i) => (
-                  <div
-                    key={i}
-                    className="pos"
-                    style={{ left: p.x + "%", top: p.y + "%" }}
-                    id={p.pos}
-                  />
-                ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {/* ----------------- GAME LAYOUT ----------------- */}
+      {draftStarted && gameLayout && (
+        <div className="gameFormationLayout">
+          {gameLayout.map((p, i) => (
+            <div
+              key={i}
+              className="pos"
+              style={{ left: p.x + "%", top: p.y + "%" }}
+            >
+              {assignedPlayers[i] && (
+                <div className="assignedPlayer">
+                  {assignedPlayers[i].short_name}
+                </div>
+              )}
+            </div>
+          ))}
+
+          {gameLayout.map((p, i) => (
+            <p
+              key={i}
+              className="posText"
+              style={{ left: p.x + "%", top: `calc(${p.y}% + 7%)` }}
+            >
+              {p.pos}
+            </p>
+          ))}
+
+          {showCaptainModal && (
+            <div className="playerSelectionModal">
+              {captainOptions.map((player, i) => {
+                const mainPosition = player.player_positions.split(", ")[0];
+
+                return (
+                  <div
+                    key={i}
+                    className="playerSlot"
+                    onClick={() => handleCaptainSelect(player)}
+                  >
+                    <p>{player.overall}</p>
+                    <p>{mainPosition}</p>
+                    <p>{player.nationality_name}</p>
+                    <p>{player.club_name}</p>
+                    <p>{player.short_name}</p>
+
+                    {mainPosition === "GK" ? (
+                      <>
+                        <p>{player.goalkeeping_diving} DIV</p>
+                        <p>{player.goalkeeping_handling} HAN</p>
+                        <p>{player.goalkeeping_kicking} KIC</p>
+                        <p>{player.goalkeeping_reflexes} REF</p>
+                        <p>{player.goalkeeping_speed} SPD</p>
+                        <p>{player.goalkeeping_positioning} POS</p>
+                      </>
+                    ) : (
+                      <>
+                        <p>{player.pace} PAC</p>
+                        <p>{player.shooting} SHO</p>
+                        <p>{player.dribbling} DRI</p>
+                        <p>{player.passing} PAS</p>
+                        <p>{player.defending} DEF</p>
+                        <p>{player.physic} PHY</p>
+                      </>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
     </>
   );
 }
 
-const formationFunction = (e) => {
-  const btnValue = e.currentTarget.querySelector(".formationText").innerHTML;
-  const formationName = document.getElementById("formationName");
-  formationName.innerHTML = "Formation: " + btnValue;
-
-  const miniFormationLayout = e.currentTarget.querySelector(
-    ".miniFormationLayout",
-  ).innerHTML;
-  const formationLayout = document.querySelector(".formationLayout");
-  formationLayout.innerHTML = miniFormationLayout;
-};
-
-const startDraft = (e) => {
-  const layoutDivs = e.currentTarget.querySelectorAll(
-    ".miniFormationLayout .pos",
-  );
-  const layoutData = Array.from(layoutDivs).map((pos) => ({
-    x: pos.style.left,
-    y: pos.style.top,
-    pos: pos.id,
-  }));
-
-  createRoot(document.getElementById("root2")).render(
-    <StrictMode>
-      <div className="gameFormationLayout">
-        {layoutData.map((p, i) => (
-          <div
-            key={i}
-            className="pos"
-            style={{ left: p.x, top: p.y }}
-            id={p.pos}
-          />
-        ))}
-        {layoutData.map((p, i) => (
-          <p
-            key={i}
-            className="posText"
-            style={{ left: p.x, top: `calc(${p.y} + 7%)` }}
-          >
-            {p.pos}
-          </p>
-        ))}
-        <div className="playerSelectionModal d-none">
-          {chooseCaptainModal()}
-          <div className="playerSlot" onClick={(e) => pickPlayer(e)}></div>
-          <div className="playerSlot" onClick={(e) => pickPlayer(e)}></div>
-          <div className="playerSlot" onClick={(e) => pickPlayer(e)}></div>
-          <div className="playerSlot" onClick={(e) => pickPlayer(e)}></div>
-          <div className="playerSlot" onClick={(e) => pickPlayer(e)}></div>
-        </div>
-      </div>
-    </StrictMode>,
-  );
-};
-
-const chooseCaptainModal = () => {
-  setTimeout(() => {
-    const playerSelectionModal = document.querySelector(
-      ".playerSelectionModal",
-    );
-    playerSelectionModal.classList.remove("d-none");
-
-    chooseCaptain();
-  }, 500);
-};
-
-const chooseCaptain = async () => {
-  try {
-    const result = await getMethodFetch(
-      "http://127.0.0.1:3000/api/randomplayers",
-    );
-
-    let i = 0;
-    result.randomjatekosok.forEach((element) => {
-      document.querySelectorAll(".playerSlot")[i].textContent =
-        element.overall +
-        " " +
-        element.player_positions.split(",")[0] +
-        " " +
-        element.nationality_name +
-        " " +
-        element.club_name +
-        " " +
-        element.short_name +
-        " " +
-        element.pace +
-        " PAC " +
-        element.shooting +
-        " SHO " +
-        element.dribbling +
-        " DRI " +
-        element.passing +
-        " PAS " +
-        element.defending +
-        " DEF " +
-        element.physic +
-        " PHY ";
-      i++;
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const pickPlayer = async (e) => {
-  try {
-    const playerSlotPlayer = e.currentTarget.textContent.trim();
-    // const response = await postMethodFetch(
-    //   "http://127.0.0.1:3000/api/draftselectedplayers",
-    //   {
-    //     player: playerSlotPlayer,
-    //   },
-    // );
-    console.log(playerSlotPlayer);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 const getMethodFetch = async (url) => {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(
-        "GET hiba: " + response.status + " " + response.statusText,
-      );
-    }
-    return await response.json();
-  } catch (error) {
-    throw new Error("Hiba történt: " + error.message);
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error("GET hiba");
   }
+  return await response.json();
 };
 
 const postMethodFetch = async (url, data) => {
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    if (!response.ok) {
-      throw new Error(
-        "POST hiba: " + response.status + " " + response.statusText,
-      );
-    }
-    return await response.json();
-  } catch (error) {
-    throw new Error("Hiba történt: " + error.message);
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error("POST hiba");
   }
+  return await response.json();
 };
 
 export default Draft;

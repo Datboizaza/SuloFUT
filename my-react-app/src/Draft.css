@@ -4,6 +4,7 @@
 #formationSelectDiv {
   width: 80vw;
   height: 80vh;
+  margin: 0 auto;
 }
 
 /*-----------------Baloldali formázások------------------*/
@@ -21,11 +22,13 @@
   padding-left: 30px;
 }
 
+/* Mini pálya */
 .miniFormationLayout {
   position: relative;
   background-color: green;
   height: 10vh;
   width: 8vw;
+  border-radius: 8px;
 }
 
 /*----------------Jobboldali formázások-----------------*/
@@ -40,19 +43,22 @@
   justify-content: space-evenly;
 }
 
-#formationName {
+#formationImage h2 {
   padding-left: 70px;
   padding-top: 30px;
 }
 
+/* Nagy pálya */
 .formationLayout {
   position: relative;
   background-color: rgb(7, 85, 7);
   height: 60vh;
   width: 45vw;
   align-self: center;
+  border-radius: 20px;
 }
 
+/* Pozíció kör */
 .pos {
   position: absolute;
   width: 5%;
@@ -62,13 +68,9 @@
   transform: translate(-50%, -50%);
 }
 
-/*---------------Gombok és azon belüli formázások---------------*/
+/*---------------Gombok---------------*/
 
-#buttonFormation {
-  height: 10vh;
-}
-
-#formationSelectBtn {
+.formationSelectBtn {
   color: rgba(255, 255, 255, 0.575);
   display: flex;
   flex-direction: row;
@@ -78,11 +80,11 @@
   background-color: transparent;
   border: none;
   border-radius: 10px;
-  height: 110%;
+  height: 10vh;
   transition: all 200ms ease-in-out;
 }
 
-#formationSelectBtn:hover {
+.formationSelectBtn:hover {
   background-color: rgba(0, 0, 0, 0.534);
   border: 1px solid #58e7e0;
   border-radius: 20px;
@@ -98,8 +100,11 @@
   background-color: rgb(7, 85, 7);
   height: 80vh;
   width: 80vw;
-  align-self: center;
+  margin: 40px auto;
+  border-radius: 25px;
 }
+
+/* Draft pozíció kör */
 .gameFormationLayout .pos {
   position: absolute;
   width: 10%;
@@ -107,17 +112,35 @@
   border-radius: 50%;
   background-color: white;
   transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .gameFormationLayout .pos:hover {
   cursor: pointer;
 }
 
+/* Pozíció szöveg */
 .posText {
   position: absolute;
   transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  pointer-events: none;
+}
+
+/*--------------Assigned player-----------------*/
+
+.assignedPlayer {
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-align: center;
+  color: black;
 }
 
 /*--------------Játékos kiválasztó modal-----------------*/
+
 .playerSelectionModal {
   justify-self: center;
   position: absolute;
@@ -137,7 +160,6 @@
   background-color: white;
   transition: all 100ms ease-in-out;
 }
-
 .playerSlot:hover {
   cursor: pointer;
   transform: scale(1.05);
