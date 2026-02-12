@@ -114,43 +114,39 @@
 }
 
 #unassignedPacksIcon {
-  width: 20vw;
+  width: 8vw;
   height: auto;
   max-width: fit-content;
 }
 
 #hubLogo {
-  width: 10vw;
+  width: 6vw;
   height: auto;
   max-width: fit-content;
 }
 
 #sbcLogo {
+  height: 14vh;
   width: auto;
-  height: 40vw;
-  max-width: fit-content;
-  max-height: 100px;
+  max-height: fit-content;
 }
 
 #draftLogo {
-  height: 30vw;
+  height: 5vh;
   width: auto;
   max-height: fit-content;
-  max-height: 100px;
 }
 
 #storeLogo {
-  width: 20vw;
-  height: auto;
-  max-width: fit-content;
-  max-height: 100px;
+  height: 6vh;
+  width: auto;
+  max-height: fit-content;
 }
 
 #objectivesLogo {
-  width: 15vw;
-  height: auto;
-  max-width: fit-content;
-  max-height: 100px;
+  height: 6vh;
+  width: auto;
+  max-height: fit-content;
 }
 
 /*-----------------Egyéb formázások-------------------*/
@@ -222,28 +218,27 @@ h3 {
   }
 
   #unassignedPacksIcon {
-    width: 30vw;
+    width: 15vw;
     height: auto;
     max-width: fit-content;
   }
 
   #hubLogo {
-    width: 17vw;
+    width: 13vw;
     height: auto;
     max-width: fit-content;
   }
 
   #sbcLogo {
-    width: 17vw;
-    height: auto;
-    max-width: fit-content;
+    height: 20vh;
+    width: auto;
+    max-height: fit-content;
   }
 
   #draftLogo {
-    width: 30vw;
-    height: auto;
-    max-width: fit-content;
-    max-height: 80px;
+    height: 15vh;
+    width: auto;
+    max-height: fit-content;
   }
 
   #storeLogo {
@@ -313,7 +308,7 @@ h3 {
 
   /*------------Ikonok/képek--------------*/
   #unassignedPacksIcon {
-    width: 30vw;
+    width: 20vw;
     height: auto;
     max-width: fit-content;
   }
@@ -325,20 +320,20 @@ h3 {
   }
 
   #sbcLogo {
-    width: 17vw;
+    width: 30vw;
     height: auto;
     max-width: fit-content;
   }
 
   #draftLogo {
-    width: 30vw;
+    width: 20vw;
     height: auto;
     max-width: fit-content;
     max-height: 100px;
   }
 
   #storeLogo {
-    width: 30vw;
+    width: 20vw;
     height: auto;
     max-width: fit-content;
     max-height: 100px;
