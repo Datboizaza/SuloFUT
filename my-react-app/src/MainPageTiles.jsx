@@ -1,9 +1,10 @@
 import "./MainPageTiles.css";
-import UnassignedPacks from "./assets/packs.png";
-import HubLogo from "./assets/eafclogo.png";
-import SbcLogo from "./assets/sbc.png";
-import DraftLogo from "./assets/draft.png";
-import ObjectivesLogo from "./assets/objectives.png";
+import UnassignedPacks from "./assets/unassignedCards.png";
+import StoreLogo from "./assets/allPacks.png";
+import HubLogo from "./assets/logoWhite.png";
+import SbcLogo from "./assets/sbcIcon.png";
+import DraftLogo from "./assets/draftLogo.png";
+import ObjectivesLogo from "./assets/xpIcon.png";
 
 function MainPageTiles() {
   return (
@@ -49,7 +50,7 @@ function MainPageTiles() {
               <p>Open packs to obtain new cards.</p>
             </div>
             <div id="tileImages2" className="col-12 col-md-4">
-              <img src={UnassignedPacks} alt="Store Logo" id="storeLogo" />
+              <img src={StoreLogo} alt="Store Logo" id="storeLogo" />
             </div>
           </a>
           <a className="col-12" id="tile2" href="">

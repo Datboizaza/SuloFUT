@@ -66,7 +66,7 @@
 }
 
 #sulofutLogo {
-  height: 35px;
+  height: 5vw;
   margin-right: 10px;
 }
 
@@ -170,5 +170,10 @@
     font-size: 3vh;
     margin-right: 20px;
     border-radius: 50%;
+  }
+
+  #sulofutLogo {
+    height: 6vh;
+    margin-right: 10px;
   }
 }
