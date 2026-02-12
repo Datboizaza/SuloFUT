@@ -1,9 +1,9 @@
 import "./MainPageTiles.css";
-import UnassignedPacks from "./assets/packs.png";
-import HubLogo from "./assets/eafclogo.png";
-import SbcLogo from "./assets/sbc.png";
-import DraftLogo from "./assets/draft.png";
-import ObjectivesLogo from "./assets/objectives.png";
+import UnassignedPacks from "./assets/allPacks.png";
+import HubLogo from "./assets/logoWhite.png";
+import SbcLogo from "./assets/sbcIcon.png";
+import DraftLogo from "./assets/draftLogo.png";
+import ObjectivesLogo from "./assets/xpIcon.png";
 
 function MainPageTilesUnassigned() {
   return (

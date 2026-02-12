@@ -1,6 +1,6 @@
 import "./SideBar.css";
 import NavbarIcon from "./assets/navbarIcon.png";
-import HubLogo from "./assets/eafclogo.png";
+import HubLogo from "./assets/logoWhite.png";
 
 function SideBar() {
   return (
