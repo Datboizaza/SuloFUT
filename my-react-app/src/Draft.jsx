@@ -253,7 +253,28 @@ const chooseCaptain = async () => {
     let i = 0;
     result.randomjatekosok.forEach((element) => {
       document.querySelectorAll(".playerSlot")[i].textContent =
-        element.short_name;
+        element.overall +
+        " " +
+        element.player_positions.split(",")[0] +
+        " " +
+        element.nationality_name +
+        " " +
+        element.club_name +
+        " " +
+        element.short_name +
+        " " +
+        element.pace +
+        " PAC " +
+        element.shooting +
+        " SHO " +
+        element.dribbling +
+        " DRI " +
+        element.passing +
+        " PAS " +
+        element.defending +
+        " DEF " +
+        element.physic +
+        " PHY ";
       i++;
     });
   } catch (error) {
