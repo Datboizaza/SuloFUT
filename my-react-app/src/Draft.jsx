@@ -220,9 +220,45 @@ const startDraft = (e) => {
             {p.pos}
           </p>
         ))}
+        <div className="playerSelectionModal d-none">
+          {chooseCaptainModal()}
+          <div className="playerSlot"></div>
+          <div className="playerSlot"></div>
+          <div className="playerSlot"></div>
+          <div className="playerSlot"></div>
+          <div className="playerSlot"></div>
+        </div>
       </div>
     </StrictMode>,
   );
+};
+
+const chooseCaptainModal = () => {
+  setTimeout(() => {
+    const playerSelectionModal = document.querySelector(
+      ".playerSelectionModal",
+    );
+    playerSelectionModal.classList.remove("d-none");
+
+    chooseCaptain();
+  }, 500);
+};
+
+const chooseCaptain = async () => {
+  try {
+    const result = await getMethodFetch(
+      "http://127.0.0.1:3000/api/randomplayers",
+    );
+
+    let i = 0;
+    result.randomjatekosok.forEach((element) => {
+      document.querySelectorAll(".playerSlot")[i].textContent =
+        element.short_name;
+      i++;
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const getMethodFetch = async (url) => {

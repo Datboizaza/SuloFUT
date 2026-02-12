@@ -116,3 +116,29 @@
   position: absolute;
   transform: translate(-50%, -50%);
 }
+
+/*--------------Játékos kiválasztó modal-----------------*/
+.playerSelectionModal {
+  justify-self: center;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.568);
+  border-radius: 30px;
+  width: 95%;
+  height: 30vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.playerSlot {
+  height: 90%;
+  width: 15%;
+  background-color: white;
+  transition: all 100ms ease-in-out;
+}
+
+.playerSlot:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+}

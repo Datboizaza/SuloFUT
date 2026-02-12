@@ -92,7 +92,49 @@ router.get("/randomformations", async (request, response) => {
 
     response.status(200).json({ randomformations: randomPick(data, 5) });
   } catch (error) {
-    console.log("GET /api/formations error:", error);
+    console.log("GET /api/randomformations error:", error);
+    response.status(500).json({ error: "Internal server error" });
+  }
+});
+
+//? Players /api/players
+router.get("/players", async (request, response) => {
+  try {
+    const data = await readJsonFile(path.join(__dirname, "./files/data.json"));
+    response.status(200).json({ players: data });
+  } catch (error) {
+    console.log("GET /api/players error:", error);
+    response.status(500).json({ error: "Internal server error" });
+  }
+});
+
+//? 5 random player /api/randomplayers
+router.get("/randomplayers", async (request, response) => {
+  try {
+    const data = await readJsonFile(path.join(__dirname, "./files/data.json"));
+
+    function randomPick(arr, count) {
+      const randomjatekosok = [];
+      const tombIndexek = [];
+
+      while (
+        randomjatekosok.length < count &&
+        randomjatekosok.length < arr.length
+      ) {
+        const index = Math.floor(Math.random() * arr.length);
+
+        if (!tombIndexek.includes(index) && arr[index].overall >= 85) {
+          tombIndexek.push(index);
+          randomjatekosok.push(arr[index]);
+        }
+      }
+
+      return randomjatekosok;
+    }
+
+    response.status(200).json({ randomjatekosok: randomPick(data, 5) });
+  } catch (error) {
+    console.log("GET /api/randomplayers error:", error);
     response.status(500).json({ error: "Internal server error" });
   }
 });
