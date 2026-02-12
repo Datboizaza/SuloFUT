@@ -139,4 +139,30 @@ router.get("/randomplayers", async (request, response) => {
   }
 });
 
+//? Választott játékosok
+const draftselectedPlayers = [];
+router.get("/draftselectedplayers", async (request, response) => {
+  try {
+    response.status(200).json({
+      draftselectedplayers: draftselectedPlayers,
+    });
+  } catch (error) {
+    console.log("GET /api/draftselectedplayers error:", error);
+    response.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.post("/draftselectedplayers", async (request, response) => {
+  try {
+    const selectedplayer = request.body;
+    draftselectedPlayers.push(selectedplayer);
+    response.status(200).json({
+      draftselectedplayers: draftselectedPlayers,
+    });
+  } catch (error) {
+    console.log("GET /api/draftselectedplayers error:", error);
+    response.status(500).json({ error: "Internal server error" });
+  }
+});
+
 module.exports = router;

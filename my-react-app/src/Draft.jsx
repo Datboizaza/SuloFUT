@@ -222,11 +222,11 @@ const startDraft = (e) => {
         ))}
         <div className="playerSelectionModal d-none">
           {chooseCaptainModal()}
-          <div className="playerSlot"></div>
-          <div className="playerSlot"></div>
-          <div className="playerSlot"></div>
-          <div className="playerSlot"></div>
-          <div className="playerSlot"></div>
+          <div className="playerSlot" onClick={(e) => pickPlayer(e)}></div>
+          <div className="playerSlot" onClick={(e) => pickPlayer(e)}></div>
+          <div className="playerSlot" onClick={(e) => pickPlayer(e)}></div>
+          <div className="playerSlot" onClick={(e) => pickPlayer(e)}></div>
+          <div className="playerSlot" onClick={(e) => pickPlayer(e)}></div>
         </div>
       </div>
     </StrictMode>,
@@ -282,12 +282,45 @@ const chooseCaptain = async () => {
   }
 };
 
+const pickPlayer = async (e) => {
+  try {
+    const playerSlotPlayer = e.currentTarget.textContent.trim();
+    // const response = await postMethodFetch(
+    //   "http://127.0.0.1:3000/api/draftselectedplayers",
+    //   {
+    //     player: playerSlotPlayer,
+    //   },
+    // );
+    console.log(playerSlotPlayer);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const getMethodFetch = async (url) => {
   try {
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(
         "GET hiba: " + response.status + " " + response.statusText,
+      );
+    }
+    return await response.json();
+  } catch (error) {
+    throw new Error("Hiba történt: " + error.message);
+  }
+};
+
+const postMethodFetch = async (url, data) => {
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error(
+        "POST hiba: " + response.status + " " + response.statusText,
       );
     }
     return await response.json();
