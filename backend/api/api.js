@@ -92,7 +92,7 @@ router.post("/users/login", async (request, response) => {
 });
 
 //!
-router.get("/users/me", async (req, res) => {
+router.get("/users/me", async (request, response) => {
   try {
     if (!request.session.userId)
       return response.status(400).json({ message: "Hiba történt." });
