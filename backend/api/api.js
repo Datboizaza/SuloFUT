@@ -43,7 +43,6 @@ router.get("/testsql", async (request, response) => {
 });
 
 //? Users /api/users
-const users = [];
 router.get("/users", (request, response) => {
   try {
     response.status(200).json({ users });
@@ -57,26 +56,40 @@ router.post("/users", async (request, response) => {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(request.body.password, salt);
 
-    const user = { name: request.body.name, password: hashedPassword };
-    users.push(user);
-
-    response.status(200).send();
+    response.status(200).send({
+      message: "User created",
+    });
   } catch (error) {
     response.status(500).json({ message: "Internal server error" });
   }
 });
 
 router.post("/users/login", async (request, response) => {
-  const user = users.find((user) => (user.name = request.body.name));
+  const user = users.find((user) => user.name === request.body.name);
   if (user == null) {
     return response.status(400).json({ message: "Invalid username" });
   }
   try {
     if (await bcrypt.compare(request.body.password, user.password)) {
+      request.session.user = user;
+
       response.status(200).json({ message: "Successful login" });
     } else {
-      response.status(400).json({ message: "Unsuccessful login" });
+      response.status(400).json({ message: "Wrong password!" });
     }
+  } catch (error) {
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.get("/users/me", (request, response) => {
+  try {
+    if (!request.session.user) {
+      return response.status(400).json({
+        message: "Not logged in",
+      });
+    }
+    response.json(request.session.user);
   } catch (error) {
     response.status(500).json({ message: "Internal server error" });
   }

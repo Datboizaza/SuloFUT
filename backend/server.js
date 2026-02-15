@@ -21,6 +21,9 @@ app.use(
     secret: "titkos_kulcs", //?Ezt generálni kell a későbbiekben
     resave: false,
     saveUninitialized: true,
+    cookie: {
+      httpOnly: true,
+    },
   }),
 );
 
