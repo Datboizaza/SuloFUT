@@ -42,54 +42,62 @@ router.get("/testsql", async (request, response) => {
   }
 });
 
-//? Users /api/users
-router.get("/users", (request, response) => {
+//! User-ek eltárolása/login
+router.get("/users", async (request, response) => {
   try {
-    response.status(200).json({ users });
+    const users = await database.selectall();
+    response.status(200).json({
+      message: "Ez a végpont működik.",
+      results: users,
+    });
   } catch (error) {
-    response.status(500).json({ message: "Internal server error" });
+    response.status(500).json({
+      message: "Ez a végpont nem működik.",
+    });
   }
 });
 
 router.post("/users", async (request, response) => {
   try {
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(request.body.password, salt);
-
-    response.status(200).send({
+    const hashed = await bcrypt.hash(request.body.password, 10);
+    const insertinto = await database.insertinto(request.body.username, hashed);
+    response.status(200).json({
       message: "User created",
+      insertId: insertinto,
     });
   } catch (error) {
-    response.status(500).json({ message: "Internal server error" });
+    response.status(500).json({
+      message: "Ez a végpont nem működik.",
+    });
   }
 });
 
 router.post("/users/login", async (request, response) => {
-  const user = users.find((user) => user.name === request.body.name);
-  if (user == null) {
-    return response.status(400).json({ message: "Invalid username" });
-  }
   try {
-    if (await bcrypt.compare(request.body.password, user.password)) {
-      request.session.user = user;
+    const user = await database.login(request.body.username);
 
-      response.status(200).json({ message: "Successful login" });
-    } else {
-      response.status(400).json({ message: "Wrong password!" });
-    }
+    if (!user)
+      return response.status(400).json({ message: "Invalid username" });
+
+    const valid = await bcrypt.compare(request.body.password, user.password);
+
+    if (!valid) return response.status(400).json({ message: "Wrong password" });
+
+    request.session.userId = user.id;
+
+    response.status(200).json({ message: "Logged in" });
   } catch (error) {
     response.status(500).json({ message: "Internal server error" });
   }
 });
 
-router.get("/users/me", (request, response) => {
+//!
+router.get("/users/me", async (req, res) => {
   try {
-    if (!request.session.user) {
-      return response.status(400).json({
-        message: "Not logged in",
-      });
-    }
-    response.json(request.session.user);
+    if (!request.session.userId)
+      return response.status(400).json({ message: "Hiba történt." });
+    const user = await database.getUserById(request.session.userId);
+    response.status(200).json(user);
   } catch (error) {
     response.status(500).json({ message: "Internal server error" });
   }
