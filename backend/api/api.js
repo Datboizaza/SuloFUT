@@ -100,7 +100,9 @@ router.get("/randomformations", async (request, response) => {
 //? Players /api/players
 router.get("/players", async (request, response) => {
   try {
-    const data = await readJsonFile(path.join(__dirname, "./files/data.json"));
+    const data = await readJsonFile(
+      path.join(__dirname, "./files/shortData.json"),
+    );
     response.status(200).json({ players: data });
   } catch (error) {
     console.log("GET /api/players error:", error);
@@ -111,7 +113,9 @@ router.get("/players", async (request, response) => {
 //? 5 random player /api/randomplayers
 router.get("/randomplayers", async (request, response) => {
   try {
-    const data = await readJsonFile(path.join(__dirname, "./files/data.json"));
+    const data = await readJsonFile(
+      path.join(__dirname, "./files/shortData.json"),
+    );
 
     function randomPick(arr, count) {
       const randomjatekosok = [];
@@ -169,7 +173,9 @@ router.post("/draftselectedplayers", async (request, response) => {
 //? 5 random GK /api/randomgk
 router.get("/randomgk", async (request, response) => {
   try {
-    const data = await readJsonFile(path.join(__dirname, "./files/data.json"));
+    const data = await readJsonFile(
+      path.join(__dirname, "./files/shortData.json"),
+    );
 
     function randomPick(arr, count) {
       const randomgk = [];
@@ -201,7 +207,9 @@ router.get("/randomgk", async (request, response) => {
 //? 5 random LB /api/randomlb
 router.get("/randomlb", async (request, response) => {
   try {
-    const data = await readJsonFile(path.join(__dirname, "./files/data.json"));
+    const data = await readJsonFile(
+      path.join(__dirname, "./files/shortData.json"),
+    );
 
     function randomPick(arr, count) {
       const randomlb = [];
@@ -233,7 +241,9 @@ router.get("/randomlb", async (request, response) => {
 //? 5 random CB /api/randomcb
 router.get("/randomcb", async (request, response) => {
   try {
-    const data = await readJsonFile(path.join(__dirname, "./files/data.json"));
+    const data = await readJsonFile(
+      path.join(__dirname, "./files/shortData.json"),
+    );
 
     function randomPick(arr, count) {
       const randomcb = [];
@@ -265,7 +275,9 @@ router.get("/randomcb", async (request, response) => {
 //? 5 random RB /api/randomrb
 router.get("/randomrb", async (request, response) => {
   try {
-    const data = await readJsonFile(path.join(__dirname, "./files/data.json"));
+    const data = await readJsonFile(
+      path.join(__dirname, "./files/shortData.json"),
+    );
 
     function randomPick(arr, count) {
       const randomrb = [];
@@ -297,7 +309,9 @@ router.get("/randomrb", async (request, response) => {
 //? 5 random CDM /api/randomcdm
 router.get("/randomcdm", async (request, response) => {
   try {
-    const data = await readJsonFile(path.join(__dirname, "./files/data.json"));
+    const data = await readJsonFile(
+      path.join(__dirname, "./files/shortData.json"),
+    );
 
     function randomPick(arr, count) {
       const randomcdm = [];
@@ -329,7 +343,9 @@ router.get("/randomcdm", async (request, response) => {
 //? 5 random CM /api/randomcm
 router.get("/randomcm", async (request, response) => {
   try {
-    const data = await readJsonFile(path.join(__dirname, "./files/data.json"));
+    const data = await readJsonFile(
+      path.join(__dirname, "./files/shortData.json"),
+    );
 
     function randomPick(arr, count) {
       const randomcm = [];
@@ -361,7 +377,9 @@ router.get("/randomcm", async (request, response) => {
 //? 5 random CAM /api/randomcam
 router.get("/randomcam", async (request, response) => {
   try {
-    const data = await readJsonFile(path.join(__dirname, "./files/data.json"));
+    const data = await readJsonFile(
+      path.join(__dirname, "./files/shortData.json"),
+    );
 
     function randomPick(arr, count) {
       const randomcam = [];
@@ -393,7 +411,9 @@ router.get("/randomcam", async (request, response) => {
 //? 5 random LM /api/randomlm
 router.get("/randomlm", async (request, response) => {
   try {
-    const data = await readJsonFile(path.join(__dirname, "./files/data.json"));
+    const data = await readJsonFile(
+      path.join(__dirname, "./files/shortData.json"),
+    );
 
     function randomPick(arr, count) {
       const randomlm = [];
@@ -425,7 +445,9 @@ router.get("/randomlm", async (request, response) => {
 //? 5 random RM /api/randomrm
 router.get("/randomrm", async (request, response) => {
   try {
-    const data = await readJsonFile(path.join(__dirname, "./files/data.json"));
+    const data = await readJsonFile(
+      path.join(__dirname, "./files/shortData.json"),
+    );
 
     function randomPick(arr, count) {
       const randomrm = [];
@@ -457,7 +479,9 @@ router.get("/randomrm", async (request, response) => {
 //? 5 random LW /api/randomlw
 router.get("/randomlw", async (request, response) => {
   try {
-    const data = await readJsonFile(path.join(__dirname, "./files/data.json"));
+    const data = await readJsonFile(
+      path.join(__dirname, "./files/shortData.json"),
+    );
 
     function randomPick(arr, count) {
       const randomlw = [];
@@ -489,7 +513,9 @@ router.get("/randomlw", async (request, response) => {
 //? 5 random RW /api/randomrw
 router.get("/randomrw", async (request, response) => {
   try {
-    const data = await readJsonFile(path.join(__dirname, "./files/data.json"));
+    const data = await readJsonFile(
+      path.join(__dirname, "./files/shortData.json"),
+    );
 
     function randomPick(arr, count) {
       const randomrw = [];
@@ -521,7 +547,9 @@ router.get("/randomrw", async (request, response) => {
 //? 5 random ST /api/randomst
 router.get("/randomst", async (request, response) => {
   try {
-    const data = await readJsonFile(path.join(__dirname, "./files/data.json"));
+    const data = await readJsonFile(
+      path.join(__dirname, "./files/shortData.json"),
+    );
 
     function randomPick(arr, count) {
       const randomst = [];

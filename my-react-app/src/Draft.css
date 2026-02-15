@@ -58,13 +58,14 @@
   border-radius: 20px;
 }
 
-/* Pozíció kör */
 .pos {
   position: absolute;
-  width: 5%;
-  height: 5%;
-  border-radius: 50%;
-  background-color: white;
+  width: 20%;
+  height: 20%;
+  background-image: url("./assets/draftPlaceHolder.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
   transform: translate(-50%, -50%);
 }
 
@@ -98,36 +99,42 @@
 .gameFormationLayout {
   position: relative;
   background-color: rgb(7, 85, 7);
-  height: 80vh;
+  height: 83vh;
   width: 80vw;
   margin: 40px auto;
   border-radius: 25px;
 }
 
-/* Draft pozíció kör */
 .gameFormationLayout .pos {
   position: absolute;
-  width: 10%;
-  height: 10%;
-  border-radius: 50%;
-  background-color: white;
+  width: 20%;
+  height: 28%;
+  background-image: url("./assets/draftPlaceHolder.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
   transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  z-index: 1;
 }
 
 .gameFormationLayout .pos:hover {
   cursor: pointer;
 }
 
-/* Pozíció szöveg */
 .posText {
   position: absolute;
   transform: translate(-50%, -50%);
   color: white;
   font-weight: bold;
   pointer-events: none;
+  background-color: grey;
+  width: 4%;
+  height: 4%;
+  border-radius: 50%;
+  z-index: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
 }
 
 /*--------------Assigned player-----------------*/
@@ -152,6 +159,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-evenly;
+  z-index: 2;
 }
 
 .playerSlot {
@@ -159,8 +167,148 @@
   width: 15%;
   background-color: white;
   transition: all 100ms ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .playerSlot:hover {
   cursor: pointer;
   transform: scale(1.05);
+}
+
+/* Kártya elrendezés */
+.cardLayout {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.goldCard {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+.cardOverall {
+  position: absolute;
+  top: 8.5%;
+  left: 17%;
+  font-size: 150%;
+  z-index: 3;
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+}
+.cardPosition {
+  position: absolute;
+  top: 20%;
+  left: 19%;
+  font-size: 80%;
+  z-index: 3;
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+}
+.cardImg {
+  position: absolute;
+  top: 8%;
+  left: 60%;
+  transform: translateX(-50%);
+  width: 57%;
+  z-index: 3;
+}
+.cardName {
+  position: absolute;
+  top: 58%;
+  width: 100%;
+  text-align: center;
+  font-size: 100%;
+  z-index: 3;
+  font-weight: bold;
+}
+.cardPlayerPaceNumber,
+.cardPlayerShootingNumber,
+.cardPlayerPassingNumber,
+.cardPlayerDribblingNumber,
+.cardPlayerDefendingNumber,
+.cardPlayerPhysicNumber {
+  font-size: 80%;
+}
+.cardPlayerPaceText,
+.cardPlayerShootingText,
+.cardPlayerPassingText,
+.cardPlayerDribblingText,
+.cardPlayerDefendingText,
+.cardPlayerPhysicText {
+  font-size: 70%;
+}
+.cardPlayerPace {
+  position: absolute;
+  top: 68%;
+  left: 18%;
+  z-index: 3;
+  display: flex;
+  flex-direction: row;
+  width: 20%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardPlayerShooting {
+  position: absolute;
+  top: 76%;
+  left: 18%;
+  z-index: 3;
+  display: flex;
+  flex-direction: row;
+  width: 20%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardPlayerDribbling {
+  position: absolute;
+  top: 84%;
+  left: 18%;
+  z-index: 3;
+  display: flex;
+  flex-direction: row;
+  width: 20%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardPlayerPassing {
+  position: absolute;
+  top: 68%;
+  right: 18%;
+  z-index: 3;
+  display: flex;
+  flex-direction: row;
+  width: 20%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardPlayerDefending {
+  position: absolute;
+  top: 76%;
+  right: 18%;
+  z-index: 3;
+  display: flex;
+  flex-direction: row;
+  width: 20%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardPlayerPhysic {
+  position: absolute;
+  top: 84%;
+  right: 18%;
+  z-index: 3;
+  display: flex;
+  flex-direction: row;
+  width: 20%;
+  justify-content: space-between;
+  align-items: center;
 }
