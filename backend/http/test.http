@@ -6,7 +6,7 @@ POST http://127.0.0.1:3000/api/users HTTP/1.1
 content-type: application/json
 
 {
-    "username": "Bobby",
+    "username": "Bobber",
     "password": "Jelszo232323"
 }
 
@@ -16,8 +16,8 @@ POST http://127.0.0.1:3000/api/users/login HTTP/1.1
 content-type: application/json
 
 {
-    "username": "Bobby",
-    "password": "Jelszo232323"
+    "username": "Bobber23",
+    "password": "1234"
 }
 
 ###

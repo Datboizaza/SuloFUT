@@ -66,6 +66,11 @@ router.post("/users", async (request, response) => {
       insertId: insertinto,
     });
   } catch (error) {
+    if (error.code === "ER_DUP_ENTRY") {
+      return response.status(409).json({
+        message: "This username is taken",
+      });
+    }
     response.status(500).json({
       message: "Ez a végpont nem működik.",
     });
@@ -81,7 +86,7 @@ router.post("/users/login", async (request, response) => {
 
     const valid = await bcrypt.compare(request.body.password, user.password);
 
-    if (!valid) return response.status(400).json({ message: "Wrong password" });
+    if (!valid) return response.status(403).json({ message: "Wrong password" });
 
     request.session.userId = user.id;
 
