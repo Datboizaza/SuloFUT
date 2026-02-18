@@ -25,10 +25,11 @@
 /* Mini pálya */
 .miniFormationLayout {
   position: relative;
-  background-color: green;
+  background-color: rgba(0, 0, 0, 0.226);
   height: 10vh;
   width: 8vw;
   border-radius: 8px;
+  border: 1px solid black;
 }
 
 /*----------------Jobboldali formázások-----------------*/
