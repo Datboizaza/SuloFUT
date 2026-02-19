@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+// import { createPortal } from "react-dom";
 import "./Draft.css";
 import RareGold from "./assets/goldRare.png";
 
@@ -355,118 +356,121 @@ function Draft() {
             </p>
           ))}
 
-          {showPlayerSelectionModal && (
-            <div className="playerSelectionModal">
-              {playerOptons.map((player, i) => {
-                const mainPosition = player.player_positions.split(", ")[0];
+          {showPlayerSelectionModal &&
+            createPortal(
+              <div className="playerSelectionModal">
+                {playerOptons.map((player, i) => {
+                  const mainPosition = player.player_positions.split(", ")[0];
 
-                return (
-                  <div
-                    className="cardSlot"
-                    key={i}
-                    onClick={() =>
-                      captainPick
-                        ? handleCaptainSelect(player)
-                        : handlePlayerSelect(player)
-                    }
-                  >
-                    <img src={RareGold} className="goldCard"></img>
+                  return (
+                    <div
+                      className="cardSlot"
+                      key={i}
+                      onClick={() =>
+                        captainPick
+                          ? handleCaptainSelect(player)
+                          : handlePlayerSelect(player)
+                      }
+                    >
+                      <img src={RareGold} className="goldCard"></img>
 
-                    <p className="cardOverall">{player.overall}</p>
-                    <p className="cardPosition">{mainPosition}</p>
-                    <img
-                      className="cardImg"
-                      src={player.player_face_url}
-                      referrerPolicy="no-referrer"
-                    ></img>
-                    <p className="cardName">{player.short_name}</p>
+                      <p className="cardOverall">{player.overall}</p>
+                      <p className="cardPosition">{mainPosition}</p>
+                      <img
+                        className="cardImg"
+                        src={player.player_face_url}
+                        referrerPolicy="no-referrer"
+                      ></img>
+                      <p className="cardName">{player.short_name}</p>
 
-                    {mainPosition === "GK" ? (
-                      <>
-                        <div className="cardPlayerDiving">
-                          <p className="cardPlayerDivingNumber">
-                            {player.goalkeeping_diving}
-                          </p>
-                          <p className="cardPlayerDivingText">DIV</p>
-                        </div>
-                        <div className="cardPlayerHandling">
-                          <p className="cardPlayerHandlingNumber">
-                            {player.goalkeeping_handling}
-                          </p>
-                          <p className="cardPlayerHandlingText">HAN</p>
-                        </div>
-                        <div className="cardPlayerKicking">
-                          <p className="cardPlayerKickingNumber">
-                            {player.goalkeeping_kicking}
-                          </p>
-                          <p className="cardPlayerKickingText">KIC</p>
-                        </div>
-                        <div className="cardPlayerReflexes">
-                          <p className="cardPlayerReflexesNumber">
-                            {player.goalkeeping_reflexes}
-                          </p>
-                          <p className="cardPlayerReflexesText">REF</p>
-                        </div>
-                        <div className="cardPlayerSpeed">
-                          <p className="cardPlayerSpeedNumber">
-                            {player.goalkeeping_speed}
-                          </p>
-                          <p className="cardPlayerSpeedText">SPD</p>
-                        </div>
-                        <div className="cardPlayerPositioning">
-                          <p className="cardPlayerPositioningNumber">
-                            {player.goalkeeping_positioning}
-                          </p>
-                          <p className="cardPlayerPositioningText">POS</p>
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="cardPlayerPace">
-                          <p className="cardPlayerPaceNumber">{player.pace}</p>
-                          <p className="cardPlayerPaceText">PAC</p>
-                        </div>
-                        <div className="cardPlayerShooting">
-                          <p className="cardPlayerShootingNumber">
-                            {player.shooting}
-                          </p>
-                          <p className="cardPlayerShootingText">SHO</p>
-                        </div>
-                        <div className="cardPlayerDribbling">
-                          <p className="cardPlayerDribblingNumber">
-                            {player.dribbling}
-                          </p>
-                          <p className="cardPlayerDribblingText">DRI</p>
-                        </div>
-                        <div className="cardPlayerPassing">
-                          <p className="cardPlayerPassingNumber">
-                            {player.passing}
-                          </p>
-                          <p className="cardPlayerPassingText">PAS</p>
-                        </div>
-                        <div className="cardPlayerDefending">
-                          <p className="cardPlayerDefendingNumber">
-                            {player.defending}
-                          </p>
-                          <p className="cardPlayerDefendingText">DEF</p>
-                        </div>
-                        <div className="cardPlayerPhysic">
-                          <p className="cardPlayerPhysicNumber">
-                            {player.physic}
-                          </p>
-                          <p className="cardPlayerPhysicText">PHY</p>
-                        </div>
-                      </>
-                    )}
+                      {mainPosition === "GK" ? (
+                        <>
+                          <div className="cardPlayerDiving">
+                            <p className="cardPlayerDivingNumber">
+                              {player.goalkeeping_diving}
+                            </p>
+                            <p className="cardPlayerDivingText">DIV</p>
+                          </div>
+                          <div className="cardPlayerHandling">
+                            <p className="cardPlayerHandlingNumber">
+                              {player.goalkeeping_handling}
+                            </p>
+                            <p className="cardPlayerHandlingText">HAN</p>
+                          </div>
+                          <div className="cardPlayerKicking">
+                            <p className="cardPlayerKickingNumber">
+                              {player.goalkeeping_kicking}
+                            </p>
+                            <p className="cardPlayerKickingText">KIC</p>
+                          </div>
+                          <div className="cardPlayerReflexes">
+                            <p className="cardPlayerReflexesNumber">
+                              {player.goalkeeping_reflexes}
+                            </p>
+                            <p className="cardPlayerReflexesText">REF</p>
+                          </div>
+                          <div className="cardPlayerSpeed">
+                            <p className="cardPlayerSpeedNumber">
+                              {player.goalkeeping_speed}
+                            </p>
+                            <p className="cardPlayerSpeedText">SPD</p>
+                          </div>
+                          <div className="cardPlayerPositioning">
+                            <p className="cardPlayerPositioningNumber">
+                              {player.goalkeeping_positioning}
+                            </p>
+                            <p className="cardPlayerPositioningText">POS</p>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="cardPlayerPace">
+                            <p className="cardPlayerPaceNumber">
+                              {player.pace}
+                            </p>
+                            <p className="cardPlayerPaceText">PAC</p>
+                          </div>
+                          <div className="cardPlayerShooting">
+                            <p className="cardPlayerShootingNumber">
+                              {player.shooting}
+                            </p>
+                            <p className="cardPlayerShootingText">SHO</p>
+                          </div>
+                          <div className="cardPlayerDribbling">
+                            <p className="cardPlayerDribblingNumber">
+                              {player.dribbling}
+                            </p>
+                            <p className="cardPlayerDribblingText">DRI</p>
+                          </div>
+                          <div className="cardPlayerPassing">
+                            <p className="cardPlayerPassingNumber">
+                              {player.passing}
+                            </p>
+                            <p className="cardPlayerPassingText">PAS</p>
+                          </div>
+                          <div className="cardPlayerDefending">
+                            <p className="cardPlayerDefendingNumber">
+                              {player.defending}
+                            </p>
+                            <p className="cardPlayerDefendingText">DEF</p>
+                          </div>
+                          <div className="cardPlayerPhysic">
+                            <p className="cardPlayerPhysicNumber">
+                              {player.physic}
+                            </p>
+                            <p className="cardPlayerPhysicText">PHY</p>
+                          </div>
+                        </>
+                      )}
 
-                    {/* <p className="cardNationality">{player.nationality_name}</p>
+                      {/* <p className="cardNationality">{player.nationality_name}</p>
                     <p className="cardLeague">{player.league_name}</p>
                     <p className="cardClub">{player.club_name}</p> */}
-                  </div>
-                );
-              })}
-            </div>
-          )}
+                    </div>
+                  );
+                })}
+              </div>,
+            )}
         </div>
       )}
     </>

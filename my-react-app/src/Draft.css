@@ -110,7 +110,7 @@
   background-image: url("./assets/footballpitch.png");
   background-repeat: no-repeat;
   background-size: 100% 105%;
-  height: 83vh;
+  height: 90vh;
   width: 80vw;
   margin: 40px auto;
   border-radius: 25px;
@@ -213,6 +213,11 @@
   left: 0;
   z-index: 2;
 }
+
+.playerSelectionModal .goldCard {
+  filter: drop-shadow(0 8px 15px rgba(255, 208, 0, 0.425));
+}
+
 .cardOverall {
   position: absolute;
   top: 7%;
