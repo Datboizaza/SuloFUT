@@ -20,6 +20,7 @@
   justify-content: space-evenly;
   color: white;
   padding-left: 30px;
+  backdrop-filter: blur(50px);
 }
 
 /* Mini pálya */
@@ -42,6 +43,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  backdrop-filter: blur(100px);
 }
 
 #formationImage h2 {
@@ -52,7 +54,7 @@
 /* Nagy pálya */
 .formationLayout {
   position: relative;
-  background: rgba(0, 0, 0, 0.459);
+  background: rgba(0, 0, 0, 0.541);
   height: 60vh;
   width: 45vw;
   align-self: center;
@@ -170,7 +172,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-evenly;
-  z-index: 2;
+  z-index: 10000;
   top: 30%;
   backdrop-filter: blur(4px);
   animation: fadeIn 0.4s ease;
@@ -186,6 +188,14 @@
     opacity: 1;
     backdrop-filter: blur(4px);
   }
+}
+
+.modalOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+  border-radius: 25px;
 }
 
 /* Kártya elrendezés */
@@ -244,6 +254,33 @@
   width: 57%;
   z-index: 3;
 }
+.cardNationality {
+  position: absolute;
+  top: 85%;
+  left: 40%;
+  transform: translateX(-50%);
+  width: 10%;
+  z-index: 3;
+}
+
+.cardLeague {
+  position: absolute;
+  top: 85%;
+  left: 52%;
+  transform: translateX(-50%);
+  width: 10%;
+  z-index: 3;
+}
+
+.cardClub {
+  position: absolute;
+  top: 85%;
+  left: 64%;
+  transform: translateX(-50%);
+  width: 10%;
+  z-index: 3;
+}
+
 .cardName {
   position: absolute;
   top: 50%;
@@ -261,6 +298,7 @@
 .cardPlayerDefendingNumber,
 .cardPlayerPhysicNumber {
   font-size: 80%;
+  font-weight: 600;
   margin: 0;
   padding: 0;
   color: #423e2b;
@@ -276,8 +314,9 @@
   padding: 0;
   position: relative;
   top: 1px;
-  font-weight: bold;
+  font-weight: 800;
   color: #52450c;
+  width: 50%;
 }
 .cardPlayerPace {
   position: absolute;
