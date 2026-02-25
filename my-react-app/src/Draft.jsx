@@ -19,6 +19,8 @@ function Draft() {
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [captainPick, setCaptainPick] = useState(true);
 
+  const [openSubs, setOpenSubs] = useState(false);
+
   //! Formációk betöltése
   useEffect(() => {
     const fetchData = async () => {
@@ -222,7 +224,7 @@ function Draft() {
                       <p
                         key={i}
                         className="posText"
-                        style={{ left: p.x + "%", top: `calc(${p.y}% + 7%)` }}
+                        style={{ left: p.x + "%", top: `calc(${p.y}% + 7.5%)` }}
                       >
                         {p.pos}
                       </p>
@@ -282,6 +284,86 @@ function Draft() {
                     referrerPolicy="no-referrer"
                   ></img>
                   <p className="cardName">{assignedPlayers[i].short_name}</p>
+
+                  {assignedPlayers[i].player_positions === "GK" ? (
+                    <>
+                      <div className="cardPlayerDiving">
+                        <p className="cardPlayerDivingNumber">
+                          {assignedPlayers[i].goalkeeping_diving}
+                        </p>
+                        <p className="cardPlayerDivingText">DIV</p>
+                      </div>
+                      <div className="cardPlayerHandling">
+                        <p className="cardPlayerHandlingNumber">
+                          {assignedPlayers[i].goalkeeping_handling}
+                        </p>
+                        <p className="cardPlayerHandlingText">HAN</p>
+                      </div>
+                      <div className="cardPlayerKicking">
+                        <p className="cardPlayerKickingNumber">
+                          {assignedPlayers[i].goalkeeping_kicking}
+                        </p>
+                        <p className="cardPlayerKickingText">KIC</p>
+                      </div>
+                      <div className="cardPlayerReflexes">
+                        <p className="cardPlayerReflexesNumber">
+                          {assignedPlayers[i].goalkeeping_reflexes}
+                        </p>
+                        <p className="cardPlayerReflexesText">REF</p>
+                      </div>
+                      <div className="cardPlayerSpeed">
+                        <p className="cardPlayerSpeedNumber">
+                          {assignedPlayers[i].goalkeeping_speed}
+                        </p>
+                        <p className="cardPlayerSpeedText">SPD</p>
+                      </div>
+                      <div className="cardPlayerPositioning">
+                        <p className="cardPlayerPositioningNumber">
+                          {assignedPlayers[i].goalkeeping_positioning}
+                        </p>
+                        <p className="cardPlayerPositioningText">POS</p>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="cardPlayerPace">
+                        <p className="cardPlayerPaceNumber">
+                          {assignedPlayers[i].pace}
+                        </p>
+                        <p className="cardPlayerPaceText">PAC</p>
+                      </div>
+                      <div className="cardPlayerShooting">
+                        <p className="cardPlayerShootingNumber">
+                          {assignedPlayers[i].shooting}
+                        </p>
+                        <p className="cardPlayerShootingText">SHO</p>
+                      </div>
+                      <div className="cardPlayerDribbling">
+                        <p className="cardPlayerDribblingNumber">
+                          {assignedPlayers[i].dribbling}
+                        </p>
+                        <p className="cardPlayerDribblingText">DRI</p>
+                      </div>
+                      <div className="cardPlayerPassing">
+                        <p className="cardPlayerPassingNumber">
+                          {assignedPlayers[i].passing}
+                        </p>
+                        <p className="cardPlayerPassingText">PAS</p>
+                      </div>
+                      <div className="cardPlayerDefending">
+                        <p className="cardPlayerDefendingNumber">
+                          {assignedPlayers[i].defending}
+                        </p>
+                        <p className="cardPlayerDefendingText">DEF</p>
+                      </div>
+                      <div className="cardPlayerPhysic">
+                        <p className="cardPlayerPhysicNumber">
+                          {assignedPlayers[i].physic}
+                        </p>
+                        <p className="cardPlayerPhysicText">PHY</p>
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
             </div>
@@ -290,7 +372,7 @@ function Draft() {
             <p
               key={i}
               className="posText"
-              style={{ left: p.x + "%", top: `calc(${p.y}% + 7%)` }}
+              style={{ left: p.x + "%", top: `calc(${p.y}% + 8%)` }}
             >
               {p.pos}
             </p>
@@ -421,19 +503,53 @@ function Draft() {
                             </div>
                           </>
                         )}
-
-                        {/* <p className="cardNationality">{player.nationality_name}</p>
-                    <p className="cardLeague">{player.league_name}</p>
-                    <p className="cardClub">{player.club_name}</p> */}
                       </div>
                     );
                   })}
                 </div>
               </div>,
-              document.querySelector(".gameFormationLayout"),
+              document.body,
             )}
         </div>
       )}
+
+      {/* Kispad */}
+      {draftStarted &&
+        gameLayout &&
+        createPortal(
+          <div
+            className={`subBar ${openSubs ? "open" : ""}`}
+            id="subBar"
+            onMouseEnter={() => setOpenSubs(true)}
+            onMouseLeave={() => setOpenSubs(false)}
+          >
+            <button
+              className="subBarTab"
+              onClick={() => setOpenSubs((prev) => !prev)}
+              aria-expanded={open}
+            >
+              SUB / RES
+            </button>
+
+            <div className="subBarContent">
+              <h4 className="subresText">SUB</h4>
+              <div className="pos" id="GK"></div>
+              <div className="pos" id="DEF"></div>
+              <div className="pos" id="DEF"></div>
+              <div className="pos" id="MID"></div>
+              <div className="pos" id="MID"></div>
+              <div className="pos" id="ATT"></div>
+              <div className="pos" id="ATT"></div>
+              <h4 className="subresText">RES</h4>
+              <div className="pos" id="ANY"></div>
+              <div className="pos" id="ANY"></div>
+              <div className="pos" id="ANY"></div>
+              <div className="pos" id="ANY"></div>
+              <div className="pos" id="ANY"></div>
+            </div>
+          </div>,
+          document.getElementById("root2"),
+        )}
     </>
   );
 }

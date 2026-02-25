@@ -1,7 +1,9 @@
 body {
-  background-image: url("./assets/hatter.png");
-  background-repeat: repeat;
-  background-size: cover;
+  background-image: url("./assets/stadium.jpg");
+  background-repeat: no-repeat;
+  background-size: 3000px;
+  background-position-x: center;
+  background-position-y: 80%;
 }
 
 #rootDiv {
@@ -14,7 +16,8 @@ body {
 #root2 {
   height: 92vh;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
 }
 
