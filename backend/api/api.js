@@ -177,109 +177,587 @@ router.get("/random/:pos", async (request, response) => {
       path.join(__dirname, "./files/shortData.json"),
     );
 
-    function randomPick(arr, count) {
-      const randomPlayers = [];
-      const tombIndexek = [];
-      const selectedIds = draftselectedPlayers.map((p) => p.player_id);
+    let randomPick;
 
-      const randomRatingRange = Math.floor(Math.random() * 10);
+    if (pos === "DEF") {
+      randomPick = function (arr, count) {
+        const randomPlayers = [];
+        const tombIndexek = [];
+        const selectedIds = draftselectedPlayers.map((p) => p.player_id);
 
-      if (randomRatingRange === 0) {
-        while (
-          randomPlayers.length < count &&
-          randomPlayers.length < arr.length
-        ) {
-          const index = Math.floor(Math.random() * arr.length);
+        const randomRatingRange = Math.floor(Math.random() * 10);
 
-          if (
-            !tombIndexek.includes(index) &&
-            arr[index].overall >= 75 &&
-            arr[index].overall <= 80 &&
-            arr[index].player_positions.split(", ").includes(pos) &&
-            !selectedIds.includes(arr[index].player_id)
+        if (randomRatingRange === 0) {
+          while (
+            randomPlayers.length < count &&
+            randomPlayers.length < arr.length
           ) {
-            tombIndexek.push(index);
-            randomPlayers.push(arr[index]);
+            const index = Math.floor(Math.random() * arr.length);
+
+            if (
+              !tombIndexek.includes(index) &&
+              arr[index].overall >= 75 &&
+              arr[index].overall <= 80 &&
+              (arr[index].player_positions.split(", ").includes("LB") ||
+                arr[index].player_positions.split(", ").includes("CB") ||
+                arr[index].player_positions.split(", ").includes("RB")) &&
+              !selectedIds.includes(arr[index].player_id)
+            ) {
+              tombIndexek.push(index);
+              randomPlayers.push(arr[index]);
+            }
           }
         }
-      }
 
-      if (randomRatingRange === 1 || randomRatingRange === 2) {
-        while (
-          randomPlayers.length < count &&
-          randomPlayers.length < arr.length
-        ) {
-          const index = Math.floor(Math.random() * arr.length);
-
-          if (
-            !tombIndexek.includes(index) &&
-            arr[index].overall >= 81 &&
-            arr[index].overall <= 85 &&
-            arr[index].player_positions.split(", ").includes(pos) &&
-            !selectedIds.includes(arr[index].player_id)
+        if (randomRatingRange === 1 || randomRatingRange === 2) {
+          while (
+            randomPlayers.length < count &&
+            randomPlayers.length < arr.length
           ) {
-            tombIndexek.push(index);
-            randomPlayers.push(arr[index]);
+            const index = Math.floor(Math.random() * arr.length);
+
+            if (
+              !tombIndexek.includes(index) &&
+              arr[index].overall >= 81 &&
+              arr[index].overall <= 85 &&
+              (arr[index].player_positions.split(", ").includes("LB") ||
+                arr[index].player_positions.split(", ").includes("CB") ||
+                arr[index].player_positions.split(", ").includes("RB")) &&
+              !selectedIds.includes(arr[index].player_id)
+            ) {
+              tombIndexek.push(index);
+              randomPlayers.push(arr[index]);
+            }
           }
         }
-      }
 
-      if (
-        randomRatingRange === 3 ||
-        randomRatingRange === 4 ||
-        randomRatingRange === 5 ||
-        randomRatingRange === 6 ||
-        //!Majd ha lesz több 90+ player vissza lehet állítani
-        randomRatingRange === 7 ||
-        randomRatingRange === 8 ||
-        randomRatingRange === 9
-      ) {
-        while (
-          randomPlayers.length < count &&
-          randomPlayers.length < arr.length
+        if (
+          randomRatingRange === 3 ||
+          randomRatingRange === 4 ||
+          randomRatingRange === 5 ||
+          randomRatingRange === 6 ||
+          //!Majd ha lesz több 90+ player vissza lehet állítani
+          randomRatingRange === 7 ||
+          randomRatingRange === 8 ||
+          randomRatingRange === 9
         ) {
-          const index = Math.floor(Math.random() * arr.length);
-
-          if (
-            !tombIndexek.includes(index) &&
-            arr[index].overall >= 86 &&
-            arr[index].overall <= 89 &&
-            arr[index].player_positions.split(", ").includes(pos) &&
-            !selectedIds.includes(arr[index].player_id)
+          while (
+            randomPlayers.length < count &&
+            randomPlayers.length < arr.length
           ) {
-            tombIndexek.push(index);
-            randomPlayers.push(arr[index]);
+            const index = Math.floor(Math.random() * arr.length);
+
+            if (
+              !tombIndexek.includes(index) &&
+              arr[index].overall >= 86 &&
+              arr[index].overall <= 89 &&
+              (arr[index].player_positions.split(", ").includes("LB") ||
+                arr[index].player_positions.split(", ").includes("CB") ||
+                arr[index].player_positions.split(", ").includes("RB")) &&
+              !selectedIds.includes(arr[index].player_id)
+            ) {
+              tombIndexek.push(index);
+              randomPlayers.push(arr[index]);
+            }
           }
         }
-      }
 
-      // if (
-      //   randomRatingRange === 7 ||
-      //   randomRatingRange === 8 ||
-      //   randomRatingRange === 9
-      // ) {
-      //   while (
-      //     randomPlayers.length < count &&
-      //     randomPlayers.length < arr.length
-      //   ) {
-      //     const index = Math.floor(Math.random() * arr.length);
+        // if (
+        //   randomRatingRange === 7 ||
+        //   randomRatingRange === 8 ||
+        //   randomRatingRange === 9
+        // ) {
+        //   while (
+        //     randomPlayers.length < count &&
+        //     randomPlayers.length < arr.length
+        //   ) {
+        //     const index = Math.floor(Math.random() * arr.length);
 
-      //     if (
-      //       !tombIndexek.includes(index) &&
-      //       arr[index].overall >= 90 &&
-      //       arr[index].player_positions.split(", ").includes(pos) &&
-      //       !selectedIds.includes(arr[index].player_id)
-      //     ) {
-      //       tombIndexek.push(index);
-      //       randomPlayers.push(arr[index]);
-      //     }
-      //   }
-      // }
+        //     if (
+        //       !tombIndexek.includes(index) &&
+        //       arr[index].overall >= 90 &&
+        //       (arr[index].player_positions.split(", ").includes("LB") ||
+        // arr[index].player_positions.split(", ").includes("CB") ||
+        // arr[index].player_positions.split(", ").includes("RB")) &&
+        //       !selectedIds.includes(arr[index].player_id)
+        //     ) {
+        //       tombIndexek.push(index);
+        //       randomPlayers.push(arr[index]);
+        //     }
+        //   }
+        // }
 
-      return randomPlayers;
+        return randomPlayers;
+      };
+    } else if (pos === "MID") {
+      randomPick = function (arr, count) {
+        const randomPlayers = [];
+        const tombIndexek = [];
+        const selectedIds = draftselectedPlayers.map((p) => p.player_id);
+
+        const randomRatingRange = Math.floor(Math.random() * 10);
+
+        if (randomRatingRange === 0) {
+          while (
+            randomPlayers.length < count &&
+            randomPlayers.length < arr.length
+          ) {
+            const index = Math.floor(Math.random() * arr.length);
+
+            if (
+              !tombIndexek.includes(index) &&
+              arr[index].overall >= 75 &&
+              arr[index].overall <= 80 &&
+              (arr[index].player_positions.split(", ").includes("LM") ||
+                arr[index].player_positions.split(", ").includes("RM") ||
+                arr[index].player_positions.split(", ").includes("CM") ||
+                arr[index].player_positions.split(", ").includes("CDM") ||
+                arr[index].player_positions.split(", ").includes("CAM")) &&
+              !selectedIds.includes(arr[index].player_id)
+            ) {
+              tombIndexek.push(index);
+              randomPlayers.push(arr[index]);
+            }
+          }
+        }
+
+        if (randomRatingRange === 1 || randomRatingRange === 2) {
+          while (
+            randomPlayers.length < count &&
+            randomPlayers.length < arr.length
+          ) {
+            const index = Math.floor(Math.random() * arr.length);
+
+            if (
+              !tombIndexek.includes(index) &&
+              arr[index].overall >= 81 &&
+              arr[index].overall <= 85 &&
+              (arr[index].player_positions.split(", ").includes("LM") ||
+                arr[index].player_positions.split(", ").includes("RM") ||
+                arr[index].player_positions.split(", ").includes("CM") ||
+                arr[index].player_positions.split(", ").includes("CDM") ||
+                arr[index].player_positions.split(", ").includes("CAM")) &&
+              !selectedIds.includes(arr[index].player_id)
+            ) {
+              tombIndexek.push(index);
+              randomPlayers.push(arr[index]);
+            }
+          }
+        }
+
+        if (
+          randomRatingRange === 3 ||
+          randomRatingRange === 4 ||
+          randomRatingRange === 5 ||
+          randomRatingRange === 6 ||
+          //!Majd ha lesz több 90+ player vissza lehet állítani
+          randomRatingRange === 7 ||
+          randomRatingRange === 8 ||
+          randomRatingRange === 9
+        ) {
+          while (
+            randomPlayers.length < count &&
+            randomPlayers.length < arr.length
+          ) {
+            const index = Math.floor(Math.random() * arr.length);
+
+            if (
+              !tombIndexek.includes(index) &&
+              arr[index].overall >= 86 &&
+              arr[index].overall <= 89 &&
+              (arr[index].player_positions.split(", ").includes("LM") ||
+                arr[index].player_positions.split(", ").includes("RM") ||
+                arr[index].player_positions.split(", ").includes("CM") ||
+                arr[index].player_positions.split(", ").includes("CDM") ||
+                arr[index].player_positions.split(", ").includes("CAM")) &&
+              !selectedIds.includes(arr[index].player_id)
+            ) {
+              tombIndexek.push(index);
+              randomPlayers.push(arr[index]);
+            }
+          }
+        }
+
+        // if (
+        //   randomRatingRange === 7 ||
+        //   randomRatingRange === 8 ||
+        //   randomRatingRange === 9
+        // ) {
+        //   while (
+        //     randomPlayers.length < count &&
+        //     randomPlayers.length < arr.length
+        //   ) {
+        //     const index = Math.floor(Math.random() * arr.length);
+
+        //     if (
+        //       !tombIndexek.includes(index) &&
+        //       arr[index].overall >= 90 &&
+        //       (arr[index].player_positions.split(", ").includes("LM") ||
+        // arr[index].player_positions.split(", ").includes("RM") ||
+        // arr[index].player_positions.split(", ").includes("CM") || arr[index].player_positions.split(", ").includes("CDM") || arr[index].player_positions.split(", ").includes("CAM") ||) &&
+        //       !selectedIds.includes(arr[index].player_id)
+        //     ) {
+        //       tombIndexek.push(index);
+        //       randomPlayers.push(arr[index]);
+        //     }
+        //   }
+        // }
+
+        return randomPlayers;
+      };
+    } else if (pos === "ATT") {
+      randomPick = function (arr, count) {
+        const randomPlayers = [];
+        const tombIndexek = [];
+        const selectedIds = draftselectedPlayers.map((p) => p.player_id);
+
+        const randomRatingRange = Math.floor(Math.random() * 10);
+
+        if (randomRatingRange === 0) {
+          while (
+            randomPlayers.length < count &&
+            randomPlayers.length < arr.length
+          ) {
+            const index = Math.floor(Math.random() * arr.length);
+
+            if (
+              !tombIndexek.includes(index) &&
+              arr[index].overall >= 75 &&
+              arr[index].overall <= 80 &&
+              (arr[index].player_positions.split(", ").includes("LW") ||
+                arr[index].player_positions.split(", ").includes("RW") ||
+                arr[index].player_positions.split(", ").includes("ST")) &&
+              !selectedIds.includes(arr[index].player_id)
+            ) {
+              tombIndexek.push(index);
+              randomPlayers.push(arr[index]);
+            }
+          }
+        }
+
+        if (randomRatingRange === 1 || randomRatingRange === 2) {
+          while (
+            randomPlayers.length < count &&
+            randomPlayers.length < arr.length
+          ) {
+            const index = Math.floor(Math.random() * arr.length);
+
+            if (
+              !tombIndexek.includes(index) &&
+              arr[index].overall >= 81 &&
+              arr[index].overall <= 85 &&
+              (arr[index].player_positions.split(", ").includes("LW") ||
+                arr[index].player_positions.split(", ").includes("RW") ||
+                arr[index].player_positions.split(", ").includes("ST")) &&
+              !selectedIds.includes(arr[index].player_id)
+            ) {
+              tombIndexek.push(index);
+              randomPlayers.push(arr[index]);
+            }
+          }
+        }
+
+        if (
+          randomRatingRange === 3 ||
+          randomRatingRange === 4 ||
+          randomRatingRange === 5 ||
+          randomRatingRange === 6 ||
+          //!Majd ha lesz több 90+ player vissza lehet állítani
+          randomRatingRange === 7 ||
+          randomRatingRange === 8 ||
+          randomRatingRange === 9
+        ) {
+          while (
+            randomPlayers.length < count &&
+            randomPlayers.length < arr.length
+          ) {
+            const index = Math.floor(Math.random() * arr.length);
+
+            if (
+              !tombIndexek.includes(index) &&
+              arr[index].overall >= 86 &&
+              arr[index].overall <= 89 &&
+              (arr[index].player_positions.split(", ").includes("LW") ||
+                arr[index].player_positions.split(", ").includes("RW") ||
+                arr[index].player_positions.split(", ").includes("ST")) &&
+              !selectedIds.includes(arr[index].player_id)
+            ) {
+              tombIndexek.push(index);
+              randomPlayers.push(arr[index]);
+            }
+          }
+        }
+
+        // if (
+        //   randomRatingRange === 7 ||
+        //   randomRatingRange === 8 ||
+        //   randomRatingRange === 9
+        // ) {
+        //   while (
+        //     randomPlayers.length < count &&
+        //     randomPlayers.length < arr.length
+        //   ) {
+        //     const index = Math.floor(Math.random() * arr.length);
+
+        //     if (
+        //       !tombIndexek.includes(index) &&
+        //       arr[index].overall >= 90 &&
+        //       (arr[index].player_positions.split(", ").includes("LW") ||
+        // arr[index].player_positions.split(", ").includes("RW") ||
+        // arr[index].player_positions.split(", ").includes("ST")) &&
+        //       !selectedIds.includes(arr[index].player_id)
+        //     ) {
+        //       tombIndexek.push(index);
+        //       randomPlayers.push(arr[index]);
+        //     }
+        //   }
+        // }
+
+        return randomPlayers;
+      };
+    } else if (pos === "ANY") {
+      randomPick = function (arr, count) {
+        const randomPlayers = [];
+        const tombIndexek = [];
+        const selectedIds = draftselectedPlayers.map((p) => p.player_id);
+
+        const randomRatingRange = Math.floor(Math.random() * 10);
+
+        if (randomRatingRange === 0) {
+          while (
+            randomPlayers.length < count &&
+            randomPlayers.length < arr.length
+          ) {
+            const index = Math.floor(Math.random() * arr.length);
+
+            if (
+              !tombIndexek.includes(index) &&
+              arr[index].overall >= 75 &&
+              arr[index].overall <= 80 &&
+              (arr[index].player_positions.split(", ").includes("LW") ||
+                arr[index].player_positions.split(", ").includes("RW") ||
+                arr[index].player_positions.split(", ").includes("ST") ||
+                arr[index].player_positions.split(", ").includes("LM") ||
+                arr[index].player_positions.split(", ").includes("RM") ||
+                arr[index].player_positions.split(", ").includes("CDM") ||
+                arr[index].player_positions.split(", ").includes("CM") ||
+                arr[index].player_positions.split(", ").includes("CAM") ||
+                arr[index].player_positions.split(", ").includes("RB") ||
+                arr[index].player_positions.split(", ").includes("CB") ||
+                arr[index].player_positions.split(", ").includes("LB") ||
+                arr[index].player_positions.split(", ").includes("GK")) &&
+              !selectedIds.includes(arr[index].player_id)
+            ) {
+              tombIndexek.push(index);
+              randomPlayers.push(arr[index]);
+            }
+          }
+        }
+
+        if (randomRatingRange === 1 || randomRatingRange === 2) {
+          while (
+            randomPlayers.length < count &&
+            randomPlayers.length < arr.length
+          ) {
+            const index = Math.floor(Math.random() * arr.length);
+
+            if (
+              !tombIndexek.includes(index) &&
+              arr[index].overall >= 81 &&
+              arr[index].overall <= 85 &&
+              (arr[index].player_positions.split(", ").includes("LW") ||
+                arr[index].player_positions.split(", ").includes("RW") ||
+                arr[index].player_positions.split(", ").includes("ST") ||
+                arr[index].player_positions.split(", ").includes("LM") ||
+                arr[index].player_positions.split(", ").includes("RM") ||
+                arr[index].player_positions.split(", ").includes("CDM") ||
+                arr[index].player_positions.split(", ").includes("CM") ||
+                arr[index].player_positions.split(", ").includes("CAM") ||
+                arr[index].player_positions.split(", ").includes("RB") ||
+                arr[index].player_positions.split(", ").includes("CB") ||
+                arr[index].player_positions.split(", ").includes("LB") ||
+                arr[index].player_positions.split(", ").includes("GK")) &&
+              !selectedIds.includes(arr[index].player_id)
+            ) {
+              tombIndexek.push(index);
+              randomPlayers.push(arr[index]);
+            }
+          }
+        }
+
+        if (
+          randomRatingRange === 3 ||
+          randomRatingRange === 4 ||
+          randomRatingRange === 5 ||
+          randomRatingRange === 6 ||
+          //!Majd ha lesz több 90+ player vissza lehet állítani
+          randomRatingRange === 7 ||
+          randomRatingRange === 8 ||
+          randomRatingRange === 9
+        ) {
+          while (
+            randomPlayers.length < count &&
+            randomPlayers.length < arr.length
+          ) {
+            const index = Math.floor(Math.random() * arr.length);
+
+            if (
+              !tombIndexek.includes(index) &&
+              arr[index].overall >= 86 &&
+              arr[index].overall <= 89 &&
+              (arr[index].player_positions.split(", ").includes("LW") ||
+                arr[index].player_positions.split(", ").includes("RW") ||
+                arr[index].player_positions.split(", ").includes("ST") ||
+                arr[index].player_positions.split(", ").includes("LM") ||
+                arr[index].player_positions.split(", ").includes("RM") ||
+                arr[index].player_positions.split(", ").includes("CDM") ||
+                arr[index].player_positions.split(", ").includes("CM") ||
+                arr[index].player_positions.split(", ").includes("CAM") ||
+                arr[index].player_positions.split(", ").includes("RB") ||
+                arr[index].player_positions.split(", ").includes("CB") ||
+                arr[index].player_positions.split(", ").includes("LB") ||
+                arr[index].player_positions.split(", ").includes("GK")) &&
+              !selectedIds.includes(arr[index].player_id)
+            ) {
+              tombIndexek.push(index);
+              randomPlayers.push(arr[index]);
+            }
+          }
+        }
+
+        // if (
+        //   randomRatingRange === 7 ||
+        //   randomRatingRange === 8 ||
+        //   randomRatingRange === 9
+        // ) {
+        //   while (
+        //     randomPlayers.length < count &&
+        //     randomPlayers.length < arr.length
+        //   ) {
+        //     const index = Math.floor(Math.random() * arr.length);
+
+        //     if (
+        //       !tombIndexek.includes(index) &&
+        //       arr[index].overall >= 90 &&
+        ////!ÍRD ÁT MAJD
+        //       (arr[index].player_positions.split(", ").includes("LW") ||
+        // arr[index].player_positions.split(", ").includes("RW") ||
+        // arr[index].player_positions.split(", ").includes("ST")) &&
+        //       !selectedIds.includes(arr[index].player_id)
+        //     ) {
+        //       tombIndexek.push(index);
+        //       randomPlayers.push(arr[index]);
+        //     }
+        //   }
+        // }
+
+        return randomPlayers;
+      };
+    } else {
+      randomPick = function (arr, count) {
+        const randomPlayers = [];
+        const tombIndexek = [];
+        const selectedIds = draftselectedPlayers.map((p) => p.player_id);
+
+        const randomRatingRange = Math.floor(Math.random() * 10);
+
+        if (randomRatingRange === 0) {
+          while (
+            randomPlayers.length < count &&
+            randomPlayers.length < arr.length
+          ) {
+            const index = Math.floor(Math.random() * arr.length);
+
+            if (
+              !tombIndexek.includes(index) &&
+              arr[index].overall >= 75 &&
+              arr[index].overall <= 80 &&
+              arr[index].player_positions.split(", ").includes(pos) &&
+              !selectedIds.includes(arr[index].player_id)
+            ) {
+              tombIndexek.push(index);
+              randomPlayers.push(arr[index]);
+            }
+          }
+        }
+
+        if (randomRatingRange === 1 || randomRatingRange === 2) {
+          while (
+            randomPlayers.length < count &&
+            randomPlayers.length < arr.length
+          ) {
+            const index = Math.floor(Math.random() * arr.length);
+
+            if (
+              !tombIndexek.includes(index) &&
+              arr[index].overall >= 81 &&
+              arr[index].overall <= 85 &&
+              arr[index].player_positions.split(", ").includes(pos) &&
+              !selectedIds.includes(arr[index].player_id)
+            ) {
+              tombIndexek.push(index);
+              randomPlayers.push(arr[index]);
+            }
+          }
+        }
+
+        if (
+          randomRatingRange === 3 ||
+          randomRatingRange === 4 ||
+          randomRatingRange === 5 ||
+          randomRatingRange === 6 ||
+          //!Majd ha lesz több 90+ player vissza lehet állítani
+          randomRatingRange === 7 ||
+          randomRatingRange === 8 ||
+          randomRatingRange === 9
+        ) {
+          while (
+            randomPlayers.length < count &&
+            randomPlayers.length < arr.length
+          ) {
+            const index = Math.floor(Math.random() * arr.length);
+
+            if (
+              !tombIndexek.includes(index) &&
+              arr[index].overall >= 86 &&
+              arr[index].overall <= 89 &&
+              arr[index].player_positions.split(", ").includes(pos) &&
+              !selectedIds.includes(arr[index].player_id)
+            ) {
+              tombIndexek.push(index);
+              randomPlayers.push(arr[index]);
+            }
+          }
+        }
+
+        // if (
+        //   randomRatingRange === 7 ||
+        //   randomRatingRange === 8 ||
+        //   randomRatingRange === 9
+        // ) {
+        //   while (
+        //     randomPlayers.length < count &&
+        //     randomPlayers.length < arr.length
+        //   ) {
+        //     const index = Math.floor(Math.random() * arr.length);
+
+        //     if (
+        //       !tombIndexek.includes(index) &&
+        //       arr[index].overall >= 90 &&
+        //       arr[index].player_positions.split(", ").includes(pos) &&
+        //       !selectedIds.includes(arr[index].player_id)
+        //     ) {
+        //       tombIndexek.push(index);
+        //       randomPlayers.push(arr[index]);
+        //     }
+        //   }
+        // }
+
+        return randomPlayers;
+      };
     }
 
-    response.status(200).json({ randomPlayers: randomPick(data, 5) });
+    return response.status(200).json({ randomPlayers: randomPick(data, 5) });
   } catch (error) {
     console.log("GET /api/random/:pos error:", error);
     response.status(500).json({ error: "Internal server error" });

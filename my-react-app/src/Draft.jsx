@@ -167,6 +167,23 @@ function Draft() {
     }
   };
 
+  //! Kispad layout
+  const benchLayout = [
+    { id: "SUBGK", pos: "GK" },
+    { id: "SUBDEF1", pos: "DEF" },
+    { id: "SUBDEF2", pos: "DEF" },
+    { id: "SUBMID1", pos: "MID" },
+    { id: "SUBMID2", pos: "MID" },
+    { id: "SUBATT1", pos: "ATT" },
+    { id: "SUBATT2", pos: "ATT" },
+
+    { id: "RES1", pos: "ANY" },
+    { id: "RES2", pos: "ANY" },
+    { id: "RES3", pos: "ANY" },
+    { id: "RES4", pos: "ANY" },
+    { id: "RES5", pos: "ANY" },
+  ];
+
   return (
     <>
       {/* Formáció kiválasztása */}
@@ -533,19 +550,278 @@ function Draft() {
 
             <div className="subBarContent">
               <h4 className="subresText">SUB</h4>
-              <div className="pos" id="GK"></div>
-              <div className="pos" id="DEF"></div>
-              <div className="pos" id="DEF"></div>
-              <div className="pos" id="MID"></div>
-              <div className="pos" id="MID"></div>
-              <div className="pos" id="ATT"></div>
-              <div className="pos" id="ATT"></div>
+              {benchLayout.slice(0, 7).map((slot) => (
+                <div
+                  key={slot.id}
+                  className="pos"
+                  id={slot.pos}
+                  onClick={() => {
+                    if (assignedPlayers[slot.id]) return;
+                    handlePosClick(slot.id, slot.pos);
+                  }}
+                >
+                  {assignedPlayers[slot.id] && (
+                    <div className="cardSlot">
+                      <img src={RareGold} className="goldCard"></img>
+
+                      <p className="cardOverall">
+                        {assignedPlayers[slot.id].overall}
+                      </p>
+                      <p className="cardPosition">
+                        {
+                          assignedPlayers[slot.id].player_positions.split(
+                            ", ",
+                          )[0]
+                        }
+                      </p>
+                      <img
+                        className="cardImg"
+                        src={assignedPlayers[slot.id].player_face_url}
+                        referrerPolicy="no-referrer"
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = AltPlayerImg;
+                        }}
+                      ></img>
+                      <img
+                        className="cardNationality"
+                        src={assignedPlayers[slot.id].nation_url}
+                        referrerPolicy="no-referrer"
+                      ></img>
+                      <img
+                        className="cardLeague"
+                        src={assignedPlayers[slot.id].league_url}
+                        referrerPolicy="no-referrer"
+                      ></img>
+                      <img
+                        className="cardClub"
+                        src={assignedPlayers[slot.id].club_team_url}
+                        referrerPolicy="no-referrer"
+                      ></img>
+                      <p className="cardName">
+                        {assignedPlayers[slot.id].short_name}
+                      </p>
+
+                      {assignedPlayers[slot.id].player_positions === "GK" ? (
+                        <>
+                          <div className="cardPlayerDiving">
+                            <p className="cardPlayerDivingNumber">
+                              {assignedPlayers[slot.id].goalkeeping_diving}
+                            </p>
+                            <p className="cardPlayerDivingText">DIV</p>
+                          </div>
+                          <div className="cardPlayerHandling">
+                            <p className="cardPlayerHandlingNumber">
+                              {assignedPlayers[slot.id].goalkeeping_handling}
+                            </p>
+                            <p className="cardPlayerHandlingText">HAN</p>
+                          </div>
+                          <div className="cardPlayerKicking">
+                            <p className="cardPlayerKickingNumber">
+                              {assignedPlayers[slot.id].goalkeeping_kicking}
+                            </p>
+                            <p className="cardPlayerKickingText">KIC</p>
+                          </div>
+                          <div className="cardPlayerReflexes">
+                            <p className="cardPlayerReflexesNumber">
+                              {assignedPlayers[slot.id].goalkeeping_reflexes}
+                            </p>
+                            <p className="cardPlayerReflexesText">REF</p>
+                          </div>
+                          <div className="cardPlayerSpeed">
+                            <p className="cardPlayerSpeedNumber">
+                              {assignedPlayers[slot.id].goalkeeping_speed}
+                            </p>
+                            <p className="cardPlayerSpeedText">SPD</p>
+                          </div>
+                          <div className="cardPlayerPositioning">
+                            <p className="cardPlayerPositioningNumber">
+                              {assignedPlayers[slot.id].goalkeeping_positioning}
+                            </p>
+                            <p className="cardPlayerPositioningText">POS</p>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="cardPlayerPace">
+                            <p className="cardPlayerPaceNumber">
+                              {assignedPlayers[slot.id].pace}
+                            </p>
+                            <p className="cardPlayerPaceText">PAC</p>
+                          </div>
+                          <div className="cardPlayerShooting">
+                            <p className="cardPlayerShootingNumber">
+                              {assignedPlayers[slot.id].shooting}
+                            </p>
+                            <p className="cardPlayerShootingText">SHO</p>
+                          </div>
+                          <div className="cardPlayerDribbling">
+                            <p className="cardPlayerDribblingNumber">
+                              {assignedPlayers[slot.id].dribbling}
+                            </p>
+                            <p className="cardPlayerDribblingText">DRI</p>
+                          </div>
+                          <div className="cardPlayerPassing">
+                            <p className="cardPlayerPassingNumber">
+                              {assignedPlayers[slot.id].passing}
+                            </p>
+                            <p className="cardPlayerPassingText">PAS</p>
+                          </div>
+                          <div className="cardPlayerDefending">
+                            <p className="cardPlayerDefendingNumber">
+                              {assignedPlayers[slot.id].defending}
+                            </p>
+                            <p className="cardPlayerDefendingText">DEF</p>
+                          </div>
+                          <div className="cardPlayerPhysic">
+                            <p className="cardPlayerPhysicNumber">
+                              {assignedPlayers[slot.id].physic}
+                            </p>
+                            <p className="cardPlayerPhysicText">PHY</p>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+
               <h4 className="subresText">RES</h4>
-              <div className="pos" id="ANY"></div>
-              <div className="pos" id="ANY"></div>
-              <div className="pos" id="ANY"></div>
-              <div className="pos" id="ANY"></div>
-              <div className="pos" id="ANY"></div>
+              {benchLayout.slice(7).map((slot) => (
+                <div
+                  key={slot.id}
+                  className="pos"
+                  id={slot.pos}
+                  onClick={() => {
+                    if (assignedPlayers[slot.id]) return;
+                    handlePosClick(slot.id, slot.pos);
+                  }}
+                >
+                  {assignedPlayers[slot.id] && (
+                    <div className="cardSlot">
+                      <img src={RareGold} className="goldCard"></img>
+
+                      <p className="cardOverall">
+                        {assignedPlayers[slot.id].overall}
+                      </p>
+                      <p className="cardPosition">
+                        {
+                          assignedPlayers[slot.id].player_positions.split(
+                            ", ",
+                          )[0]
+                        }
+                      </p>
+                      <img
+                        className="cardImg"
+                        src={assignedPlayers[slot.id].player_face_url}
+                        referrerPolicy="no-referrer"
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = AltPlayerImg;
+                        }}
+                      ></img>
+                      <img
+                        className="cardNationality"
+                        src={assignedPlayers[slot.id].nation_url}
+                        referrerPolicy="no-referrer"
+                      ></img>
+                      <img
+                        className="cardLeague"
+                        src={assignedPlayers[slot.id].league_url}
+                        referrerPolicy="no-referrer"
+                      ></img>
+                      <img
+                        className="cardClub"
+                        src={assignedPlayers[slot.id].club_team_url}
+                        referrerPolicy="no-referrer"
+                      ></img>
+                      <p className="cardName">
+                        {assignedPlayers[slot.id].short_name}
+                      </p>
+
+                      {assignedPlayers[slot.id].player_positions === "GK" ? (
+                        <>
+                          <div className="cardPlayerDiving">
+                            <p className="cardPlayerDivingNumber">
+                              {assignedPlayers[slot.id].goalkeeping_diving}
+                            </p>
+                            <p className="cardPlayerDivingText">DIV</p>
+                          </div>
+                          <div className="cardPlayerHandling">
+                            <p className="cardPlayerHandlingNumber">
+                              {assignedPlayers[slot.id].goalkeeping_handling}
+                            </p>
+                            <p className="cardPlayerHandlingText">HAN</p>
+                          </div>
+                          <div className="cardPlayerKicking">
+                            <p className="cardPlayerKickingNumber">
+                              {assignedPlayers[slot.id].goalkeeping_kicking}
+                            </p>
+                            <p className="cardPlayerKickingText">KIC</p>
+                          </div>
+                          <div className="cardPlayerReflexes">
+                            <p className="cardPlayerReflexesNumber">
+                              {assignedPlayers[slot.id].goalkeeping_reflexes}
+                            </p>
+                            <p className="cardPlayerReflexesText">REF</p>
+                          </div>
+                          <div className="cardPlayerSpeed">
+                            <p className="cardPlayerSpeedNumber">
+                              {assignedPlayers[slot.id].goalkeeping_speed}
+                            </p>
+                            <p className="cardPlayerSpeedText">SPD</p>
+                          </div>
+                          <div className="cardPlayerPositioning">
+                            <p className="cardPlayerPositioningNumber">
+                              {assignedPlayers[slot.id].goalkeeping_positioning}
+                            </p>
+                            <p className="cardPlayerPositioningText">POS</p>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="cardPlayerPace">
+                            <p className="cardPlayerPaceNumber">
+                              {assignedPlayers[slot.id].pace}
+                            </p>
+                            <p className="cardPlayerPaceText">PAC</p>
+                          </div>
+                          <div className="cardPlayerShooting">
+                            <p className="cardPlayerShootingNumber">
+                              {assignedPlayers[slot.id].shooting}
+                            </p>
+                            <p className="cardPlayerShootingText">SHO</p>
+                          </div>
+                          <div className="cardPlayerDribbling">
+                            <p className="cardPlayerDribblingNumber">
+                              {assignedPlayers[slot.id].dribbling}
+                            </p>
+                            <p className="cardPlayerDribblingText">DRI</p>
+                          </div>
+                          <div className="cardPlayerPassing">
+                            <p className="cardPlayerPassingNumber">
+                              {assignedPlayers[slot.id].passing}
+                            </p>
+                            <p className="cardPlayerPassingText">PAS</p>
+                          </div>
+                          <div className="cardPlayerDefending">
+                            <p className="cardPlayerDefendingNumber">
+                              {assignedPlayers[slot.id].defending}
+                            </p>
+                            <p className="cardPlayerDefendingText">DEF</p>
+                          </div>
+                          <div className="cardPlayerPhysic">
+                            <p className="cardPlayerPhysicNumber">
+                              {assignedPlayers[slot.id].physic}
+                            </p>
+                            <p className="cardPlayerPhysicText">PHY</p>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>,
           document.getElementById("root2"),
