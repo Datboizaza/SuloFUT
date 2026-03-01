@@ -826,6 +826,23 @@ function Draft() {
           </div>,
           document.getElementById("root2"),
         )}
+
+      {/* Rating & Chemistry Display */}
+      {draftStarted &&
+        gameLayout &&
+        createPortal(
+          <div className="chemRatingDisplay">
+            <h4 className="draftSquadText">Draft Squad</h4>
+            <div className="ratingStars">☆☆☆☆☆</div>
+            <h5 className="ratingText">
+              Rating <span id="ratingNum" className="ratingNum"></span>
+            </h5>
+            <h5 className="chemText">
+              Chemistry <span id="chemNum" className="chemNum"></span>
+            </h5>
+          </div>,
+          document.body,
+        )}
     </>
   );
 }
