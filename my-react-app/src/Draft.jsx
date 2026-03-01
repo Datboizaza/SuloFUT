@@ -30,6 +30,8 @@ function Draft() {
 
   const [playerChemMap, setPlayerChemMap] = useState({});
 
+  const [dragFrom, setDragFrom] = useState(null);
+
   //! Formációk betöltése
   useEffect(() => {
     const fetchData = async () => {
@@ -256,6 +258,34 @@ function Draft() {
     return "☆☆☆☆☆";
   };
 
+  const getDisplayedPosition = (player, slotPos) => {
+    if (!player) return "";
+    const positions = player.player_positions.split(",").map((p) => p.trim());
+    const primary = positions[0] || "";
+    if (!slotPos || slotPos === "ANY") return primary;
+    if (positions.includes(slotPos)) return slotPos;
+    return primary;
+  };
+
+  const handleSwapPlayers = async (fromKey, toKey) => {
+    try {
+      setAssignedPlayers((prev) => {
+        const next = { ...prev };
+        const a = next[fromKey];
+        const b = next[toKey];
+
+        next[fromKey] = b;
+        next[toKey] = a;
+        return next;
+      });
+
+      await fetchChemistry();
+      await fetchRating();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       {/* Formáció kiválasztása */}
@@ -339,9 +369,38 @@ function Draft() {
                 if (assignedPlayers[i]) return;
                 handlePosClick(i, p.pos);
               }}
+              onDragOver={(e) => {
+                if (!assignedPlayers[i]) return;
+                e.preventDefault();
+                e.dataTransfer.dropEffect = "move";
+              }}
+              onDrop={(e) => {
+                e.preventDefault();
+                if (!assignedPlayers[i]) return;
+                const raw = e.dataTransfer.getData("text/plain");
+                const fromKey =
+                  dragFrom ??
+                  (raw && !Number.isNaN(Number(raw)) ? Number(raw) : raw);
+
+                if (fromKey === null || fromKey === undefined) return;
+                if (fromKey === i) return;
+                if (!assignedPlayers[fromKey]) return;
+
+                handleSwapPlayers(fromKey, i);
+              }}
             >
               {assignedPlayers[i] && (
-                <div className="cardSlot" key={i}>
+                <div
+                  className="cardSlot"
+                  key={i}
+                  draggable
+                  onDragStart={(e) => {
+                    setDragFrom(i);
+                    e.dataTransfer.effectAllowed = "move";
+                    e.dataTransfer.setData("text/plain", String(i));
+                  }}
+                  onDragEnd={() => setDragFrom(null)}
+                >
                   <img
                     src={RareGold}
                     className="goldCard"
@@ -356,7 +415,10 @@ function Draft() {
 
                   <p className="cardOverall">{assignedPlayers[i].overall}</p>
                   <p className="cardPosition">
-                    {assignedPlayers[i].player_positions.split(", ")[0]}
+                    {getDisplayedPosition(
+                      assignedPlayers[i],
+                      gameLayout[i].pos,
+                    )}
                   </p>
                   <img
                     className="cardImg"
@@ -653,9 +715,37 @@ function Draft() {
                     if (assignedPlayers[slot.id]) return;
                     handlePosClick(slot.id, slot.pos);
                   }}
+                  onDragOver={(e) => {
+                    if (!assignedPlayers[slot.id]) return;
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = "move";
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    if (!assignedPlayers[slot.id]) return;
+                    const raw = e.dataTransfer.getData("text/plain");
+                    const fromKey =
+                      dragFrom ??
+                      (raw && !Number.isNaN(Number(raw)) ? Number(raw) : raw);
+
+                    if (fromKey === null || fromKey === undefined) return;
+                    if (fromKey === slot.id) return;
+                    if (!assignedPlayers[fromKey]) return;
+
+                    handleSwapPlayers(fromKey, slot.id);
+                  }}
                 >
                   {assignedPlayers[slot.id] && (
-                    <div className="cardSlot">
+                    <div
+                      className="cardSlot"
+                      draggable
+                      onDragStart={(e) => {
+                        setDragFrom(slot.id);
+                        e.dataTransfer.effectAllowed = "move";
+                        e.dataTransfer.setData("text/plain", String(slot.id));
+                      }}
+                      onDragEnd={() => setDragFrom(null)}
+                    >
                       <img
                         src={RareGold}
                         className="goldCard"
@@ -798,9 +888,37 @@ function Draft() {
                     if (assignedPlayers[slot.id]) return;
                     handlePosClick(slot.id, slot.pos);
                   }}
+                  onDragOver={(e) => {
+                    if (!assignedPlayers[slot.id]) return;
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = "move";
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    if (!assignedPlayers[slot.id]) return;
+                    const raw = e.dataTransfer.getData("text/plain");
+                    const fromKey =
+                      dragFrom ??
+                      (raw && !Number.isNaN(Number(raw)) ? Number(raw) : raw);
+
+                    if (fromKey === null || fromKey === undefined) return;
+                    if (fromKey === slot.id) return;
+                    if (!assignedPlayers[fromKey]) return;
+
+                    handleSwapPlayers(fromKey, slot.id);
+                  }}
                 >
                   {assignedPlayers[slot.id] && (
-                    <div className="cardSlot">
+                    <div
+                      className="cardSlot"
+                      draggable
+                      onDragStart={(e) => {
+                        setDragFrom(slot.id);
+                        e.dataTransfer.effectAllowed = "move";
+                        e.dataTransfer.setData("text/plain", String(slot.id));
+                      }}
+                      onDragEnd={() => setDragFrom(null)}
+                    >
                       <img
                         src={RareGold}
                         className="goldCard"
