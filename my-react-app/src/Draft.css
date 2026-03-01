@@ -551,6 +551,15 @@
   font-weight: normal;
 }
 
+.pos .chemStars {
+  height: 15%;
+  width: auto;
+  z-index: 2;
+  position: absolute;
+  left: 5%;
+  bottom: 3%;
+}
+
 /* Kispad */
 .subBar {
   position: fixed;
@@ -629,4 +638,27 @@
   align-items: left;
   justify-content: space-around;
   padding: 25px;
+  cursor: default;
+}
+
+.draftSquadText {
+  align-self: center;
+  color: rgb(113, 255, 212);
+}
+
+.ratingStars {
+  font-size: 150%;
+  align-self: center;
+  color: rgb(255, 217, 0);
+}
+
+.ratingText,
+.chemText {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ratingNum,
+.chemNum {
+  color: rgb(0, 255, 179);
 }

@@ -3,6 +3,10 @@ import { createPortal } from "react-dom";
 import "./Draft.css";
 import RareGold from "./assets/goldRare.png";
 import AltPlayerImg from "./assets/altPlayerImg.png";
+import ZeroChem from "./assets/zeroChem.png";
+import OneChem from "./assets/oneChem.png";
+import TwoChem from "./assets/twoChem.png";
+import ThreeChem from "./assets/threeChem.png";
 
 function Draft() {
   const [formations, setFormations] = useState([]);
@@ -20,6 +24,11 @@ function Draft() {
   const [captainPick, setCaptainPick] = useState(true);
 
   const [openSubs, setOpenSubs] = useState(false);
+
+  const [teamChemistry, setTeamChemistry] = useState(0);
+  const [teamRating, setTeamRating] = useState(0);
+
+  const [playerChemMap, setPlayerChemMap] = useState({});
 
   //! Formációk betöltése
   useEffect(() => {
@@ -77,12 +86,17 @@ function Draft() {
   //! Csapatkapitány kiválasztása + kiválasztott játékos elküldése a backend-re
   const handleCaptainSelect = async (player) => {
     try {
-      await postMethodFetch(
-        "http://127.0.0.1:3000/api/draftselectedplayers",
-        player,
-      );
+      await postMethodFetch("http://127.0.0.1:3000/api/draftselectedplayers", {
+        ...player,
+        starting11: true,
+        resIndex: false,
+      });
+
       setShowPlayerSelectionModal(false);
       assignCaptain();
+
+      await fetchChemistry();
+      await fetchRating();
     } catch (error) {
       console.log(error);
     }
@@ -150,10 +164,21 @@ function Draft() {
     try {
       if (assignedPlayers[selectedIndex]) return;
 
-      await postMethodFetch(
-        "http://127.0.0.1:3000/api/draftselectedplayers",
-        player,
-      );
+      const starting11 = typeof selectedIndex === "number";
+      const resIndex =
+        selectedIndex === "RES1" ||
+        selectedIndex === "RES2" ||
+        selectedIndex === "RES3" ||
+        selectedIndex === "RES4" ||
+        selectedIndex === "RES5";
+      await postMethodFetch("http://127.0.0.1:3000/api/draftselectedplayers", {
+        ...player,
+        starting11,
+        resIndex,
+      });
+
+      await fetchChemistry();
+      await fetchRating();
 
       setAssignedPlayers((prev) => ({
         ...prev,
@@ -183,6 +208,53 @@ function Draft() {
     { id: "RES4", pos: "ANY" },
     { id: "RES5", pos: "ANY" },
   ];
+
+  //! Chemistry fetch-elése
+  const fetchChemistry = async () => {
+    try {
+      const result = await getMethodFetch(
+        "http://127.0.0.1:3000/api/chemistry",
+      );
+      setTeamChemistry(result.teamChemistry);
+
+      const map = {};
+      for (let i = 0; i < result.players.length; i++) {
+        const p = result.players[i];
+        map[p.player_id] = p.chemistry;
+      }
+      setPlayerChemMap(map);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //! Rating fetch-elése
+  const fetchRating = async () => {
+    try {
+      const result = await getMethodFetch("http://127.0.0.1:3000/api/rating");
+      setTeamRating(result.rating);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //! Chemistry Star-ok visszaadása
+  const chemImg = (chem) => {
+    if (chem === 3) return ThreeChem;
+    if (chem === 2) return TwoChem;
+    if (chem === 1) return OneChem;
+    return ZeroChem;
+  };
+
+  //! Rating csillagok
+  const ratingStars = (rating) => {
+    if (rating >= 83) return "★★★★★";
+    if (rating >= 75) return "★★★★☆";
+    if (rating >= 69) return "★★★☆☆";
+    if (rating >= 65) return "★★☆☆☆";
+    if (rating >= 2) return "★☆☆☆☆";
+    return "☆☆☆☆☆";
+  };
 
   return (
     <>
@@ -270,7 +342,17 @@ function Draft() {
             >
               {assignedPlayers[i] && (
                 <div className="cardSlot" key={i}>
-                  <img src={RareGold} className="goldCard"></img>
+                  <img
+                    src={RareGold}
+                    className="goldCard"
+                    alt="Gold Card"
+                  ></img>
+
+                  <img
+                    src={chemImg(playerChemMap[assignedPlayers[i].player_id])}
+                    alt="Chemistry Stars"
+                    className="chemStars"
+                  />
 
                   <p className="cardOverall">{assignedPlayers[i].overall}</p>
                   <p className="cardPosition">
@@ -278,6 +360,7 @@ function Draft() {
                   </p>
                   <img
                     className="cardImg"
+                    alt="Player Image"
                     src={assignedPlayers[i].player_face_url}
                     referrerPolicy="no-referrer"
                     onError={(e) => {
@@ -287,16 +370,19 @@ function Draft() {
                   ></img>
                   <img
                     className="cardNationality"
+                    alt="Player Nationality"
                     src={assignedPlayers[i].nation_url}
                     referrerPolicy="no-referrer"
                   ></img>
                   <img
                     className="cardLeague"
+                    alt="Player League"
                     src={assignedPlayers[i].league_url}
                     referrerPolicy="no-referrer"
                   ></img>
                   <img
                     className="cardClub"
+                    alt="Player Club"
                     src={assignedPlayers[i].club_team_url}
                     referrerPolicy="no-referrer"
                   ></img>
@@ -411,12 +497,17 @@ function Draft() {
                             : handlePlayerSelect(player)
                         }
                       >
-                        <img src={RareGold} className="goldCard"></img>
+                        <img
+                          src={RareGold}
+                          className="goldCard"
+                          alt="Gold Card"
+                        ></img>
 
                         <p className="cardOverall">{player.overall}</p>
                         <p className="cardPosition">{mainPosition}</p>
                         <img
                           className="cardImg"
+                          alt="Player Image"
                           src={player.player_face_url}
                           referrerPolicy="no-referrer"
                           onError={(e) => {
@@ -426,16 +517,19 @@ function Draft() {
                         ></img>
                         <img
                           className="cardNationality"
+                          alt="Player Nationality"
                           src={player.nation_url}
                           referrerPolicy="no-referrer"
                         ></img>
                         <img
                           className="cardLeague"
+                          alt="Player League"
                           src={player.league_url}
                           referrerPolicy="no-referrer"
                         ></img>
                         <img
                           className="cardClub"
+                          alt="Player Club"
                           src={player.club_team_url}
                           referrerPolicy="no-referrer"
                         ></img>
@@ -562,7 +656,11 @@ function Draft() {
                 >
                   {assignedPlayers[slot.id] && (
                     <div className="cardSlot">
-                      <img src={RareGold} className="goldCard"></img>
+                      <img
+                        src={RareGold}
+                        className="goldCard"
+                        alt="Gold Card"
+                      ></img>
 
                       <p className="cardOverall">
                         {assignedPlayers[slot.id].overall}
@@ -576,6 +674,7 @@ function Draft() {
                       </p>
                       <img
                         className="cardImg"
+                        alt="Player Image"
                         src={assignedPlayers[slot.id].player_face_url}
                         referrerPolicy="no-referrer"
                         onError={(e) => {
@@ -585,16 +684,19 @@ function Draft() {
                       ></img>
                       <img
                         className="cardNationality"
+                        alt="Player Nationality"
                         src={assignedPlayers[slot.id].nation_url}
                         referrerPolicy="no-referrer"
                       ></img>
                       <img
                         className="cardLeague"
+                        alt="Player League"
                         src={assignedPlayers[slot.id].league_url}
                         referrerPolicy="no-referrer"
                       ></img>
                       <img
                         className="cardClub"
+                        alt="Player Club"
                         src={assignedPlayers[slot.id].club_team_url}
                         referrerPolicy="no-referrer"
                       ></img>
@@ -699,7 +801,11 @@ function Draft() {
                 >
                   {assignedPlayers[slot.id] && (
                     <div className="cardSlot">
-                      <img src={RareGold} className="goldCard"></img>
+                      <img
+                        src={RareGold}
+                        className="goldCard"
+                        alt="Gold Card"
+                      ></img>
 
                       <p className="cardOverall">
                         {assignedPlayers[slot.id].overall}
@@ -713,6 +819,7 @@ function Draft() {
                       </p>
                       <img
                         className="cardImg"
+                        alt="Player Image"
                         src={assignedPlayers[slot.id].player_face_url}
                         referrerPolicy="no-referrer"
                         onError={(e) => {
@@ -722,16 +829,19 @@ function Draft() {
                       ></img>
                       <img
                         className="cardNationality"
+                        alt="Player Nationality"
                         src={assignedPlayers[slot.id].nation_url}
                         referrerPolicy="no-referrer"
                       ></img>
                       <img
                         className="cardLeague"
+                        alt="Player League"
                         src={assignedPlayers[slot.id].league_url}
                         referrerPolicy="no-referrer"
                       ></img>
                       <img
                         className="cardClub"
+                        alt="Player Club"
                         src={assignedPlayers[slot.id].club_team_url}
                         referrerPolicy="no-referrer"
                       ></img>
@@ -833,12 +943,18 @@ function Draft() {
         createPortal(
           <div className="chemRatingDisplay">
             <h4 className="draftSquadText">Draft Squad</h4>
-            <div className="ratingStars">☆☆☆☆☆</div>
+            <div className="ratingStars">{ratingStars(teamRating)}</div>
             <h5 className="ratingText">
-              Rating <span id="ratingNum" className="ratingNum"></span>
+              Rating{" "}
+              <span id="ratingNum" className="ratingNum">
+                {teamRating}
+              </span>
             </h5>
             <h5 className="chemText">
-              Chemistry <span id="chemNum" className="chemNum"></span>
+              Chemistry{" "}
+              <span id="chemNum" className="chemNum">
+                {teamChemistry}
+              </span>
             </h5>
           </div>,
           document.body,

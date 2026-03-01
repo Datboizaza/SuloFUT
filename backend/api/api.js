@@ -145,6 +145,8 @@ router.get("/randomplayers", async (request, response) => {
 
 //? Választott játékosok
 const draftselectedPlayers = [];
+const draftselectedPlayers11 = [];
+const draftselectedPlayers18 = [];
 router.get("/draftselectedplayers", async (request, response) => {
   try {
     response.status(200).json({
@@ -156,12 +158,47 @@ router.get("/draftselectedplayers", async (request, response) => {
   }
 });
 
+router.get("/draftselectedplayers11", async (request, response) => {
+  try {
+    response.status(200).json({
+      draftselectedplayers11: draftselectedPlayers11,
+    });
+  } catch (error) {
+    console.log("GET /api/draftselectedplayers11 error:", error);
+    response.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.get("/draftselectedplayers18", async (request, response) => {
+  try {
+    response.status(200).json({
+      draftselectedplayers18: draftselectedPlayers18,
+    });
+  } catch (error) {
+    console.log("GET /api/draftselectedplayers18 error:", error);
+    response.status(500).json({ error: "Internal server error" });
+  }
+});
+
 router.post("/draftselectedplayers", async (request, response) => {
   try {
     const selectedplayer = request.body;
+
     draftselectedPlayers.push(selectedplayer);
+
+    if (selectedplayer.starting11 === true) {
+      draftselectedPlayers11.push(selectedplayer);
+      draftselectedPlayers18.push(selectedplayer);
+    } else if (
+      selectedplayer.starting11 === false &&
+      selectedplayer.resIndex === false
+    ) {
+      draftselectedPlayers18.push(selectedplayer);
+    }
+
     response.status(200).json({
       draftselectedplayers: draftselectedPlayers,
+      draftselectedPlayers11: draftselectedPlayers11,
     });
   } catch (error) {
     console.log("POST /api/draftselectedplayers error:", error);
@@ -760,6 +797,125 @@ router.get("/random/:pos", async (request, response) => {
     return response.status(200).json({ randomPlayers: randomPick(data, 5) });
   } catch (error) {
     console.log("GET /api/random/:pos error:", error);
+    response.status(500).json({ error: "Internal server error" });
+  }
+});
+
+//! Chemistry kiszámolása
+router.get("/chemistry", async (request, response) => {
+  try {
+    function chemFromClubCount(count) {
+      if (count >= 7) return 3;
+      if (count >= 4) return 2;
+      if (count >= 2) return 1;
+      return 0;
+    }
+
+    function chemFromCountryCount(count) {
+      if (count >= 8) return 3;
+      if (count >= 5) return 2;
+      if (count >= 2) return 1;
+      return 0;
+    }
+    function chemFromLeagueCount(count) {
+      if (count >= 8) return 3;
+      if (count >= 5) return 2;
+      if (count >= 3) return 1;
+      return 0;
+    }
+
+    function calculateChemistry(players) {
+      const nationCount = {};
+      const leagueCount = {};
+      const clubCount = {};
+
+      // számlálás
+      players.forEach((p) => {
+        if (!nationCount[p.nationality_name]) {
+          nationCount[p.nationality_name] = 1;
+        } else {
+          nationCount[p.nationality_name]++;
+        }
+        if (!leagueCount[p.league_name]) {
+          leagueCount[p.league_name] = 1;
+        } else {
+          leagueCount[p.league_name]++;
+        }
+        if (!clubCount[p.club_name]) {
+          clubCount[p.club_name] = 1;
+        } else {
+          clubCount[p.club_name]++;
+        }
+      });
+
+      // chemistry kiszámítás
+      return players.map((player) => {
+        let chemistry = 0;
+
+        chemistry += chemFromCountryCount(nationCount[player.nationality_name]);
+
+        chemistry += chemFromLeagueCount(leagueCount[player.league_name]);
+
+        chemistry += chemFromClubCount(clubCount[player.club_name]);
+
+        if (chemistry > 3) {
+          chemistry = 3;
+        }
+
+        return {
+          player_id: player.player_id,
+          chemistry,
+        };
+      });
+    }
+
+    const team = draftselectedPlayers11;
+
+    const teamWithChemistry = calculateChemistry(team);
+
+    response.status(200).json({
+      teamChemistry: teamWithChemistry.reduce((sum, p) => sum + p.chemistry, 0),
+      players: teamWithChemistry,
+    });
+  } catch (error) {
+    console.log("GET /api/chemistry error:", error);
+    response.status(500).json({ error: "Internal server error" });
+  }
+});
+
+//! Rating kiszámolása
+router.get("/rating", async (request, response) => {
+  try {
+    const players = draftselectedPlayers18;
+
+    if (players.length === 0) {
+      return response.json({ rating: 0 });
+    }
+
+    const ratings = players.map((p) => Number(p.overall));
+
+    let ratingSum = 0;
+    for (let i = 0; i < ratings.length; i++) {
+      ratingSum += ratings[i];
+    }
+    const avg = ratingSum / 18;
+
+    let correction = 0;
+    for (let i = 0; i < ratings.length; i++) {
+      if (ratings[i] > avg) {
+        correction += ratings[i] - avg;
+      }
+    }
+
+    const correctedSum = ratingSum + correction;
+
+    const finalRating = Math.floor(Math.round(correctedSum) / 18);
+
+    response.status(200).json({
+      rating: finalRating,
+    });
+  } catch (error) {
+    console.log("GET /api/rating error:", error);
     response.status(500).json({ error: "Internal server error" });
   }
 });
