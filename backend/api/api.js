@@ -998,7 +998,7 @@ router.get("/rating", async (request, response) => {
       }
     }
 
-    const correctedSum = ratingSum + correction;
+    const correctedSum = ratingSum + correction / 2 / 18;
 
     const finalRating = Math.floor(Math.round(correctedSum) / 18);
 
