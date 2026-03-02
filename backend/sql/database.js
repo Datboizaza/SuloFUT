@@ -1,22 +1,60 @@
-const mysql = require('mysql2/promise');
+const mysql = require("mysql2/promise");
 
 const pool = mysql.createPool({
-    host: '127.0.0.1',
-    user: 'root',
-    password: '',
-    database: 'exampledb',
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+  host: "127.0.0.1",
+  user: "root",
+  password: "",
+  database: "sulofut",
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
 });
 
 //!SQL Queries
+//? Összes user
 async function selectall() {
-    const query = 'SELECT * FROM exampletable;';
-    const [rows] = await pool.execute(query);
-    return rows;
+  const query = "SELECT * FROM users;";
+  const [rows] = await pool.execute(query);
+  return rows;
 }
+
+//? Regisztráció
+async function insertinto(username, password) {
+  const query = "INSERT INTO users(username, password) VALUES(?, ?);";
+  try {
+    const [rows] = await pool.execute(query, [username, password]);
+    return rows.insertId;
+  } catch (error) {
+    throw error;
+  }
+}
+
+//? Login
+async function login(username) {
+  const query = "SELECT * FROM users WHERE username = ?";
+  try {
+    const [rows] = await pool.execute(query, [username]);
+    return rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+
+//? User by id
+async function getUserById(id) {
+  const query = "SELECT id, username FROM users WHERE id = ?";
+  try {
+    const [rows] = await pool.execute(query, [id]);
+    return rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+
 //!Export
 module.exports = {
-    selectall
+  selectall,
+  insertinto,
+  login,
+  getUserById,
 };
