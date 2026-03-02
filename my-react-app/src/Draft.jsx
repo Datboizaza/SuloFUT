@@ -32,7 +32,7 @@ function Draft() {
 
   const [dragFrom, setDragFrom] = useState(null);
 
-  //! Formációk betöltése
+  //! Formációk betöltése és draft reset-elése
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -62,14 +62,22 @@ function Draft() {
 
   //! Játék elkezdése
   const startDraft = async (formation) => {
-    setGameLayout(formation.layout);
-    setSelectedFormation(formation);
-    setDraftStarted(true);
+    try {
+      await fetch("http://127.0.0.1:3000/api/draftselectedplayers", {
+        method: "DELETE",
+      });
 
-    setTimeout(async () => {
-      await chooseCaptain();
-      setShowPlayerSelectionModal(true);
-    }, 500);
+      setGameLayout(formation.layout);
+      setSelectedFormation(formation);
+      setDraftStarted(true);
+
+      setTimeout(async () => {
+        await chooseCaptain();
+        setShowPlayerSelectionModal(true);
+      }, 500);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   //! Csapatkapitányok betöltése
@@ -258,6 +266,7 @@ function Draft() {
     return "☆☆☆☆☆";
   };
 
+  //! Pozíció átírása az aktuális pozícióra amin szerepel (ha van)
   const getDisplayedPosition = (player, slotPos) => {
     if (!player) return "";
     const positions = player.player_positions.split(",").map((p) => p.trim());
@@ -267,6 +276,7 @@ function Draft() {
     return primary;
   };
 
+  //! Játékosok swap-olása
   const handleSwapPlayers = async (fromKey, toKey) => {
     try {
       setAssignedPlayers((prev) => {

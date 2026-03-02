@@ -96,7 +96,6 @@ router.post("/users/login", async (request, response) => {
   }
 });
 
-//!
 router.get("/users/me", async (request, response) => {
   try {
     if (!request.session.userId)
@@ -108,7 +107,19 @@ router.get("/users/me", async (request, response) => {
   }
 });
 
-//? Json fájl beolvasása
+//! User statok
+router.get("/users/me/coins", async (request, response) => {
+  try {
+    if (!request.session.userId)
+      return response.status(400).json({ message: "Hiba történt." });
+    const coins = await database.getUserCoinsById(request.session.userId);
+    response.status(200).json(coins);
+  } catch (error) {
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//! Json fájl beolvasása
 const readJsonFile = async (filePath) => {
   try {
     const raw = await fs.readFile(filePath, "utf-8");
@@ -118,7 +129,7 @@ const readJsonFile = async (filePath) => {
   }
 };
 
-//? Formációk /api/formations
+//! Formációk /api/formations
 router.get("/formations", async (request, response) => {
   try {
     const data = await readJsonFile(
@@ -131,7 +142,7 @@ router.get("/formations", async (request, response) => {
   }
 });
 
-//? 5 random formáció /api/randomformations
+//! 5 random formáció /api/randomformations
 router.get("/randomformations", async (request, response) => {
   try {
     const data = await readJsonFile(
@@ -164,7 +175,7 @@ router.get("/randomformations", async (request, response) => {
   }
 });
 
-//? Players /api/players
+//! Players /api/players
 router.get("/players", async (request, response) => {
   try {
     const data = await readJsonFile(
@@ -177,7 +188,7 @@ router.get("/players", async (request, response) => {
   }
 });
 
-//? 5 random player (Captains) /api/randomplayers
+//! 5 random player (Captains) /api/randomplayers
 router.get("/randomplayers", async (request, response) => {
   try {
     const data = await readJsonFile(
@@ -210,10 +221,10 @@ router.get("/randomplayers", async (request, response) => {
   }
 });
 
-//? Választott játékosok
-const draftselectedPlayers = [];
-const draftselectedPlayers11 = [];
-const draftselectedPlayers18 = [];
+//! Választott játékosok
+let draftselectedPlayers = [];
+let draftselectedPlayers11 = [];
+let draftselectedPlayers18 = [];
 router.get("/draftselectedplayers", async (request, response) => {
   try {
     response.status(200).json({
@@ -269,6 +280,19 @@ router.post("/draftselectedplayers", async (request, response) => {
     });
   } catch (error) {
     console.log("POST /api/draftselectedplayers error:", error);
+    response.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.delete("/draftselectedplayers", (request, response) => {
+  try {
+    draftselectedPlayers = [];
+    draftselectedPlayers11 = [];
+    draftselectedPlayers18 = [];
+
+    response.status(200).json({ message: "Successful draft reset" });
+  } catch (error) {
+    console.log("DELETE /api/draftselectedplayers error:", error);
     response.status(500).json({ error: "Internal server error" });
   }
 });

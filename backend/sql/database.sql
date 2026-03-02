@@ -9,3 +9,24 @@ CREATE TABLE users (
   username VARCHAR(50) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL
 );
+
+CREATE TABLE coins (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT UNIQUE NOT NULL,
+  coinNumber INT NOT NULL DEFAULT 0,
+
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+/* Coins létrehozása triggers */
+DELIMITER $$
+
+CREATE TRIGGER createCoins_afterUserInsert
+AFTER INSERT ON users
+FOR EACH ROW
+BEGIN
+  INSERT INTO coins (user_id, coinNumber)
+  VALUES (NEW.id, 0);
+END$$
+
+DELIMITER ;

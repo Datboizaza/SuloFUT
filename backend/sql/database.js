@@ -51,10 +51,22 @@ async function getUserById(id) {
   }
 }
 
+//? User Coin száma
+async function getUserCoinsById(id) {
+  const query = "SELECT coinNumber FROM coins WHERE user_id = ?;";
+  try {
+    const [rows] = await pool.execute(query, [id]);
+    return rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+
 //!Export
 module.exports = {
   selectall,
   insertinto,
   login,
   getUserById,
+  getUserCoinsById,
 };
