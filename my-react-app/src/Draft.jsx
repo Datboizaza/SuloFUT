@@ -132,8 +132,19 @@ function Draft() {
           );
         }
         if (alternateIndex === -1) {
-          console.log("Kispad");
-          return;
+          const resSlots = ["RES1", "RES2", "RES3", "RES4", "RES5"];
+          let chosenRes = null;
+
+          setAssignedPlayers((prev) => {
+            const next = { ...prev };
+            chosenRes = resSlots.find((id) => !next[id]);
+            next[chosenRes] = player;
+            return next;
+          });
+
+          await fetch("http://127.0.0.1:3000/api/draftselectedplayers11", {
+            method: "DELETE",
+          });
         } else {
           setAssignedPlayers((prev) => ({
             ...prev,

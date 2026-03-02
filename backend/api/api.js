@@ -297,6 +297,18 @@ router.delete("/draftselectedplayers", (request, response) => {
   }
 });
 
+router.delete("/draftselectedplayers11", (request, response) => {
+  try {
+    draftselectedPlayers11 = [];
+    draftselectedPlayers18 = [];
+
+    response.status(200).json({ message: "Successful" });
+  } catch (error) {
+    console.log("DELETE /api/draftselectedplayers11 error:", error);
+    response.status(500).json({ error: "Internal server error" });
+  }
+});
+
 //!Pozíciónkénti random játékos generálás Rating Range-ekkel
 router.get("/random/:pos", async (request, response) => {
   try {
