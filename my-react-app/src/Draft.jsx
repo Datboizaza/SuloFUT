@@ -32,6 +32,9 @@ function Draft() {
 
   const [dragFrom, setDragFrom] = useState(null);
 
+  const [draftComplete, setDraftComplete] = useState(false);
+  const [showDraftSummary, setShowDraftSummary] = useState(false);
+
   //! Formációk betöltése és draft reset-elése
   useEffect(() => {
     const fetchData = async () => {
@@ -68,6 +71,11 @@ function Draft() {
       });
 
       setGameLayout(formation.layout);
+
+      await postMethodFetch("http://127.0.0.1:3000/api/draft/formation", {
+        slotPosList: formation.layout.map((p) => p.pos),
+      });
+
       setSelectedFormation(formation);
       setDraftStarted(true);
 
@@ -192,10 +200,15 @@ function Draft() {
         selectedIndex === "RES3" ||
         selectedIndex === "RES4" ||
         selectedIndex === "RES5";
+      const slotPos = starting11
+        ? gameLayout[selectedIndex].pos
+        : benchLayout.find((s) => s.id === selectedIndex)?.pos;
+
       await postMethodFetch("http://127.0.0.1:3000/api/draftselectedplayers", {
         ...player,
         starting11,
         resIndex,
+        slotPos,
       });
 
       await fetchChemistry();
@@ -300,8 +313,51 @@ function Draft() {
         return next;
       });
 
+      const getSlotPosByKey = (key) => {
+        if (typeof key === "number") return gameLayout[key]?.pos;
+        return benchLayout.find((s) => s.id === key)?.pos;
+      };
+
+      await putMethodFetch("http://127.0.0.1:3000/api/swap", {
+        aId: assignedPlayers[fromKey].player_id,
+        bId: assignedPlayers[toKey].player_id,
+        aSlotPos: getSlotPosByKey(fromKey),
+        bSlotPos: getSlotPosByKey(toKey),
+      });
+
       await fetchChemistry();
       await fetchRating();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //! Draft vége
+  useEffect(() => {
+    if (!draftStarted || !gameLayout) {
+      setDraftComplete(false);
+      return;
+    }
+
+    const starting11Full = gameLayout.every((_, i) =>
+      Boolean(assignedPlayers[i]),
+    );
+    const benchFull = benchLayout.every((slot) =>
+      Boolean(assignedPlayers[slot.id]),
+    );
+
+    setDraftComplete(starting11Full && benchFull);
+  }, [draftStarted, gameLayout, assignedPlayers]);
+
+  //! Draft befejezése
+  const handleSubmitDraft = async () => {
+    try {
+      setShowDraftSummary(true);
+
+      const actualDraft = teamChemistry + teamRating;
+      await postMethodFetch("http://127.0.0.1:3000/api/users/me/bestdraft", {
+        rating: actualDraft,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -1098,6 +1154,27 @@ function Draft() {
           </div>,
           document.body,
         )}
+
+      {/* Draft vége */}
+      {draftComplete &&
+        createPortal(
+          <div className="submitDraft">
+            <button className="submitDraftBtn" onClick={handleSubmitDraft}>
+              Submit Draft
+            </button>
+          </div>,
+          document.body,
+        )}
+
+      {/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/}
+      {/* Draft Summary */}
+      {showDraftSummary &&
+        createPortal(
+          <div className="draftSummary">
+            <p>Draft vége</p>
+          </div>,
+          document.body,
+        )}
     </>
   );
 }
@@ -1119,6 +1196,16 @@ const postMethodFetch = async (url, data) => {
   if (!response.ok) {
     throw new Error("POST hiba");
   }
+  return await response.json();
+};
+
+const putMethodFetch = async (url, data) => {
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) throw new Error("PUT hiba");
   return await response.json();
 };
 

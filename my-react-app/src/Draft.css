@@ -112,10 +112,10 @@
 
 /*--------------------Draft layout---------------------*/
 .gameFormationLayout {
-  height: 60vh;
+  height: 70vh;
   width: 60vw;
   position: fixed;
-  top: 54%;
+  top: 56%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
@@ -486,9 +486,9 @@
 .pos .cardSlot {
   position: relative;
   width: 90%;
-  height: 100%;
+  height: 85%;
   justify-self: center;
-  bottom: 18%;
+  bottom: 0;
 }
 
 .pos .cardSlot:hover {
@@ -603,7 +603,7 @@
 .subBarContent .pos {
   position: relative;
   width: 8%;
-  height: 15vh;
+  height: 16vh;
   transform: none;
   z-index: 0;
   aspect-ratio: 3/4.2;

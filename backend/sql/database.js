@@ -62,6 +62,18 @@ async function getUserCoinsById(id) {
   }
 }
 
+//? User legjobb draft update
+async function updateBestDraftById(actualDraft, id) {
+  const query =
+    "UPDATE stats SET best_draft = IF(best_draft < ?, ?, best_draft) WHERE user_id = ?;";
+  try {
+    const [rows] = await pool.execute(query, [actualDraft, actualDraft, id]);
+    return rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+
 //!Export
 module.exports = {
   selectall,
@@ -69,4 +81,5 @@ module.exports = {
   login,
   getUserById,
   getUserCoinsById,
+  updateBestDraftById,
 };

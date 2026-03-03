@@ -119,6 +119,22 @@ router.get("/users/me/coins", async (request, response) => {
   }
 });
 
+router.post("/users/me/bestdraft", async (request, response) => {
+  try {
+    const result = await database.updateBestDraftById(
+      rating,
+      request.session.userId,
+    );
+
+    return response.status(200).json({
+      bestDraft: rating,
+    });
+  } catch (error) {
+    console.log("POST /users/me/bestdraft error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
 //! Json fájl beolvasása
 const readJsonFile = async (filePath) => {
   try {
@@ -175,6 +191,20 @@ router.get("/randomformations", async (request, response) => {
   }
 });
 
+let currentStarting11SlotPos = [];
+const subsSlotPos = ["GK", "DEF", "DEF", "MID", "MID", "ATT", "ATT"];
+const resSlotPos = ["ANY", "ANY", "ANY", "ANY", "ANY"];
+//! kiválasztott formáció pozíciói
+router.post("/draft/formation", async (request, response) => {
+  try {
+    const { slotPosList } = request.body;
+    currentStarting11SlotPos = slotPosList;
+    return response.status(200).json({ message: true });
+  } catch (error) {
+    return response.status(500).json({ error: "Internal server error" });
+  }
+});
+
 //! Players /api/players
 router.get("/players", async (request, response) => {
   try {
@@ -224,7 +254,8 @@ router.get("/randomplayers", async (request, response) => {
 //! Választott játékosok
 let draftselectedPlayers = [];
 let draftselectedPlayers11 = [];
-let draftselectedPlayers18 = [];
+let draftselectedPlayersSubs = [];
+let draftselectedPlayersRes = [];
 router.get("/draftselectedplayers", async (request, response) => {
   try {
     response.status(200).json({
@@ -247,13 +278,24 @@ router.get("/draftselectedplayers11", async (request, response) => {
   }
 });
 
-router.get("/draftselectedplayers18", async (request, response) => {
+router.get("/draftselectedplayersSubs", async (request, response) => {
   try {
     response.status(200).json({
-      draftselectedplayers18: draftselectedPlayers18,
+      draftselectedPlayersSubs: draftselectedPlayersSubs,
     });
   } catch (error) {
-    console.log("GET /api/draftselectedplayers18 error:", error);
+    console.log("GET /api/draftselectedplayersSubs error:", error);
+    response.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.get("/draftselectedplayersRes", async (request, response) => {
+  try {
+    response.status(200).json({
+      draftselectedPlayersRes: draftselectedPlayersRes,
+    });
+  } catch (error) {
+    console.log("GET /api/draftselectedplayersRes error:", error);
     response.status(500).json({ error: "Internal server error" });
   }
 });
@@ -266,17 +308,20 @@ router.post("/draftselectedplayers", async (request, response) => {
 
     if (selectedplayer.starting11 === true) {
       draftselectedPlayers11.push(selectedplayer);
-      draftselectedPlayers18.push(selectedplayer);
     } else if (
       selectedplayer.starting11 === false &&
       selectedplayer.resIndex === false
     ) {
-      draftselectedPlayers18.push(selectedplayer);
+      draftselectedPlayersSubs.push(selectedplayer);
+    } else {
+      draftselectedPlayersRes.push(selectedplayer);
     }
 
     response.status(200).json({
       draftselectedplayers: draftselectedPlayers,
       draftselectedPlayers11: draftselectedPlayers11,
+      draftselectedPlayersSubs: draftselectedPlayersSubs,
+      draftselectedPlayersRes: draftselectedPlayersRes,
     });
   } catch (error) {
     console.log("POST /api/draftselectedplayers error:", error);
@@ -288,7 +333,9 @@ router.delete("/draftselectedplayers", (request, response) => {
   try {
     draftselectedPlayers = [];
     draftselectedPlayers11 = [];
-    draftselectedPlayers18 = [];
+    draftselectedPlayersSubs = [];
+    draftselectedPlayersRes = [];
+    currentStarting11SlotPos = [];
 
     response.status(200).json({ message: "Successful draft reset" });
   } catch (error) {
@@ -300,7 +347,7 @@ router.delete("/draftselectedplayers", (request, response) => {
 router.delete("/draftselectedplayers11", (request, response) => {
   try {
     draftselectedPlayers11 = [];
-    draftselectedPlayers18 = [];
+    draftselectedPlayersSubs = [];
 
     response.status(200).json({ message: "Successful" });
   } catch (error) {
@@ -927,13 +974,32 @@ router.get("/chemistry", async (request, response) => {
       return 0;
     }
 
+    function inPosition(player) {
+      const slotPos = player.slotPos;
+      const positions = player.player_positions.split(", ");
+      if (!slotPos || slotPos === "ANY") return true;
+
+      if (slotPos === "DEF")
+        return positions.some((p) => ["LB", "CB", "RB"].includes(p));
+      if (slotPos === "MID")
+        return positions.some((p) =>
+          ["CDM", "CM", "CAM", "LM", "RM"].includes(p),
+        );
+      if (slotPos === "ATT")
+        return positions.some((p) => ["ST", "LW", "RW"].includes(p));
+
+      return positions.includes(slotPos);
+    }
+
     function calculateChemistry(players) {
+      const activePlayers = players.filter((p) => p && inPosition(p));
+
       const nationCount = {};
       const leagueCount = {};
       const clubCount = {};
 
       // számlálás
-      players.forEach((p) => {
+      activePlayers.forEach((p) => {
         if (!nationCount[p.nationality_name]) {
           nationCount[p.nationality_name] = 1;
         } else {
@@ -953,13 +1019,22 @@ router.get("/chemistry", async (request, response) => {
 
       // chemistry kiszámítás
       return players.map((player) => {
+        if (!player) return null;
+
+        if (!inPosition(player)) {
+          return {
+            player_id: player.player_id,
+            chemistry: 0,
+            inPosition: false,
+          };
+        }
+
         let chemistry = 0;
-
-        chemistry += chemFromCountryCount(nationCount[player.nationality_name]);
-
-        chemistry += chemFromLeagueCount(leagueCount[player.league_name]);
-
-        chemistry += chemFromClubCount(clubCount[player.club_name]);
+        chemistry += chemFromCountryCount(
+          nationCount[player.nationality_name] || 0,
+        );
+        chemistry += chemFromLeagueCount(leagueCount[player.league_name] || 0);
+        chemistry += chemFromClubCount(clubCount[player.club_name] || 0);
 
         if (chemistry > 3) {
           chemistry = 3;
@@ -968,6 +1043,7 @@ router.get("/chemistry", async (request, response) => {
         return {
           player_id: player.player_id,
           chemistry,
+          inPosition: true,
         };
       });
     }
@@ -989,30 +1065,32 @@ router.get("/chemistry", async (request, response) => {
 //! Rating kiszámolása
 router.get("/rating", async (request, response) => {
   try {
-    const players = draftselectedPlayers18;
+    const starting11players = await draftselectedPlayers11;
+    const subplayers = await draftselectedPlayersSubs;
 
-    if (players.length === 0) {
+    if (starting11players.length === 0) {
       return response.json({ rating: 0 });
     }
 
-    const ratings = players.map((p) => Number(p.overall));
+    const starting11ratings = starting11players.map((p) => Number(p.overall));
+    const subratings = subplayers.map((p) => Number(p.overall));
 
-    let ratingSum = 0;
-    for (let i = 0; i < ratings.length; i++) {
-      ratingSum += ratings[i];
-    }
-    const avg = ratingSum / 18;
-
-    let correction = 0;
-    for (let i = 0; i < ratings.length; i++) {
-      if (ratings[i] > avg) {
-        correction += ratings[i] - avg;
-      }
+    let starting11ratingsSum = 0;
+    for (let i = 0; i < starting11ratings.length; i++) {
+      starting11ratingsSum += starting11ratings[i];
     }
 
-    const correctedSum = ratingSum + correction / 2 / 18;
+    let subratingsSum = 0;
+    for (let i = 0; i < subratings.length; i++) {
+      subratingsSum += subratings[i];
+    }
+    const subavg = Math.round(subratingsSum / 7);
 
-    const finalRating = Math.floor(Math.round(correctedSum) / 18);
+    const correctedSum = starting11ratingsSum + subavg;
+
+    const correctedSumAvg = correctedSum / 12;
+
+    const finalRating = Math.round(correctedSumAvg);
 
     response.status(200).json({
       rating: finalRating,
@@ -1020,6 +1098,44 @@ router.get("/rating", async (request, response) => {
   } catch (error) {
     console.log("GET /api/rating error:", error);
     response.status(500).json({ error: "Internal server error" });
+  }
+});
+
+//! Játékosok Swap-olása
+router.put("/swap", (request, response) => {
+  try {
+    const { aId, bId, aSlotPos, bSlotPos } = request.body;
+
+    const arrays = {
+      starting11: draftselectedPlayers11,
+      subs: draftselectedPlayersSubs,
+      res: draftselectedPlayersRes,
+    };
+
+    const findPlayer = (playerId) => {
+      for (const [name, arr] of Object.entries(arrays)) {
+        const idx = arr.findIndex(
+          (p) => String(p.player_id) === String(playerId),
+        );
+        if (idx !== -1) return { name, arr, idx };
+      }
+      return null;
+    };
+
+    const A = findPlayer(aId);
+    const B = findPlayer(bId);
+
+    const temp = A.arr[A.idx];
+    A.arr[A.idx] = B.arr[B.idx];
+    B.arr[B.idx] = temp;
+
+    if (A.arr[A.idx]) A.arr[A.idx].slotPos = aSlotPos;
+    if (B.arr[B.idx]) B.arr[B.idx].slotPos = bSlotPos;
+
+    return response.json({ ok: true });
+  } catch (error) {
+    console.log("PUT /api/swap error:", error);
+    return response.status(500).json({ error: "Internal server error" });
   }
 });
 

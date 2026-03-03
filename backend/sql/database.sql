@@ -18,6 +18,14 @@ CREATE TABLE coins (
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE stats (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT UNIQUE NOT NULL,
+  best_draft INT NOT NULL DEFAULT 0,
+
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 /* Coins létrehozása triggers */
 DELIMITER $$
 
@@ -26,6 +34,19 @@ AFTER INSERT ON users
 FOR EACH ROW
 BEGIN
   INSERT INTO coins (user_id, coinNumber)
+  VALUES (NEW.id, 0);
+END$$
+
+DELIMITER ;
+
+/* Stats létrehozása triggers */
+DELIMITER $$
+
+CREATE TRIGGER createStats_afterUserInsert
+AFTER INSERT ON users
+FOR EACH ROW
+BEGIN
+  INSERT INTO stats (user_id, best_draft)
   VALUES (NEW.id, 0);
 END$$
 
