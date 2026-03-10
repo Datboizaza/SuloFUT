@@ -23,7 +23,7 @@
   flex-direction: column;
   justify-content: space-evenly;
   color: white;
-  padding-left: 30px;
+  padding-left: 2%;
   backdrop-filter: blur(50px);
 }
 
@@ -52,7 +52,7 @@
 
 #formationImage h2 {
   padding-left: 70px;
-  padding-top: 30px;
+  padding-top: 20px;
 }
 
 /* Nagy pálya */
@@ -72,7 +72,7 @@
 
 .pos {
   position: absolute;
-  width: 10%;
+  width: 15%;
   height: 23%;
   background-image: url("./assets/draftPlaceHolder.png");
   background-size: contain;
@@ -91,7 +91,7 @@
   align-items: center;
   justify-content: space-between;
   padding-left: 15%;
-  padding-right: 13%;
+  padding-right: 10%;
   width: 95%;
   background-color: transparent;
   border: none;
@@ -143,7 +143,8 @@
   font-weight: bolder;
   pointer-events: none;
   background-color: rgba(128, 128, 128, 0.781);
-  width: 3.5%;
+  width: 8%;
+  max-width: 50px;
   height: 4%;
   border-radius: 50%;
   z-index: 0;
@@ -170,18 +171,6 @@
   z-index: 10000;
   backdrop-filter: blur(4px);
   animation: fadeIn 0.4s ease;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    backdrop-filter: blur(0px);
-  }
-
-  to {
-    opacity: 1;
-    backdrop-filter: blur(4px);
-  }
 }
 
 .modalOverlay {
@@ -786,4 +775,137 @@
   align-items: center;
   justify-content: center;
   font-size: 120%;
+}
+
+/*? Animációk */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+
+  to {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+}
+
+/*------------------Media queries---------------------*/
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  /*?------------------Formáció kiválasztás stílusai-------------------*/
+
+  /*------------------Alap elrendezés------------------*/
+  #formationSelectDiv {
+    width: 90vw;
+  }
+
+  /*-----------------Baloldali formázások------------------*/
+
+  #chooseFormation {
+    padding-left: 0;
+  }
+
+  .chooseFormationTitle {
+    margin-left: 30px;
+  }
+
+  /* Mini pálya */
+  .miniFormationLayout {
+    width: 12vw;
+  }
+
+  /*----------------Jobboldali formázások-----------------*/
+
+  #formationImage h2 {
+    padding-left: 30px;
+    padding-top: 20px;
+  }
+
+  /* Nagy pálya */
+  .formationLayout {
+    width: 50vw;
+  }
+
+  .pos {
+    width: 14%;
+    max-width: 60px;
+  }
+
+  .formationLayout .posText {
+    width: 9%;
+    max-width: 40px;
+    height: 5%;
+    transform: translate(-50%, -90%);
+  }
+
+  /*---------------Gombok---------------*/
+
+  .formationSelectBtn {
+    justify-content: space-between;
+    padding-left: 7%;
+    padding-right: 2%;
+  }
+
+  .formationSelectBtn:hover {
+    transform: scale(1.01);
+  }
+}
+
+@media screen and (max-width: 767px) {
+  /*?------------------Formáció kiválasztás stílusai-------------------*/
+
+  /*------------------Alap elrendezés------------------*/
+  #formationSelectDiv {
+    width: 90vw;
+  }
+
+  /*-----------------Baloldali formázások------------------*/
+
+  #chooseFormation {
+    padding-left: 0;
+  }
+
+  .chooseFormationTitle {
+    margin-left: 20px;
+    font-size: 110%;
+  }
+
+  /* Mini pálya */
+  .miniFormationLayout {
+    display: none;
+  }
+
+  /*----------------Jobboldali formázások-----------------*/
+
+  #formationImage h2 {
+    padding-left: 20px;
+    padding-top: 10px;
+    font-size: 120%;
+  }
+
+  /* Nagy pálya */
+  .formationLayout {
+    width: 100%;
+  }
+
+  .pos {
+    width: 25%;
+    max-width: 50px;
+  }
+
+  .formationLayout .posText {
+    width: 12%;
+    max-width: 30px;
+    height: 4%;
+    transform: translate(-50%, -130%);
+    font-size: 45%;
+  }
+
+  /*---------------Gombok---------------*/
+
+  .formationSelectBtn {
+    justify-content: center;
+    padding-left: 0%;
+    padding-right: 0%;
+  }
 }

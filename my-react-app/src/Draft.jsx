@@ -388,7 +388,7 @@ function Draft() {
           <div className="row">
             {/* Bal oldal */}
             <div className="col-4" id="chooseFormation">
-              <h3>Choose a formation</h3>
+              <h3 className="chooseFormationTitle">Choose a formation</h3>
 
               {formations.map((formation, index) => {
                 const formationArray = Object.values(formation.formation);
