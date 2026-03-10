@@ -7,6 +7,10 @@ import ZeroChem from "./assets/zeroChem.png";
 import OneChem from "./assets/oneChem.png";
 import TwoChem from "./assets/twoChem.png";
 import ThreeChem from "./assets/threeChem.png";
+import InterMilan from "./assets/intermilan.png";
+import ACMilan from "./assets/acmilan.png";
+import Atalanta from "./assets/atalanta.png";
+import Lazio from "./assets/lazio.png";
 
 function Draft() {
   const [formations, setFormations] = useState([]);
@@ -363,6 +367,19 @@ function Draft() {
     }
   };
 
+  //! Grafikon létrehozása
+  const graphProgress =
+    Math.max(0, Math.min((teamChemistry + teamRating) / 133, 1)) * 360;
+
+  //! Visszatérés a menübe
+  const handleExitToMenu = () => {
+    try {
+      window.location.href = "/";
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       {/* Formáció kiválasztása */}
@@ -524,6 +541,21 @@ function Draft() {
                     alt="Player Club"
                     src={assignedPlayers[i].club_team_url}
                     referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      if (assignedPlayers[i].club_name === "Inter") {
+                        e.currentTarget.src = InterMilan;
+                      }
+                      if (assignedPlayers[i].club_name === "AC Milan") {
+                        e.currentTarget.src = ACMilan;
+                      }
+                      if (assignedPlayers[i].club_name === "Lazio") {
+                        e.currentTarget.src = Lazio;
+                      }
+                      if (assignedPlayers[i].club_name === "Atalanta") {
+                        e.currentTarget.src = Atalanta;
+                      }
+                    }}
                   ></img>
                   <p className="cardName">{assignedPlayers[i].short_name}</p>
 
@@ -614,7 +646,7 @@ function Draft() {
             <p
               key={i}
               className="posText"
-              style={{ left: p.x + "%", top: `calc(${p.y}% + 8%)` }}
+              style={{ left: p.x + "%", top: `calc(${p.y}% + 6%)` }}
             >
               {p.pos}
             </p>
@@ -671,6 +703,21 @@ function Draft() {
                           alt="Player Club"
                           src={player.club_team_url}
                           referrerPolicy="no-referrer"
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            if (player.club_name === "Inter") {
+                              e.currentTarget.src = InterMilan;
+                            }
+                            if (player.club_name === "AC Milan") {
+                              e.currentTarget.src = ACMilan;
+                            }
+                            if (player.club_name === "Lazio") {
+                              e.currentTarget.src = Lazio;
+                            }
+                            if (player.club_name === "Atalanta") {
+                              e.currentTarget.src = Atalanta;
+                            }
+                          }}
                         ></img>
                         <p className="cardName">{player.short_name}</p>
 
@@ -866,6 +913,25 @@ function Draft() {
                         alt="Player Club"
                         src={assignedPlayers[slot.id].club_team_url}
                         referrerPolicy="no-referrer"
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          if (assignedPlayers[slot.id].club_name === "Inter") {
+                            e.currentTarget.src = InterMilan;
+                          }
+                          if (
+                            assignedPlayers[slot.id].club_name === "AC Milan"
+                          ) {
+                            e.currentTarget.src = ACMilan;
+                          }
+                          if (assignedPlayers[slot.id].club_name === "Lazio") {
+                            e.currentTarget.src = Lazio;
+                          }
+                          if (
+                            assignedPlayers[slot.id].club_name === "Atalanta"
+                          ) {
+                            e.currentTarget.src = Atalanta;
+                          }
+                        }}
                       ></img>
                       <p className="cardName">
                         {assignedPlayers[slot.id].short_name}
@@ -1039,6 +1105,25 @@ function Draft() {
                         alt="Player Club"
                         src={assignedPlayers[slot.id].club_team_url}
                         referrerPolicy="no-referrer"
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          if (assignedPlayers[slot.id].club_name === "Inter") {
+                            e.currentTarget.src = InterMilan;
+                          }
+                          if (
+                            assignedPlayers[slot.id].club_name === "AC Milan"
+                          ) {
+                            e.currentTarget.src = ACMilan;
+                          }
+                          if (assignedPlayers[slot.id].club_name === "Lazio") {
+                            e.currentTarget.src = Lazio;
+                          }
+                          if (
+                            assignedPlayers[slot.id].club_name === "Atalanta"
+                          ) {
+                            e.currentTarget.src = Atalanta;
+                          }
+                        }}
                       ></img>
                       <p className="cardName">
                         {assignedPlayers[slot.id].short_name}
@@ -1158,20 +1243,54 @@ function Draft() {
       {/* Draft vége */}
       {draftComplete &&
         createPortal(
-          <div className="submitDraft">
-            <button className="submitDraftBtn" onClick={handleSubmitDraft}>
-              Submit Draft
-            </button>
-          </div>,
+          <button className="submitDraftBtn" onClick={handleSubmitDraft}>
+            Submit Draft
+          </button>,
           document.body,
         )}
 
-      {/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/}
       {/* Draft Summary */}
       {showDraftSummary &&
         createPortal(
-          <div className="draftSummary">
-            <p>Draft vége</p>
+          <div className="draftSummaryOverlay">
+            <div className="draftSummary">
+              <div className="draftSummaryTitle">Draft Summary</div>
+              <div className="draftSummaryStats">
+                <div className="draftGraphDiv">
+                  <div
+                    className="draftGraph"
+                    style={{
+                      background: `conic-gradient(rgb(0, 255, 251) ${graphProgress}deg, rgba(0, 255, 251, 0.26) ${graphProgress}deg)`,
+                    }}
+                  >
+                    <div className="ratingInner">
+                      <div>Squad</div>
+                      <div>Rating</div>
+                      <strong>{teamChemistry + teamRating}</strong>
+                    </div>
+                  </div>
+                </div>
+                <div className="vl"></div>
+                <div className="draftNumbers">
+                  <div className="ratingStars">{ratingStars(teamRating)}</div>
+                  <h5 className="ratingText">
+                    Rating{" "}
+                    <span id="ratingNum" className="ratingNum">
+                      {teamRating}
+                    </span>
+                  </h5>
+                  <h5 className="chemText">
+                    Chemistry{" "}
+                    <span id="chemNum" className="chemNum">
+                      {teamChemistry}
+                    </span>
+                  </h5>
+                  <button className="exitButton" onClick={handleExitToMenu}>
+                    Exit
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>,
           document.body,
         )}
@@ -1180,33 +1299,48 @@ function Draft() {
 }
 
 const getMethodFetch = async (url) => {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error("GET hiba");
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`GET hiba: ${response.status} ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    throw new Error(`Hiba történt: ${error.message}`);
   }
-  return await response.json();
 };
 
 const postMethodFetch = async (url, data) => {
-  const response = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-  if (!response.ok) {
-    throw new Error("POST hiba");
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error(`POST Hiba: ${response.status} ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    throw new Error(`Hiba történt: ${error.message}`);
   }
-  return await response.json();
 };
 
 const putMethodFetch = async (url, data) => {
-  const response = await fetch(url, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-  if (!response.ok) throw new Error("PUT hiba");
-  return await response.json();
+  try {
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error(`PUT Hiba: ${response.status} ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    throw new Error(`Hiba történt: ${error.message}`);
+  }
 };
 
 export default Draft;

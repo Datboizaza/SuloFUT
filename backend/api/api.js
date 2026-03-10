@@ -121,6 +121,7 @@ router.get("/users/me/coins", async (request, response) => {
 
 router.post("/users/me/bestdraft", async (request, response) => {
   try {
+    const rating = request.body.rating;
     const result = await database.updateBestDraftById(
       rating,
       request.session.userId,

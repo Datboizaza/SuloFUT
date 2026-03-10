@@ -112,17 +112,17 @@
 
 /*--------------------Draft layout---------------------*/
 .gameFormationLayout {
-  height: 70vh;
-  width: 60vw;
+  height: 92vh;
+  width: 80vw;
   position: fixed;
-  top: 56%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
 .gameFormationLayout .pos {
   position: absolute;
-  width: 10%;
+  width: 7%;
   aspect-ratio: 3/4.2;
   background-image: url("./assets/draftPlaceHolder.png");
   background-size: contain;
@@ -143,7 +143,7 @@
   font-weight: bolder;
   pointer-events: none;
   background-color: rgba(128, 128, 128, 0.781);
-  width: 4%;
+  width: 3.5%;
   height: 4%;
   border-radius: 50%;
   z-index: 0;
@@ -484,11 +484,11 @@
 
 /* Kiválasztott játékosok */
 .pos .cardSlot {
-  position: relative;
-  width: 90%;
-  height: 85%;
+  position: absolute;
+  width: 100%;
+  aspect-ratio: 3/3.8;
   justify-self: center;
-  bottom: 0;
+  bottom: 45px;
 }
 
 .pos .cardSlot:hover {
@@ -620,6 +620,7 @@
 
 .subBarContent .cardSlot {
   top: 0;
+  bottom: 0;
 }
 
 /* Rating & Chemistry Display */
@@ -661,4 +662,128 @@
 .ratingNum,
 .chemNum {
   color: rgb(0, 255, 179);
+}
+
+/* Submit draft */
+.submitDraftBtn {
+  position: absolute;
+  top: 37%;
+  right: 5%;
+  height: 5vh;
+  width: 12vw;
+  border-radius: 20px;
+  box-shadow: 1px 1px 100px 10px rgba(0, 0, 0, 0.76);
+  border: 3px rgba(0, 255, 251, 0.548) solid;
+  background-color: rgb(0, 165, 121);
+  color: white;
+  transition: all 150ms ease-in-out;
+}
+
+.submitDraftBtn:hover {
+  transform: scale(1.05);
+  background-color: rgb(1, 123, 91);
+  border: 1px rgb(0, 254, 156) solid;
+  color: rgba(0, 255, 221, 0.856);
+}
+
+.draftSummary {
+  position: absolute;
+  justify-self: center;
+  top: 30%;
+  height: 40vh;
+  width: 50vw;
+  border-radius: 20px;
+  background-color: rgba(24, 24, 24, 0.932);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.draftSummaryOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: #1111117c;
+}
+
+.draftSummaryTitle {
+  height: 20%;
+  display: flex;
+  align-items: center;
+  font-size: 160%;
+  font-weight: bold;
+}
+
+.draftSummaryStats {
+  height: 80%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.vl {
+  background-color: rgba(255, 255, 255, 0.288);
+  height: 80%;
+  width: 3px;
+}
+
+.draftNumbers {
+  width: 25%;
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 150%;
+}
+
+.exitButton {
+  width: 80%;
+  height: 20%;
+  align-self: center;
+  border-radius: 20px;
+  box-shadow: 1px 1px 100px 10px rgba(0, 0, 0, 0.76);
+  border: 3px rgba(0, 255, 251, 0.548) solid;
+  background-color: rgb(0, 165, 121);
+  color: white;
+  transition: all 150ms ease-in-out;
+}
+
+.exitButton:hover {
+  transform: scale(1.05);
+  background-color: rgb(1, 123, 91);
+  border: 1px rgb(0, 254, 156) solid;
+  color: rgba(0, 255, 221, 0.856);
+}
+
+.draftGraphDiv {
+  width: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.draftGraph {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
+.ratingInner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #0f2421;
+  color: rgb(31, 255, 180);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 120%;
 }

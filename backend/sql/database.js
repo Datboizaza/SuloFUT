@@ -68,7 +68,7 @@ async function updateBestDraftById(actualDraft, id) {
     "UPDATE stats SET best_draft = IF(best_draft < ?, ?, best_draft) WHERE user_id = ?;";
   try {
     const [rows] = await pool.execute(query, [actualDraft, actualDraft, id]);
-    return rows[0];
+    return rows;
   } catch (error) {
     throw error;
   }

@@ -1,7 +1,7 @@
 body {
   background-image: url("./assets/stadium.jpg");
   background-repeat: no-repeat;
-  background-size: 3000px;
+  background-size: 3000px 2400px;
   background-position-x: center;
   background-position-y: 80%;
 }
