@@ -1,12 +1,55 @@
+import { useState } from "react";
 import "./Leaderboard.css";
 
 function Leaderboard() {
+  const [selectedLeaderboard, setSelectedLeaderboard] = useState("Top Squad");
+
+  const leaderboardOptions = [
+    "Top Squad",
+    "Club Value",
+    "Best Draft",
+    "Cards opened",
+    "Total earnings",
+  ];
+
+  const rankings = [
+    { rank: 1, account: "Bobber23", points: 194 },
+    { rank: 2, account: "Bobber23", points: 194 },
+    { rank: 3, account: "Bobber23", points: 194 },
+    { rank: 4, account: "Bobber23", points: 194 },
+    { rank: 5, account: "Bobber23", points: 194 },
+    { rank: 6, account: "Bobber23", points: 194 },
+    { rank: 7, account: "Bobber23", points: 194 },
+    { rank: 8, account: "Bobber23", points: 194 },
+    { rank: 9, account: "Bobber23", points: 194 },
+    { rank: 10, account: "Bobber23", points: 194 },
+    { rank: 11, account: "Bobber23", points: 194 },
+    { rank: 12, account: "Bobber23", points: 194 },
+    { rank: 13, account: "Bobber23", points: 194 },
+    { rank: 14, account: "Bobber23", points: 194 },
+    { rank: 15, account: "Bobber23", points: 194 },
+    { rank: 16, account: "Bobber23", points: 194 },
+    { rank: 17, account: "Bobber23", points: 194 },
+    { rank: 18, account: "Bobber23", points: 194 },
+    { rank: 19, account: "Bobber23", points: 194 },
+    { rank: 20, account: "Bobber23", points: 194 },
+  ];
+
+  const handleLeaderboardChange = (event) => {
+    setSelectedLeaderboard(event.target.value);
+  };
+
+  // const handleSearch = () => {
+  //   console.log("Kiválasztott leaderboard:", selectedLeaderboard);
+  //   // ide jöhet majd a backend fetch
+  // };
+
   return (
     <>
-      <div id="leaderboardDiv">
+      <div className="leaderboardDiv">
         <div className="row" id="leaderboardRow1">
           <h3 className="col-12 mt-3" id="actualLeaderboard">
-            Top Squad
+            {selectedLeaderboard}
           </h3>
         </div>
         <div className="row" id="leaderboardRow2">
@@ -15,13 +58,14 @@ function Leaderboard() {
               name="selectLeaderboard"
               id="selectLeaderboard"
               aria-label="Select leaderboard"
-              onChange={actualLeaderboard}
+              value={selectedLeaderboard}
+              onChange={handleLeaderboardChange}
             >
-              <option defaultValue>Top Squad</option>
-              <option value="Club Value">Club Value</option>
-              <option value="Best Draft">Best Draft</option>
-              <option value="Cards opened">Cards opened</option>
-              <option value="Total earnings">Total earnings</option>
+              {leaderboardOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
             </select>
             <button type="button" className="btn" id="searchBtn">
               Search
@@ -40,106 +84,13 @@ function Leaderboard() {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th>1</th>
-                  <td>Bobber23</td>
-                  <td>194</td>
-                </tr>
-                <tr>
-                  <th>2</th>
-                  <td>Bobber23</td>
-                  <td>194</td>
-                </tr>
-                <tr>
-                  <th>3</th>
-                  <td>Bobber23</td>
-                  <td>194</td>
-                </tr>
-                <tr>
-                  <th>4</th>
-                  <td>Bobber23</td>
-                  <td>194</td>
-                </tr>
-                <tr>
-                  <th>5</th>
-                  <td>Bobber23</td>
-                  <td>194</td>
-                </tr>
-                <tr>
-                  <th>6</th>
-                  <td>Bobber23</td>
-                  <td>194</td>
-                </tr>
-                <tr>
-                  <th>7</th>
-                  <td>Bobber23</td>
-                  <td>194</td>
-                </tr>
-                <tr>
-                  <th>8</th>
-                  <td>Bobber23</td>
-                  <td>194</td>
-                </tr>
-                <tr>
-                  <th>9</th>
-                  <td>Bobber23</td>
-                  <td>194</td>
-                </tr>
-                <tr>
-                  <th>10</th>
-                  <td>Bobber23</td>
-                  <td>194</td>
-                </tr>
-                <tr>
-                  <th>11</th>
-                  <td>Bobber23</td>
-                  <td>194</td>
-                </tr>
-                <tr>
-                  <th>12</th>
-                  <td>Bobber23</td>
-                  <td>194</td>
-                </tr>
-                <tr>
-                  <th>13</th>
-                  <td>Bobber23</td>
-                  <td>194</td>
-                </tr>
-                <tr>
-                  <th>14</th>
-                  <td>Bobber23</td>
-                  <td>194</td>
-                </tr>
-                <tr>
-                  <th>15</th>
-                  <td>Bobber23</td>
-                  <td>194</td>
-                </tr>
-                <tr>
-                  <th>16</th>
-                  <td>Bobber23</td>
-                  <td>194</td>
-                </tr>
-                <tr>
-                  <th>17</th>
-                  <td>Bobber23</td>
-                  <td>194</td>
-                </tr>
-                <tr>
-                  <th>18</th>
-                  <td>Bobber23</td>
-                  <td>194</td>
-                </tr>
-                <tr>
-                  <th>19</th>
-                  <td>Bobber23</td>
-                  <td>194</td>
-                </tr>
-                <tr>
-                  <th>20</th>
-                  <td>Bobber23</td>
-                  <td>194</td>
-                </tr>
+                {rankings.map((player) => (
+                  <tr key={player.rank}>
+                    <th>{player.rank}</th>
+                    <td>{player.account}</td>
+                    <td>{player.points}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -148,12 +99,5 @@ function Leaderboard() {
     </>
   );
 }
-
-const actualLeaderboard = () => {
-  const selectedLeaderboard =
-    document.getElementById("selectLeaderboard").value;
-  const leaderboardTitle = document.getElementById("actualLeaderboard");
-  leaderboardTitle.innerHTML = selectedLeaderboard;
-};
 
 export default Leaderboard;

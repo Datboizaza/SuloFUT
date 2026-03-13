@@ -14,7 +14,7 @@ function MainPageTiles() {
           <a className="col-12" id="tile1" href="">
             <div id="tileTexts1" className="col-8">
               <h3>SuloFUT Hub</h3>
-              <p>Check daily objectives and seasonal rewards.</p>
+              <p>Check out seasonal rewards.</p>
             </div>
             <div id="tileImages1" className="col-4">
               <img src={HubLogo} alt="SuloFUT Hub Logo" id="hubLogo" />
@@ -53,7 +53,7 @@ function MainPageTiles() {
               <img src={StoreLogo} alt="Store Logo" id="storeLogo" />
             </div>
           </a>
-          <a className="col-12" id="tile2" href="">
+          <a className="col-12" id="tile2" href="../objectives.html">
             <div id="tileTexts2" className="col-12  col-md-8">
               <h3>Objectives</h3>
               <p>Complete tasks to earn packs or coins.</p>

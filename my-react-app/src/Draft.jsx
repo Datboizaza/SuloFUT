@@ -34,10 +34,12 @@ function Draft() {
 
   const [playerChemMap, setPlayerChemMap] = useState({});
 
-  const [dragFrom, setDragFrom] = useState(null);
-
   const [draftComplete, setDraftComplete] = useState(false);
   const [showDraftSummary, setShowDraftSummary] = useState(false);
+
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragKey, setDragKey] = useState(null);
+  const [dragPos, setDragPos] = useState({ x: 0, y: 0 });
 
   //! Formációk betöltése és draft reset-elése
   useEffect(() => {
@@ -336,6 +338,54 @@ function Draft() {
     }
   };
 
+  const startDrag = (e, key) => {
+    if (e.button !== 0) return;
+    e.preventDefault();
+
+    setDragKey(key);
+    setIsDragging(true);
+    setDragPos({ x: e.clientX, y: e.clientY });
+  };
+
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const handleMouseMove = (e) => {
+      setDragPos({ x: e.clientX, y: e.clientY });
+    };
+
+    const handleMouseUp = async (e) => {
+      const fromKey = dragKey;
+
+      setIsDragging(false);
+      setDragKey(null);
+
+      if (fromKey === null || fromKey === undefined) return;
+
+      const el = document.elementFromPoint(e.clientX, e.clientY);
+      const slotEl = el?.closest?.("[data-slotkey]");
+
+      if (!slotEl) return;
+
+      const rawToKey = slotEl.getAttribute("data-slotkey");
+      const toKey = /^\d+$/.test(rawToKey) ? Number(rawToKey) : rawToKey;
+
+      if (fromKey === toKey) return;
+      if (!assignedPlayers[fromKey]) return;
+      if (!assignedPlayers[toKey]) return;
+
+      await handleSwapPlayers(fromKey, toKey);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragging, dragKey, assignedPlayers]);
+
   //! Draft vége
   useEffect(() => {
     if (!draftStarted || !gameLayout) {
@@ -405,6 +455,7 @@ function Draft() {
                         <div
                           key={i}
                           className="pos"
+                          data-slotkey={i}
                           style={{ left: p.x + "%", top: p.y + "%" }}
                           id={p.pos}
                         />
@@ -429,6 +480,7 @@ function Draft() {
                       <div
                         key={i}
                         className="pos"
+                        data-slotkey={i}
                         style={{ left: p.x + "%", top: p.y + "%" }}
                         id={p.pos}
                       ></div>
@@ -457,43 +509,19 @@ function Draft() {
             <div
               key={i}
               className="pos"
+              data-slotkey={i}
               style={{ left: p.x + "%", top: p.y + "%" }}
               id={p.pos}
               onClick={() => {
                 if (assignedPlayers[i]) return;
                 handlePosClick(i, p.pos);
               }}
-              onDragOver={(e) => {
-                if (!assignedPlayers[i]) return;
-                e.preventDefault();
-                e.dataTransfer.dropEffect = "move";
-              }}
-              onDrop={(e) => {
-                e.preventDefault();
-                if (!assignedPlayers[i]) return;
-                const raw = e.dataTransfer.getData("text/plain");
-                const fromKey =
-                  dragFrom ??
-                  (raw && !Number.isNaN(Number(raw)) ? Number(raw) : raw);
-
-                if (fromKey === null || fromKey === undefined) return;
-                if (fromKey === i) return;
-                if (!assignedPlayers[fromKey]) return;
-
-                handleSwapPlayers(fromKey, i);
-              }}
             >
               {assignedPlayers[i] && (
                 <div
-                  className="cardSlot"
                   key={i}
-                  draggable
-                  onDragStart={(e) => {
-                    setDragFrom(i);
-                    e.dataTransfer.effectAllowed = "move";
-                    e.dataTransfer.setData("text/plain", String(i));
-                  }}
-                  onDragEnd={() => setDragFrom(null)}
+                  onMouseDown={(e) => startDrag(e, i)}
+                  className={`cardSlot ${isDragging && dragKey === i ? "dragSource" : ""}`}
                 >
                   <img
                     src={RareGold}
@@ -834,41 +862,17 @@ function Draft() {
                 <div
                   key={slot.id}
                   className="pos"
+                  data-slotkey={slot.id}
                   id={slot.pos}
                   onClick={() => {
                     if (assignedPlayers[slot.id]) return;
                     handlePosClick(slot.id, slot.pos);
                   }}
-                  onDragOver={(e) => {
-                    if (!assignedPlayers[slot.id]) return;
-                    e.preventDefault();
-                    e.dataTransfer.dropEffect = "move";
-                  }}
-                  onDrop={(e) => {
-                    e.preventDefault();
-                    if (!assignedPlayers[slot.id]) return;
-                    const raw = e.dataTransfer.getData("text/plain");
-                    const fromKey =
-                      dragFrom ??
-                      (raw && !Number.isNaN(Number(raw)) ? Number(raw) : raw);
-
-                    if (fromKey === null || fromKey === undefined) return;
-                    if (fromKey === slot.id) return;
-                    if (!assignedPlayers[fromKey]) return;
-
-                    handleSwapPlayers(fromKey, slot.id);
-                  }}
                 >
                   {assignedPlayers[slot.id] && (
                     <div
-                      className="cardSlot"
-                      draggable
-                      onDragStart={(e) => {
-                        setDragFrom(slot.id);
-                        e.dataTransfer.effectAllowed = "move";
-                        e.dataTransfer.setData("text/plain", String(slot.id));
-                      }}
-                      onDragEnd={() => setDragFrom(null)}
+                      onMouseDown={(e) => startDrag(e, slot.id)}
+                      className={`cardSlot ${isDragging && dragKey === slot.id ? "dragSource" : ""}`}
                     >
                       <img
                         src={RareGold}
@@ -1026,41 +1030,17 @@ function Draft() {
                 <div
                   key={slot.id}
                   className="pos"
+                  data-slotkey={slot.id}
                   id={slot.pos}
                   onClick={() => {
                     if (assignedPlayers[slot.id]) return;
                     handlePosClick(slot.id, slot.pos);
                   }}
-                  onDragOver={(e) => {
-                    if (!assignedPlayers[slot.id]) return;
-                    e.preventDefault();
-                    e.dataTransfer.dropEffect = "move";
-                  }}
-                  onDrop={(e) => {
-                    e.preventDefault();
-                    if (!assignedPlayers[slot.id]) return;
-                    const raw = e.dataTransfer.getData("text/plain");
-                    const fromKey =
-                      dragFrom ??
-                      (raw && !Number.isNaN(Number(raw)) ? Number(raw) : raw);
-
-                    if (fromKey === null || fromKey === undefined) return;
-                    if (fromKey === slot.id) return;
-                    if (!assignedPlayers[fromKey]) return;
-
-                    handleSwapPlayers(fromKey, slot.id);
-                  }}
                 >
                   {assignedPlayers[slot.id] && (
                     <div
-                      className="cardSlot"
-                      draggable
-                      onDragStart={(e) => {
-                        setDragFrom(slot.id);
-                        e.dataTransfer.effectAllowed = "move";
-                        e.dataTransfer.setData("text/plain", String(slot.id));
-                      }}
-                      onDragEnd={() => setDragFrom(null)}
+                      onMouseDown={(e) => startDrag(e, slot.id)}
+                      className={`cardSlot ${isDragging && dragKey === slot.id ? "dragSource" : ""}`}
                     >
                       <img
                         src={RareGold}
@@ -1290,6 +1270,164 @@ function Draft() {
                   </button>
                 </div>
               </div>
+            </div>
+          </div>,
+          document.body,
+        )}
+
+      {/* Grab */}
+      {isDragging &&
+        dragKey !== null &&
+        assignedPlayers[dragKey] &&
+        createPortal(
+          <div
+            className="dragOverlay pos"
+            style={{
+              left: dragPos.x,
+              top: dragPos.y,
+            }}
+          >
+            <div className="cardSlot dragPreview">
+              <img src={RareGold} className="goldCard" alt="Gold Card" />
+
+              <img
+                src={chemImg(playerChemMap[assignedPlayers[dragKey].player_id])}
+                alt="Chemistry Stars"
+                className="chemStars"
+              />
+
+              <p className="cardOverall">{assignedPlayers[dragKey].overall}</p>
+              <p className="cardPosition">
+                {getDisplayedPosition(
+                  assignedPlayers[dragKey],
+                  gameLayout[dragKey].pos,
+                )}
+              </p>
+
+              <img
+                className="cardImg"
+                alt="Player Image"
+                src={assignedPlayers[dragKey].player_face_url}
+                referrerPolicy="no-referrer"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = AltPlayerImg;
+                }}
+              />
+              <img
+                className="cardNationality"
+                alt="Player Nationality"
+                src={assignedPlayers[dragKey].nation_url}
+                referrerPolicy="no-referrer"
+              />
+              <img
+                className="cardLeague"
+                alt="Player League"
+                src={assignedPlayers[dragKey].league_url}
+                referrerPolicy="no-referrer"
+              />
+              <img
+                className="cardClub"
+                alt="Player Club"
+                src={assignedPlayers[dragKey].club_team_url}
+                referrerPolicy="no-referrer"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  if (assignedPlayers[dragKey].club_name === "Inter") {
+                    e.currentTarget.src = InterMilan;
+                  }
+                  if (assignedPlayers[dragKey].club_name === "AC Milan") {
+                    e.currentTarget.src = ACMilan;
+                  }
+                  if (assignedPlayers[dragKey].club_name === "Lazio") {
+                    e.currentTarget.src = Lazio;
+                  }
+                  if (assignedPlayers[dragKey].club_name === "Atalanta") {
+                    e.currentTarget.src = Atalanta;
+                  }
+                }}
+              />
+              <p className="cardName">{assignedPlayers[dragKey].short_name}</p>
+
+              {assignedPlayers[dragKey].player_positions === "GK" ? (
+                <>
+                  <div className="cardPlayerDiving">
+                    <p className="cardPlayerDivingNumber">
+                      {assignedPlayers[dragKey].goalkeeping_diving}
+                    </p>
+                    <p className="cardPlayerDivingText">DIV</p>
+                  </div>
+                  <div className="cardPlayerHandling">
+                    <p className="cardPlayerHandlingNumber">
+                      {assignedPlayers[dragKey].goalkeeping_handling}
+                    </p>
+                    <p className="cardPlayerHandlingText">HAN</p>
+                  </div>
+                  <div className="cardPlayerKicking">
+                    <p className="cardPlayerKickingNumber">
+                      {assignedPlayers[dragKey].goalkeeping_kicking}
+                    </p>
+                    <p className="cardPlayerKickingText">KIC</p>
+                  </div>
+                  <div className="cardPlayerReflexes">
+                    <p className="cardPlayerReflexesNumber">
+                      {assignedPlayers[dragKey].goalkeeping_reflexes}
+                    </p>
+                    <p className="cardPlayerReflexesText">REF</p>
+                  </div>
+                  <div className="cardPlayerSpeed">
+                    <p className="cardPlayerSpeedNumber">
+                      {assignedPlayers[dragKey].goalkeeping_speed}
+                    </p>
+                    <p className="cardPlayerSpeedText">SPD</p>
+                  </div>
+                  <div className="cardPlayerPositioning">
+                    <p className="cardPlayerPositioningNumber">
+                      {assignedPlayers[dragKey].goalkeeping_positioning}
+                    </p>
+                    <p className="cardPlayerPositioningText">POS</p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="cardPlayerPace">
+                    <p className="cardPlayerPaceNumber">
+                      {assignedPlayers[dragKey].pace}
+                    </p>
+                    <p className="cardPlayerPaceText">PAC</p>
+                  </div>
+                  <div className="cardPlayerShooting">
+                    <p className="cardPlayerShootingNumber">
+                      {assignedPlayers[dragKey].shooting}
+                    </p>
+                    <p className="cardPlayerShootingText">SHO</p>
+                  </div>
+                  <div className="cardPlayerDribbling">
+                    <p className="cardPlayerDribblingNumber">
+                      {assignedPlayers[dragKey].dribbling}
+                    </p>
+                    <p className="cardPlayerDribblingText">DRI</p>
+                  </div>
+                  <div className="cardPlayerPassing">
+                    <p className="cardPlayerPassingNumber">
+                      {assignedPlayers[dragKey].passing}
+                    </p>
+                    <p className="cardPlayerPassingText">PAS</p>
+                  </div>
+                  <div className="cardPlayerDefending">
+                    <p className="cardPlayerDefendingNumber">
+                      {assignedPlayers[dragKey].defending}
+                    </p>
+                    <p className="cardPlayerDefendingText">DEF</p>
+                  </div>
+                  <div className="cardPlayerPhysic">
+                    <p className="cardPlayerPhysicNumber">
+                      {assignedPlayers[dragKey].physic}
+                    </p>
+                    <p className="cardPlayerPhysicText">PHY</p>
+                  </div>
+                </>
+              )}
             </div>
           </div>,
           document.body,

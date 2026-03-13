@@ -1,0 +1,253 @@
+{
+  "foundations": [
+    {
+      "name": "Chemistry Mastery",
+      "subobjectives": [
+        {
+          "task": "Achieve 10 chemistry points in your starting 11",
+          "requirement": 10,
+          "reward": ""
+        },
+        {
+          "task": "Achieve 20 chemistry points in your starting 11",
+          "requirement": 20,
+          "reward": ""
+        },
+        {
+          "task": "Achieve 28 chemistry points in your starting 11",
+          "requirement": 28,
+          "reward": ""
+        },
+        {
+          "task": "Achieve full chemistry in your starting 11",
+          "requirement": 33,
+          "reward": ""
+        }
+      ],
+      "groupreward": ""
+    },
+    {
+      "name": "Rating Mastery",
+      "subobjectives": [
+        {
+          "task": "Achieve 75 rating in your squad",
+          "requirement": 75,
+          "reward": ""
+        },
+        {
+          "task": "Achieve 80 rating in your squad",
+          "requirement": 80,
+          "reward": ""
+        },
+        {
+          "task": "Achieve 85 rating in your squad",
+          "requirement": 85,
+          "reward": ""
+        },
+        {
+          "task": "Achieve 90 rating in your squad",
+          "requirement": 90,
+          "reward": ""
+        }
+      ],
+      "groupreward": ""
+    },
+    {
+      "name": "Customize your squad",
+      "subobjectives": [
+        {
+          "task": "Change your formation",
+          "requirement": true,
+          "reward": ""
+        },
+        {
+          "task": "Change your team's name",
+          "requirement": true,
+          "reward": ""
+        }
+      ],
+      "groupreward": ""
+    }
+  ],
+  "milestones": [
+    {
+      "name": "Draft Mastery",
+      "subobjectives": [
+        {
+          "task": "Play 1 Draft",
+          "requirement": 1,
+          "reward": ""
+        },
+        {
+          "task": "Play 3 Draft",
+          "requirement": 3,
+          "reward": ""
+        },
+        {
+          "task": "Play 5 Draft",
+          "requirement": 5,
+          "reward": ""
+        },
+        {
+          "task": "Play 10 Draft",
+          "requirement": 10,
+          "reward": ""
+        },
+        {
+          "task": "Play 20 Draft",
+          "requirement": 20,
+          "reward": ""
+        }
+      ],
+      "groupreward": ""
+    },
+    {
+      "name": "Squad Building Mastery",
+      "subobjectives": [
+        {
+          "task": "Complete 1 SBC",
+          "requirement": 1,
+          "reward": ""
+        },
+        {
+          "task": "Complete 3 SBC",
+          "requirement": 3,
+          "reward": ""
+        },
+        {
+          "task": "Complete 5 SBC",
+          "requirement": 5,
+          "reward": ""
+        },
+        {
+          "task": "Complete 10 SBC",
+          "requirement": 10,
+          "reward": ""
+        }
+      ],
+      "groupreward": ""
+    },
+    {
+      "name": "Pack Opening Mastery",
+      "subobjectives": [
+        {
+          "task": "Open 1 pack",
+          "requirement": 1,
+          "reward": ""
+        },
+        {
+          "task": "Open 3 packs",
+          "requirement": 3,
+          "reward": ""
+        },
+        {
+          "task": "Open 5 packs",
+          "requirement": 5,
+          "reward": ""
+        },
+        {
+          "task": "Open 10 packs",
+          "requirement": 10,
+          "reward": ""
+        },
+        {
+          "task": "Open 20 packs",
+          "requirement": 20,
+          "reward": ""
+        },
+        {
+          "task": "Open 50 packs",
+          "requirement": 50,
+          "reward": ""
+        }
+      ],
+      "groupreward": ""
+    }
+  ],
+  "campaign": [
+    {
+      "name": "The Best of '25",
+      "subobjectives": [
+        {
+          "task": "Pick a TOTY card in Draft",
+          "requirement": true,
+          "reward": ""
+        },
+        {
+          "task": "Open a TOTY card",
+          "requirement": true,
+          "reward": ""
+        },
+        {
+          "task": "Put a TOTY card in your squad",
+          "requirement": true,
+          "reward": ""
+        }
+      ],
+      "groupreward": ""
+    },
+    {
+      "name": "Once a baller always a baller",
+      "subobjectives": [
+        {
+          "task": "Pick a FLASHBACK card in Draft",
+          "requirement": true,
+          "reward": ""
+        },
+        {
+          "task": "Open a FLASHBACK card",
+          "requirement": true,
+          "reward": ""
+        },
+        {
+          "task": "Put a FLASHBACK card in your squad",
+          "requirement": true,
+          "reward": ""
+        }
+      ],
+      "groupreward": ""
+    },
+    {
+      "name": "Scare your opponent to death",
+      "subobjectives": [
+        {
+          "task": "Pick a SCREAM card in Draft",
+          "requirement": true,
+          "reward": ""
+        },
+        {
+          "task": "Open a SCREAM card",
+          "requirement": true,
+          "reward": ""
+        },
+        {
+          "task": "Put a SCREAM card in your squad",
+          "requirement": true,
+          "reward": ""
+        }
+      ],
+      "groupreward": ""
+    },
+    {
+      "name": "Pack Luck",
+      "subobjectives": [
+        {
+          "task": "Open a Walkout Player",
+          "requirement": true,
+          "reward": ""
+        },
+        {
+          "task": "Open a 90+ Player",
+          "requirement": true,
+          "reward": ""
+        },
+        {
+          "task": "Open an Icon",
+          "requirement": true,
+          "reward": ""
+        }
+      ],
+      "groupreward": ""
+    }
+  ]
+}

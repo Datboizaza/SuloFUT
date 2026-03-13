@@ -1,6 +1,7 @@
 /*---------Elendezések és alapvető formázások-----------*/
 #statBarDiv {
   background-color: rgba(17, 38, 39, 0.459);
+  backdrop-filter: blur(2px);
   height: 8vh;
   width: 80vw;
   color: white;
@@ -10,6 +11,7 @@
   align-items: center;
   padding-left: 40px;
   padding-right: 40px;
+  box-shadow: 0px 20px 20px rgba(0, 0, 0, 0.349);
 }
 
 #coinsDiv {
