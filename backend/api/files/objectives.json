@@ -6,25 +6,25 @@
         {
           "task": "Achieve 10 chemistry points in your starting 11",
           "requirement": 10,
-          "reward": ""
+          "reward": 1
         },
         {
           "task": "Achieve 20 chemistry points in your starting 11",
           "requirement": 20,
-          "reward": ""
+          "reward": 2
         },
         {
           "task": "Achieve 28 chemistry points in your starting 11",
           "requirement": 28,
-          "reward": ""
+          "reward": 3
         },
         {
           "task": "Achieve full chemistry in your starting 11",
           "requirement": 33,
-          "reward": ""
+          "reward": 4
         }
       ],
-      "groupreward": ""
+      "groupreward": 6
     },
     {
       "name": "Rating Mastery",
@@ -32,25 +32,25 @@
         {
           "task": "Achieve 75 rating in your squad",
           "requirement": 75,
-          "reward": ""
+          "reward": 1
         },
         {
           "task": "Achieve 80 rating in your squad",
           "requirement": 80,
-          "reward": ""
+          "reward": 2
         },
         {
           "task": "Achieve 85 rating in your squad",
           "requirement": 85,
-          "reward": ""
+          "reward": 4
         },
         {
           "task": "Achieve 90 rating in your squad",
           "requirement": 90,
-          "reward": ""
+          "reward": 5
         }
       ],
-      "groupreward": ""
+      "groupreward": 17
     },
     {
       "name": "Customize your squad",
@@ -58,15 +58,15 @@
         {
           "task": "Change your formation",
           "requirement": true,
-          "reward": ""
+          "reward": 7
         },
         {
           "task": "Change your team's name",
           "requirement": true,
-          "reward": ""
+          "reward": 8
         }
       ],
-      "groupreward": ""
+      "groupreward": 9
     }
   ],
   "milestones": [
@@ -76,30 +76,30 @@
         {
           "task": "Play 1 Draft",
           "requirement": 1,
-          "reward": ""
+          "reward": 9
         },
         {
           "task": "Play 3 Draft",
           "requirement": 3,
-          "reward": ""
+          "reward": 3
         },
         {
           "task": "Play 5 Draft",
           "requirement": 5,
-          "reward": ""
+          "reward": 4
         },
         {
           "task": "Play 10 Draft",
           "requirement": 10,
-          "reward": ""
+          "reward": 10
         },
         {
           "task": "Play 20 Draft",
           "requirement": 20,
-          "reward": ""
+          "reward": 5
         }
       ],
-      "groupreward": ""
+      "groupreward": 17
     },
     {
       "name": "Squad Building Mastery",
@@ -107,25 +107,25 @@
         {
           "task": "Complete 1 SBC",
           "requirement": 1,
-          "reward": ""
+          "reward": 1
         },
         {
           "task": "Complete 3 SBC",
           "requirement": 3,
-          "reward": ""
+          "reward": 9
         },
         {
           "task": "Complete 5 SBC",
           "requirement": 5,
-          "reward": ""
+          "reward": 3
         },
         {
           "task": "Complete 10 SBC",
           "requirement": 10,
-          "reward": ""
+          "reward": 4
         }
       ],
-      "groupreward": ""
+      "groupreward": 5
     },
     {
       "name": "Pack Opening Mastery",
@@ -133,35 +133,35 @@
         {
           "task": "Open 1 pack",
           "requirement": 1,
-          "reward": ""
+          "reward": 1
         },
         {
           "task": "Open 3 packs",
           "requirement": 3,
-          "reward": ""
+          "reward": 1
         },
         {
           "task": "Open 5 packs",
           "requirement": 5,
-          "reward": ""
+          "reward": 1
         },
         {
           "task": "Open 10 packs",
           "requirement": 10,
-          "reward": ""
+          "reward": 2
         },
         {
           "task": "Open 20 packs",
           "requirement": 20,
-          "reward": ""
+          "reward": 3
         },
         {
           "task": "Open 50 packs",
           "requirement": 50,
-          "reward": ""
+          "reward": 10
         }
       ],
-      "groupreward": ""
+      "groupreward": 6
     }
   ],
   "campaign": [
@@ -171,20 +171,20 @@
         {
           "task": "Pick a TOTY card in Draft",
           "requirement": true,
-          "reward": ""
+          "reward": 3
         },
         {
           "task": "Open a TOTY card",
           "requirement": true,
-          "reward": ""
+          "reward": 17
         },
         {
           "task": "Put a TOTY card in your squad",
           "requirement": true,
-          "reward": ""
+          "reward": 4
         }
       ],
-      "groupreward": ""
+      "groupreward": 19
     },
     {
       "name": "Once a baller always a baller",
@@ -192,20 +192,20 @@
         {
           "task": "Pick a FLASHBACK card in Draft",
           "requirement": true,
-          "reward": ""
+          "reward": 3
         },
         {
           "task": "Open a FLASHBACK card",
           "requirement": true,
-          "reward": ""
+          "reward": 10
         },
         {
           "task": "Put a FLASHBACK card in your squad",
           "requirement": true,
-          "reward": ""
+          "reward": 2
         }
       ],
-      "groupreward": ""
+      "groupreward": 13
     },
     {
       "name": "Scare your opponent to death",
@@ -213,20 +213,20 @@
         {
           "task": "Pick a SCREAM card in Draft",
           "requirement": true,
-          "reward": ""
+          "reward": 3
         },
         {
           "task": "Open a SCREAM card",
           "requirement": true,
-          "reward": ""
+          "reward": 2
         },
         {
           "task": "Put a SCREAM card in your squad",
           "requirement": true,
-          "reward": ""
+          "reward": 1
         }
       ],
-      "groupreward": ""
+      "groupreward": 14
     },
     {
       "name": "Pack Luck",
@@ -234,20 +234,20 @@
         {
           "task": "Open a Walkout Player",
           "requirement": true,
-          "reward": ""
+          "reward": 4
         },
         {
           "task": "Open a 90+ Player",
           "requirement": true,
-          "reward": ""
+          "reward": 5
         },
         {
           "task": "Open an Icon",
           "requirement": true,
-          "reward": ""
+          "reward": 17
         }
       ],
-      "groupreward": ""
+      "groupreward": 18
     }
   ]
 }
