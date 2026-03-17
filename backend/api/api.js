@@ -1140,4 +1140,34 @@ router.put("/swap", (request, response) => {
   }
 });
 
+//!Packek/rewardok
+router.get("/rewards/:id", async (request, response) => {
+  try {
+    const id = request.params.id;
+    const reward = await database.getRewardById(id);
+    response.status(200).json({
+      message: "Ez a végpont működik.",
+      results: reward,
+    });
+  } catch (error) {
+    response.status(500).json({
+      message: "Ez a végpont nem működik.",
+    });
+  }
+});
+
+router.get("/draftrewards", async (request, response) => {
+  try {
+    const draftrewards = await database.getDraftRewards();
+    response.status(200).json({
+      message: "Ez a végpont működik.",
+      results: draftrewards,
+    });
+  } catch (error) {
+    response.status(500).json({
+      message: "Ez a végpont nem működik.",
+    });
+  }
+});
+
 module.exports = router;

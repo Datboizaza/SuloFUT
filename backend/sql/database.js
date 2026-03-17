@@ -74,6 +74,40 @@ async function updateBestDraftById(actualDraft, id) {
   }
 }
 
+//? Pack adatai
+async function getPackById(id) {
+  const query = "SELECT * FROM packs WHERE id = ?;";
+  try {
+    const [rows] = await pool.execute(query, [id]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+//? Rewardok
+async function getRewardById(id) {
+  const query =
+    "SELECT rewards.id AS rewardId, rewards.coins, packs.* FROM rewards LEFT JOIN packs ON rewards.packIds IS NOT NULL AND FIND_IN_SET(packs.id, rewards.packIds) > 0 WHERE rewards.id = ?;";
+  try {
+    const [rows] = await pool.execute(query, [id]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getDraftRewards() {
+  const query =
+    "SELECT draftrewards.id AS draftRewardId, draftrewards.coins, draftrewards.rewardValue, packs.* FROM draftrewards LEFT JOIN packs ON draftrewards.packIds IS NOT NULL AND FIND_IN_SET(packs.id, draftrewards.packIds) > 0";
+  try {
+    const [rows] = await pool.execute(query);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
 //!Export
 module.exports = {
   selectall,
@@ -82,4 +116,7 @@ module.exports = {
   getUserById,
   getUserCoinsById,
   updateBestDraftById,
+  getPackById,
+  getRewardById,
+  getDraftRewards,
 };
