@@ -210,7 +210,7 @@ router.post("/draft/formation", async (request, response) => {
 router.get("/players", async (request, response) => {
   try {
     const data = await readJsonFile(
-      path.join(__dirname, "./files/shortData.json"),
+      path.join(__dirname, "./files/players.json"),
     );
     response.status(200).json({ players: data });
   } catch (error) {
@@ -223,7 +223,7 @@ router.get("/players", async (request, response) => {
 router.get("/randomplayers", async (request, response) => {
   try {
     const data = await readJsonFile(
-      path.join(__dirname, "./files/shortData.json"),
+      path.join(__dirname, "./files/players.json"),
     );
 
     function randomPick(arr, count) {
@@ -362,7 +362,7 @@ router.get("/random/:pos", async (request, response) => {
   try {
     const pos = request.params.pos;
     const data = await readJsonFile(
-      path.join(__dirname, "./files/shortData.json"),
+      path.join(__dirname, "./files/players.json"),
     );
 
     let randomPick;

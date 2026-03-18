@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import "./Draft.css";
-import RareGold from "./assets/goldRare.png";
+import Gold from "./assets/goldRare.png";
+import Hero from "./assets/Hero.png";
+import Icon from "./assets/Icon.png";
 import AltPlayerImg from "./assets/altPlayerImg.png";
 import ZeroChem from "./assets/zeroChem.png";
 import OneChem from "./assets/oneChem.png";
@@ -248,6 +250,13 @@ function Draft() {
     { id: "RES4", pos: "ANY" },
     { id: "RES5", pos: "ANY" },
   ];
+
+  //! Card design-ok
+  const rarityImgs = {
+    gold: Gold,
+    icon: Icon,
+    hero: Hero,
+  };
 
   //! Chemistry fetch-elése
   const fetchChemistry = async () => {
@@ -524,9 +533,9 @@ function Draft() {
                   className={`cardSlot ${isDragging && dragKey === i ? "dragSource" : ""}`}
                 >
                   <img
-                    src={RareGold}
-                    className="goldCard"
-                    alt="Gold Card"
+                    src={rarityImgs[assignedPlayers[i].rarity]}
+                    className="cardDesign"
+                    alt="Card"
                   ></img>
 
                   <img
@@ -697,9 +706,9 @@ function Draft() {
                         }
                       >
                         <img
-                          src={RareGold}
-                          className="goldCard"
-                          alt="Gold Card"
+                          src={rarityImgs[player.rarity]}
+                          className="cardDesign"
+                          alt="Card"
                         ></img>
 
                         <p className="cardOverall">{player.overall}</p>
@@ -875,9 +884,9 @@ function Draft() {
                       className={`cardSlot ${isDragging && dragKey === slot.id ? "dragSource" : ""}`}
                     >
                       <img
-                        src={RareGold}
-                        className="goldCard"
-                        alt="Gold Card"
+                        src={rarityImgs[assignedPlayers[slot.id].rarity]}
+                        className="cardDesign"
+                        alt="Card"
                       ></img>
 
                       <p className="cardOverall">
@@ -1043,9 +1052,9 @@ function Draft() {
                       className={`cardSlot ${isDragging && dragKey === slot.id ? "dragSource" : ""}`}
                     >
                       <img
-                        src={RareGold}
-                        className="goldCard"
-                        alt="Gold Card"
+                        src={rarityImgs[assignedPlayers[slot.id].rarity]}
+                        className="cardDesign"
+                        alt="Card"
                       ></img>
 
                       <p className="cardOverall">
@@ -1288,7 +1297,11 @@ function Draft() {
             }}
           >
             <div className="cardSlot dragPreview">
-              <img src={RareGold} className="goldCard" alt="Gold Card" />
+              <img
+                src={rarityImgs[assignedPlayers[dragKey].rarity]}
+                className="cardDesign"
+                alt="Card"
+              />
 
               <img
                 src={chemImg(playerChemMap[assignedPlayers[dragKey].player_id])}

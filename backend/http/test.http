@@ -22,4 +22,4 @@ content-type: application/json
 
 ###
 
-GET http://127.0.0.1:3000/api/rewards/20 HTTP/1.1
+GET http://127.0.0.1:3000/api/draftrewards HTTP/1.1
