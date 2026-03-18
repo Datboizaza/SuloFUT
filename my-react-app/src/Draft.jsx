@@ -256,6 +256,7 @@ function Draft() {
     gold: Gold,
     icon: Icon,
     hero: Hero,
+    //!FOLYTATÁS
   };
 
   //! Chemistry fetch-elése
@@ -306,10 +307,9 @@ function Draft() {
   };
 
   //! Pozíció átírása az aktuális pozícióra amin szerepel (ha van)
-  const getDisplayedPosition = (player, slotPos) => {
-    if (!player) return "";
-    const positions = player.player_positions.split(",").map((p) => p.trim());
-    const primary = positions[0] || "";
+  const displayedPosition = (player, slotPos) => {
+    const positions = player.player_positions.split(", ");
+    const primary = positions[0];
     if (!slotPos || slotPos === "ANY") return primary;
     if (positions.includes(slotPos)) return slotPos;
     return primary;
@@ -546,10 +546,7 @@ function Draft() {
 
                   <p className="cardOverall">{assignedPlayers[i].overall}</p>
                   <p className="cardPosition">
-                    {getDisplayedPosition(
-                      assignedPlayers[i],
-                      gameLayout[i].pos,
-                    )}
+                    {displayedPosition(assignedPlayers[i], gameLayout[i].pos)}
                   </p>
                   <img
                     className="cardImg"
@@ -1311,7 +1308,7 @@ function Draft() {
 
               <p className="cardOverall">{assignedPlayers[dragKey].overall}</p>
               <p className="cardPosition">
-                {getDisplayedPosition(
+                {displayedPosition(
                   assignedPlayers[dragKey],
                   gameLayout[dragKey].pos,
                 )}

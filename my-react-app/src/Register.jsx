@@ -69,24 +69,35 @@ const register = async () => {
       if (passwordValue !== passwordAgainValue) {
         passwordErrorSpan.innerHTML = "Passwords don't match";
       } else {
-        const response = await postMethodFetch(
-          "http://127.0.0.1:3000/api/users",
-          {
-            username: usernameValue,
-            password: passwordValue,
-          },
-        );
+        const uppercase = (passwordValue) =>
+          /[A-ZÁÉÓÚŐŰÖÜÍ]/.test(passwordValue);
+        const number = (passwordValue) => /[0-9]/.test(passwordValue);
+        if (
+          passwordValue.length < 5 ||
+          !uppercase(passwordValue) ||
+          !number(passwordValue)
+        ) {
+          passwordErrorSpan.innerHTML = "Password is too weak";
+        } else {
+          const response = await postMethodFetch(
+            "http://127.0.0.1:3000/api/users",
+            {
+              username: usernameValue,
+              password: passwordValue,
+            },
+          );
 
-        if (response.message === "User created") {
-          passwordErrorSpan.innerHTML =
-            "Successful registration, please log in";
-          passwordErrorSpan.style.color = "rgb(0, 204, 92)";
-          setTimeout(() => {
-            window.location.href = "/login";
-          }, 1000);
+          if (response.message === "User created") {
+            passwordErrorSpan.innerHTML =
+              "Successful registration, please log in";
+            passwordErrorSpan.style.color = "rgb(0, 204, 92)";
+            setTimeout(() => {
+              window.location.href = "/login";
+            }, 1000);
+          }
+
+          return response;
         }
-
-        return response;
       }
     }
   } catch (error) {
