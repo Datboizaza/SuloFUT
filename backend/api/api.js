@@ -679,4 +679,122 @@ router.get("/draftrewards", async (request, response) => {
   }
 });
 
+router.get("/objectives", async (req, res) => {
+  try {
+    const rows = await database.getObjectives();
+
+    const result = [{ foundations: [] }, { milestones: [] }, { campaign: [] }];
+
+    const objectivesMap = {};
+    const subMap = {};
+    const rewardsMap = {};
+    const groupRewardsMap = {};
+    const categoryMap = {
+      foundations: 0,
+      milestones: 1,
+      campaign: 2,
+    };
+
+    rows.forEach((row) => {
+      const cat = row.category;
+
+      if (!objectivesMap[row.objective_id]) {
+        objectivesMap[row.objective_id] = {
+          id: row.objective_id,
+          name: row.objective_name,
+          groupreward: null,
+          subobjectives: [],
+        };
+
+        const index = categoryMap[cat];
+        const key = Object.keys(result[index])[0];
+
+        result[index][key].push(objectivesMap[row.objective_id]);
+      }
+
+      const objective = objectivesMap[row.objective_id];
+
+      if (row.groupRewardId) {
+        if (!groupRewardsMap[row.groupRewardId]) {
+          groupRewardsMap[row.groupRewardId] = {
+            id: row.groupRewardId,
+            coins: row.group_coins,
+            packs: [],
+          };
+        }
+
+        if (row.group_pack_id) {
+          const exists = groupRewardsMap[row.groupRewardId].packs.some(
+            (p) => p.id === row.group_pack_id,
+          );
+
+          if (!exists) {
+            groupRewardsMap[row.groupRewardId].packs.push({
+              id: row.group_pack_id,
+              name: row.group_pack_name,
+              price: row.group_pack_price,
+              design: row.group_pack_design,
+            });
+          }
+        }
+
+        objective.groupreward = groupRewardsMap[row.groupRewardId];
+      }
+
+      if (!subMap[row.sub_id]) {
+        subMap[row.sub_id] = {
+          id: row.sub_id,
+          task: row.task,
+          requirement: row.requirement,
+          progress: row.progress,
+          reward: null,
+        };
+
+        objective.subobjectives.push(subMap[row.sub_id]);
+      }
+
+      const sub = subMap[row.sub_id];
+
+      if (row.rewardId) {
+        if (!rewardsMap[row.rewardId]) {
+          rewardsMap[row.rewardId] = {
+            id: row.rewardId,
+            coins: row.coins,
+            packs: [],
+          };
+        }
+
+        if (row.pack_id) {
+          const exists = rewardsMap[row.rewardId].packs.some(
+            (p) => p.id === row.pack_id,
+          );
+
+          if (!exists) {
+            rewardsMap[row.rewardId].packs.push({
+              id: row.pack_id,
+              name: row.pack_name,
+              price: row.pack_price,
+              design: row.pack_design,
+            });
+          }
+        }
+
+        if (!sub.reward) {
+          sub.reward = rewardsMap[row.rewardId];
+        }
+      }
+    });
+
+    res.status(200).json({
+      message: "Ez a végpont működik!",
+      results: result,
+    });
+  } catch (error) {
+    console.log("GET /api/objectives error:", error);
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+});
+
 module.exports = router;

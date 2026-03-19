@@ -211,18 +211,48 @@
 }
 
 .icon {
-  width: 106%;
+  width: 102%;
   height: 101%;
 }
 
+.text-icon {
+  color: rgba(49, 47, 25, 0.671) !important;
+}
+
 .hero {
-  width: 106%;
+  width: 102%;
   height: 101%;
+}
+
+.text-hero {
+  color: rgba(255, 238, 238, 0.671) !important;
 }
 
 .toty {
   width: 96%;
   height: 101%;
+}
+
+.text-toty {
+  color: rgb(255, 250, 202) !important;
+}
+
+.flashback {
+  width: 102%;
+  height: 102%;
+}
+
+.text-flashback {
+  color: rgba(217, 255, 0, 0.89) !important;
+}
+
+.scream {
+  width: 102%;
+  height: 100%;
+}
+
+.text-scream {
+  color: rgb(221, 255, 207) !important;
 }
 
 .playerSelectionModal .cardDesign {
@@ -235,6 +265,18 @@
 
 .playerSelectionModal .hero {
   filter: drop-shadow(0 8px 15px rgba(231, 68, 68, 0.425));
+}
+
+.playerSelectionModal .toty {
+  filter: drop-shadow(0 8px 15px rgba(231, 220, 68, 0.425));
+}
+
+.playerSelectionModal .flashback {
+  filter: drop-shadow(0 8px 15px rgba(128, 231, 68, 0.425));
+}
+
+.playerSelectionModal .scream {
+  filter: drop-shadow(0 8px 15px rgba(255, 166, 0, 0.425));
 }
 
 .cardOverall {

@@ -5,6 +5,8 @@ import Gold from "./assets/goldRare.png";
 import Hero from "./assets/Hero.png";
 import Icon from "./assets/Icon.png";
 import Toty from "./assets/toty.png";
+import Scream from "./assets/Scream.png";
+import Flashback from "./assets/Flashback.png";
 import AltPlayerImg from "./assets/altPlayerImg.png";
 import ZeroChem from "./assets/zeroChem.png";
 import OneChem from "./assets/oneChem.png";
@@ -258,7 +260,28 @@ function Draft() {
     icon: Icon,
     hero: Hero,
     toty: Toty,
-    //!FOLYTATÁS
+    scream: Scream,
+    flashback: Flashback,
+  };
+
+  //! Card szövegek
+  const getText = (rarity) => {
+    switch (rarity) {
+      case "gold":
+        return "text-gold";
+      case "icon":
+        return "text-icon";
+      case "toty":
+        return "text-toty";
+      case "hero":
+        return "text-hero";
+      case "scream":
+        return "text-scream";
+      case "flashback":
+        return "text-flashback";
+      default:
+        return "text-gold";
+    }
   };
 
   //! Chemistry fetch-elése
@@ -546,8 +569,14 @@ function Draft() {
                     className="chemStars"
                   />
 
-                  <p className="cardOverall">{assignedPlayers[i].overall}</p>
-                  <p className="cardPosition">
+                  <p
+                    className={`cardOverall ${getText(assignedPlayers[i].rarity)}`}
+                  >
+                    {assignedPlayers[i].overall}
+                  </p>
+                  <p
+                    className={`cardPosition ${getText(assignedPlayers[i].rarity)}`}
+                  >
                     {displayedPosition(assignedPlayers[i], gameLayout[i].pos)}
                   </p>
                   <img
@@ -593,84 +622,160 @@ function Draft() {
                       }
                     }}
                   ></img>
-                  <p className="cardName">{assignedPlayers[i].short_name}</p>
+                  <p
+                    className={`cardName ${getText(assignedPlayers[i].rarity)}`}
+                  >
+                    {assignedPlayers[i].short_name}
+                  </p>
 
                   {assignedPlayers[i].player_positions === "GK" ? (
                     <>
                       <div className="cardPlayerDiving">
-                        <p className="cardPlayerDivingNumber">
+                        <p
+                          className={`cardPlayerDivingNumber ${getText(assignedPlayers[i].rarity)}`}
+                        >
                           {assignedPlayers[i].goalkeeping_diving}
                         </p>
-                        <p className="cardPlayerDivingText">DIV</p>
+                        <p
+                          className={`cardPlayerDivingText ${getText(assignedPlayers[i].rarity)}`}
+                        >
+                          DIV
+                        </p>
                       </div>
                       <div className="cardPlayerHandling">
-                        <p className="cardPlayerHandlingNumber">
+                        <p
+                          className={`cardPlayerHandlingNumber ${getText(assignedPlayers[i].rarity)}`}
+                        >
                           {assignedPlayers[i].goalkeeping_handling}
                         </p>
-                        <p className="cardPlayerHandlingText">HAN</p>
+                        <p
+                          className={`cardPlayerHandlingText ${getText(assignedPlayers[i].rarity)}`}
+                        >
+                          HAN
+                        </p>
                       </div>
                       <div className="cardPlayerKicking">
-                        <p className="cardPlayerKickingNumber">
+                        <p
+                          className={`cardPlayerKickingNumber ${getText(assignedPlayers[i].rarity)}`}
+                        >
                           {assignedPlayers[i].goalkeeping_kicking}
                         </p>
-                        <p className="cardPlayerKickingText">KIC</p>
+                        <p
+                          className={`cardPlayerKickingText ${getText(assignedPlayers[i].rarity)}`}
+                        >
+                          KIC
+                        </p>
                       </div>
                       <div className="cardPlayerReflexes">
-                        <p className="cardPlayerReflexesNumber">
+                        <p
+                          className={`cardPlayerReflexesNumber ${getText(assignedPlayers[i].rarity)}`}
+                        >
                           {assignedPlayers[i].goalkeeping_reflexes}
                         </p>
-                        <p className="cardPlayerReflexesText">REF</p>
+                        <p
+                          className={`cardPlayerReflexesText ${getText(assignedPlayers[i].rarity)}`}
+                        >
+                          REF
+                        </p>
                       </div>
                       <div className="cardPlayerSpeed">
-                        <p className="cardPlayerSpeedNumber">
+                        <p
+                          className={`cardPlayerSpeedNumber ${getText(assignedPlayers[i].rarity)}`}
+                        >
                           {assignedPlayers[i].goalkeeping_speed}
                         </p>
-                        <p className="cardPlayerSpeedText">SPD</p>
+                        <p
+                          className={`cardPlayerSpeedText ${getText(assignedPlayers[i].rarity)}`}
+                        >
+                          SPD
+                        </p>
                       </div>
                       <div className="cardPlayerPositioning">
-                        <p className="cardPlayerPositioningNumber">
+                        <p
+                          className={`cardPlayerPositioningNumber ${getText(assignedPlayers[i].rarity)}`}
+                        >
                           {assignedPlayers[i].goalkeeping_positioning}
                         </p>
-                        <p className="cardPlayerPositioningText">POS</p>
+                        <p
+                          className={`cardPlayerPositioningText ${getText(assignedPlayers[i].rarity)}`}
+                        >
+                          POS
+                        </p>
                       </div>
                     </>
                   ) : (
                     <>
                       <div className="cardPlayerPace">
-                        <p className="cardPlayerPaceNumber">
+                        <p
+                          className={`cardPlayerPaceNumber ${getText(assignedPlayers[i].rarity)}`}
+                        >
                           {assignedPlayers[i].pace}
                         </p>
-                        <p className="cardPlayerPaceText">PAC</p>
+                        <p
+                          className={`cardPlayerPaceText ${getText(assignedPlayers[i].rarity)}`}
+                        >
+                          PAC
+                        </p>
                       </div>
                       <div className="cardPlayerShooting">
-                        <p className="cardPlayerShootingNumber">
+                        <p
+                          className={`cardPlayerShootingNumber ${getText(assignedPlayers[i].rarity)}`}
+                        >
                           {assignedPlayers[i].shooting}
                         </p>
-                        <p className="cardPlayerShootingText">SHO</p>
+                        <p
+                          className={`cardPlayerShootingText ${getText(assignedPlayers[i].rarity)}`}
+                        >
+                          SHO
+                        </p>
                       </div>
                       <div className="cardPlayerDribbling">
-                        <p className="cardPlayerDribblingNumber">
+                        <p
+                          className={`cardPlayerDribblingNumber ${getText(assignedPlayers[i].rarity)}`}
+                        >
                           {assignedPlayers[i].dribbling}
                         </p>
-                        <p className="cardPlayerDribblingText">DRI</p>
+                        <p
+                          className={`cardPlayerDribblingText ${getText(assignedPlayers[i].rarity)}`}
+                        >
+                          DRI
+                        </p>
                       </div>
                       <div className="cardPlayerPassing">
-                        <p className="cardPlayerPassingNumber">
+                        <p
+                          className={`cardPlayerPassingNumber ${getText(assignedPlayers[i].rarity)}`}
+                        >
                           {assignedPlayers[i].passing}
                         </p>
-                        <p className="cardPlayerPassingText">PAS</p>
+                        <p
+                          className={`cardPlayerPassingText ${getText(assignedPlayers[i].rarity)}`}
+                        >
+                          PAS
+                        </p>
                       </div>
                       <div className="cardPlayerDefending">
-                        <p className="cardPlayerDefendingNumber">
+                        <p
+                          className={`cardPlayerDefendingNumber ${getText(assignedPlayers[i].rarity)}`}
+                        >
                           {assignedPlayers[i].defending}
                         </p>
-                        <p className="cardPlayerDefendingText">DEF</p>
+                        <p
+                          className={`cardPlayerDefendingText ${getText(assignedPlayers[i].rarity)}`}
+                        >
+                          DEF
+                        </p>
                       </div>
                       <div className="cardPlayerPhysic">
-                        <p className="cardPlayerPhysicNumber">
+                        <p
+                          className={`cardPlayerPhysicNumber ${getText(assignedPlayers[i].rarity)}`}
+                        >
                           {assignedPlayers[i].physic}
                         </p>
-                        <p className="cardPlayerPhysicText">PHY</p>
+                        <p
+                          className={`cardPlayerPhysicText ${getText(assignedPlayers[i].rarity)}`}
+                        >
+                          PHY
+                        </p>
                       </div>
                     </>
                   )}
@@ -710,8 +815,12 @@ function Draft() {
                           alt="Card"
                         ></img>
 
-                        <p className="cardOverall">{player.overall}</p>
-                        <p className="cardPosition">{mainPosition}</p>
+                        <p className={`cardOverall ${getText(player.rarity)}`}>
+                          {player.overall}
+                        </p>
+                        <p className={`cardPosition ${getText(player.rarity)}`}>
+                          {mainPosition}
+                        </p>
                         <img
                           className="cardImg"
                           alt="Player Image"
@@ -755,84 +864,158 @@ function Draft() {
                             }
                           }}
                         ></img>
-                        <p className="cardName">{player.short_name}</p>
+                        <p className={`cardName ${getText(player.rarity)}`}>
+                          {player.short_name}
+                        </p>
 
                         {mainPosition === "GK" ? (
                           <>
                             <div className="cardPlayerDiving">
-                              <p className="cardPlayerDivingNumber">
+                              <p
+                                className={`cardPlayerDivingNumber ${getText(player.rarity)}`}
+                              >
                                 {player.goalkeeping_diving}
                               </p>
-                              <p className="cardPlayerDivingText">DIV</p>
+                              <p
+                                className={`cardPlayerDivingText ${getText(player.rarity)}`}
+                              >
+                                DIV
+                              </p>
                             </div>
                             <div className="cardPlayerHandling">
-                              <p className="cardPlayerHandlingNumber">
+                              <p
+                                className={`cardPlayerHandlingNumber ${getText(player.rarity)}`}
+                              >
                                 {player.goalkeeping_handling}
                               </p>
-                              <p className="cardPlayerHandlingText">HAN</p>
+                              <p
+                                className={`cardPlayerHandlingText ${getText(player.rarity)}`}
+                              >
+                                HAN
+                              </p>
                             </div>
                             <div className="cardPlayerKicking">
-                              <p className="cardPlayerKickingNumber">
+                              <p
+                                className={`cardPlayerKickingNumber ${getText(player.rarity)}`}
+                              >
                                 {player.goalkeeping_kicking}
                               </p>
-                              <p className="cardPlayerKickingText">KIC</p>
+                              <p
+                                className={`cardPlayerKickingText ${getText(player.rarity)}`}
+                              >
+                                KIC
+                              </p>
                             </div>
                             <div className="cardPlayerReflexes">
-                              <p className="cardPlayerReflexesNumber">
+                              <p
+                                className={`cardPlayerReflexesNumber ${getText(player.rarity)}`}
+                              >
                                 {player.goalkeeping_reflexes}
                               </p>
-                              <p className="cardPlayerReflexesText">REF</p>
+                              <p
+                                className={`cardPlayerReflexesText ${getText(player.rarity)}`}
+                              >
+                                REF
+                              </p>
                             </div>
                             <div className="cardPlayerSpeed">
-                              <p className="cardPlayerSpeedNumber">
+                              <p
+                                className={`cardPlayerSpeedNumber ${getText(player.rarity)}`}
+                              >
                                 {player.goalkeeping_speed}
                               </p>
-                              <p className="cardPlayerSpeedText">SPD</p>
+                              <p
+                                className={`cardPlayerSpeedText ${getText(player.rarity)}`}
+                              >
+                                SPD
+                              </p>
                             </div>
                             <div className="cardPlayerPositioning">
-                              <p className="cardPlayerPositioningNumber">
+                              <p
+                                className={`cardPlayerPositioningNumber ${getText(player.rarity)}`}
+                              >
                                 {player.goalkeeping_positioning}
                               </p>
-                              <p className="cardPlayerPositioningText">POS</p>
+                              <p
+                                className={`cardPlayerPositioningText ${getText(player.rarity)}`}
+                              >
+                                POS
+                              </p>
                             </div>
                           </>
                         ) : (
                           <>
                             <div className="cardPlayerPace">
-                              <p className="cardPlayerPaceNumber">
+                              <p
+                                className={`cardPlayerPaceNumber ${getText(player.rarity)}`}
+                              >
                                 {player.pace}
                               </p>
-                              <p className="cardPlayerPaceText">PAC</p>
+                              <p
+                                className={`cardPlayerPaceText ${getText(player.rarity)}`}
+                              >
+                                PAC
+                              </p>
                             </div>
                             <div className="cardPlayerShooting">
-                              <p className="cardPlayerShootingNumber">
+                              <p
+                                className={`cardPlayerShootingNumber ${getText(player.rarity)}`}
+                              >
                                 {player.shooting}
                               </p>
-                              <p className="cardPlayerShootingText">SHO</p>
+                              <p
+                                className={`cardPlayerShootingText ${getText(player.rarity)}`}
+                              >
+                                SHO
+                              </p>
                             </div>
                             <div className="cardPlayerDribbling">
-                              <p className="cardPlayerDribblingNumber">
+                              <p
+                                className={`cardPlayerDribblingNumber ${getText(player.rarity)}`}
+                              >
                                 {player.dribbling}
                               </p>
-                              <p className="cardPlayerDribblingText">DRI</p>
+                              <p
+                                className={`cardPlayerDribblingText ${getText(player.rarity)}`}
+                              >
+                                DRI
+                              </p>
                             </div>
                             <div className="cardPlayerPassing">
-                              <p className="cardPlayerPassingNumber">
+                              <p
+                                className={`cardPlayerPassingNumber ${getText(player.rarity)}`}
+                              >
                                 {player.passing}
                               </p>
-                              <p className="cardPlayerPassingText">PAS</p>
+                              <p
+                                className={`cardPlayerPassingText ${getText(player.rarity)}`}
+                              >
+                                PAS
+                              </p>
                             </div>
                             <div className="cardPlayerDefending">
-                              <p className="cardPlayerDefendingNumber">
+                              <p
+                                className={`cardPlayerDefendingNumber ${getText(player.rarity)}`}
+                              >
                                 {player.defending}
                               </p>
-                              <p className="cardPlayerDefendingText">DEF</p>
+                              <p
+                                className={`cardPlayerDefendingText ${getText(player.rarity)}`}
+                              >
+                                DEF
+                              </p>
                             </div>
                             <div className="cardPlayerPhysic">
-                              <p className="cardPlayerPhysicNumber">
+                              <p
+                                className={`cardPlayerPhysicNumber ${getText(player.rarity)}`}
+                              >
                                 {player.physic}
                               </p>
-                              <p className="cardPlayerPhysicText">PHY</p>
+                              <p
+                                className={`cardPlayerPhysicText ${getText(player.rarity)}`}
+                              >
+                                PHY
+                              </p>
                             </div>
                           </>
                         )}
@@ -890,10 +1073,14 @@ function Draft() {
                         alt="Card"
                       ></img>
 
-                      <p className="cardOverall">
+                      <p
+                        className={`cardOverall ${getText(assignedPlayers[slot.id].rarity)}`}
+                      >
                         {assignedPlayers[slot.id].overall}
                       </p>
-                      <p className="cardPosition">
+                      <p
+                        className={`cardPosition ${getText(assignedPlayers[slot.id].rarity)}`}
+                      >
                         {
                           assignedPlayers[slot.id].player_positions.split(
                             ", ",
@@ -947,86 +1134,160 @@ function Draft() {
                           }
                         }}
                       ></img>
-                      <p className="cardName">
+                      <p
+                        className={`cardName ${getText(assignedPlayers[slot.id].rarity)}`}
+                      >
                         {assignedPlayers[slot.id].short_name}
                       </p>
 
                       {assignedPlayers[slot.id].player_positions === "GK" ? (
                         <>
                           <div className="cardPlayerDiving">
-                            <p className="cardPlayerDivingNumber">
+                            <p
+                              className={`cardPlayerDivingNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].goalkeeping_diving}
                             </p>
-                            <p className="cardPlayerDivingText">DIV</p>
+                            <p
+                              className={`cardPlayerDivingText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              DIV
+                            </p>
                           </div>
                           <div className="cardPlayerHandling">
-                            <p className="cardPlayerHandlingNumber">
+                            <p
+                              className={`cardPlayerHandlingNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].goalkeeping_handling}
                             </p>
-                            <p className="cardPlayerHandlingText">HAN</p>
+                            <p
+                              className={`cardPlayerHandlingText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              HAN
+                            </p>
                           </div>
                           <div className="cardPlayerKicking">
-                            <p className="cardPlayerKickingNumber">
+                            <p
+                              className={`cardPlayerKickingNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].goalkeeping_kicking}
                             </p>
-                            <p className="cardPlayerKickingText">KIC</p>
+                            <p
+                              className={`cardPlayerKickingText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              KIC
+                            </p>
                           </div>
                           <div className="cardPlayerReflexes">
-                            <p className="cardPlayerReflexesNumber">
+                            <p
+                              className={`cardPlayerReflexesNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].goalkeeping_reflexes}
                             </p>
-                            <p className="cardPlayerReflexesText">REF</p>
+                            <p
+                              className={`cardPlayerReflexesText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              REF
+                            </p>
                           </div>
                           <div className="cardPlayerSpeed">
-                            <p className="cardPlayerSpeedNumber">
+                            <p
+                              className={`cardPlayerSpeedNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].goalkeeping_speed}
                             </p>
-                            <p className="cardPlayerSpeedText">SPD</p>
+                            <p
+                              className={`cardPlayerSpeedText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              SPD
+                            </p>
                           </div>
                           <div className="cardPlayerPositioning">
-                            <p className="cardPlayerPositioningNumber">
+                            <p
+                              className={`cardPlayerPositioningNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].goalkeeping_positioning}
                             </p>
-                            <p className="cardPlayerPositioningText">POS</p>
+                            <p
+                              className={`cardPlayerPositioningText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              POS
+                            </p>
                           </div>
                         </>
                       ) : (
                         <>
                           <div className="cardPlayerPace">
-                            <p className="cardPlayerPaceNumber">
+                            <p
+                              className={`cardPlayerPaceNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].pace}
                             </p>
-                            <p className="cardPlayerPaceText">PAC</p>
+                            <p
+                              className={`cardPlayerPaceText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              PAC
+                            </p>
                           </div>
                           <div className="cardPlayerShooting">
-                            <p className="cardPlayerShootingNumber">
+                            <p
+                              className={`cardPlayerShootingNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].shooting}
                             </p>
-                            <p className="cardPlayerShootingText">SHO</p>
+                            <p
+                              className={`cardPlayerShootingText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              SHO
+                            </p>
                           </div>
                           <div className="cardPlayerDribbling">
-                            <p className="cardPlayerDribblingNumber">
+                            <p
+                              className={`cardPlayerDribblingNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].dribbling}
                             </p>
-                            <p className="cardPlayerDribblingText">DRI</p>
+                            <p
+                              className={`cardPlayerDribblingText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              DRI
+                            </p>
                           </div>
                           <div className="cardPlayerPassing">
-                            <p className="cardPlayerPassingNumber">
+                            <p
+                              className={`cardPlayerPassingNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].passing}
                             </p>
-                            <p className="cardPlayerPassingText">PAS</p>
+                            <p
+                              className={`cardPlayerPassingText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              PAS
+                            </p>
                           </div>
                           <div className="cardPlayerDefending">
-                            <p className="cardPlayerDefendingNumber">
+                            <p
+                              className={`cardPlayerDefendingNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].defending}
                             </p>
-                            <p className="cardPlayerDefendingText">DEF</p>
+                            <p
+                              className={`cardPlayerDefendingText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              DEF
+                            </p>
                           </div>
                           <div className="cardPlayerPhysic">
-                            <p className="cardPlayerPhysicNumber">
+                            <p
+                              className={`cardPlayerPhysicNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].physic}
                             </p>
-                            <p className="cardPlayerPhysicText">PHY</p>
+                            <p
+                              className={`cardPlayerPhysicText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              PHY
+                            </p>
                           </div>
                         </>
                       )}
@@ -1060,10 +1321,14 @@ function Draft() {
                         alt="Card"
                       ></img>
 
-                      <p className="cardOverall">
+                      <p
+                        className={`cardOverall ${getText(assignedPlayers[slot.id].rarity)}`}
+                      >
                         {assignedPlayers[slot.id].overall}
                       </p>
-                      <p className="cardPosition">
+                      <p
+                        className={`cardPosition ${getText(assignedPlayers[slot.id].rarity)}`}
+                      >
                         {
                           assignedPlayers[slot.id].player_positions.split(
                             ", ",
@@ -1117,86 +1382,160 @@ function Draft() {
                           }
                         }}
                       ></img>
-                      <p className="cardName">
+                      <p
+                        className={`cardName ${getText(assignedPlayers[slot.id].rarity)}`}
+                      >
                         {assignedPlayers[slot.id].short_name}
                       </p>
 
                       {assignedPlayers[slot.id].player_positions === "GK" ? (
                         <>
                           <div className="cardPlayerDiving">
-                            <p className="cardPlayerDivingNumber">
+                            <p
+                              className={`cardPlayerDivingNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].goalkeeping_diving}
                             </p>
-                            <p className="cardPlayerDivingText">DIV</p>
+                            <p
+                              className={`cardPlayerDivingText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              DIV
+                            </p>
                           </div>
                           <div className="cardPlayerHandling">
-                            <p className="cardPlayerHandlingNumber">
+                            <p
+                              className={`cardPlayerHandlingNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].goalkeeping_handling}
                             </p>
-                            <p className="cardPlayerHandlingText">HAN</p>
+                            <p
+                              className={`cardPlayerHandlingText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              HAN
+                            </p>
                           </div>
                           <div className="cardPlayerKicking">
-                            <p className="cardPlayerKickingNumber">
+                            <p
+                              className={`cardPlayerKickingNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].goalkeeping_kicking}
                             </p>
-                            <p className="cardPlayerKickingText">KIC</p>
+                            <p
+                              className={`cardPlayerKickingText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              KIC
+                            </p>
                           </div>
                           <div className="cardPlayerReflexes">
-                            <p className="cardPlayerReflexesNumber">
+                            <p
+                              className={`cardPlayerReflexesNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].goalkeeping_reflexes}
                             </p>
-                            <p className="cardPlayerReflexesText">REF</p>
+                            <p
+                              className={`cardPlayerReflexesText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              REF
+                            </p>
                           </div>
                           <div className="cardPlayerSpeed">
-                            <p className="cardPlayerSpeedNumber">
+                            <p
+                              className={`cardPlayerSpeedNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].goalkeeping_speed}
                             </p>
-                            <p className="cardPlayerSpeedText">SPD</p>
+                            <p
+                              className={`cardPlayerSpeedText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              SPD
+                            </p>
                           </div>
                           <div className="cardPlayerPositioning">
-                            <p className="cardPlayerPositioningNumber">
+                            <p
+                              className={`cardPlayerPositioningNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].goalkeeping_positioning}
                             </p>
-                            <p className="cardPlayerPositioningText">POS</p>
+                            <p
+                              className={`cardPlayerPositioningText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              POS
+                            </p>
                           </div>
                         </>
                       ) : (
                         <>
                           <div className="cardPlayerPace">
-                            <p className="cardPlayerPaceNumber">
+                            <p
+                              className={`cardPlayerPaceNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].pace}
                             </p>
-                            <p className="cardPlayerPaceText">PAC</p>
+                            <p
+                              className={`cardPlayerPaceText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              PAC
+                            </p>
                           </div>
                           <div className="cardPlayerShooting">
-                            <p className="cardPlayerShootingNumber">
+                            <p
+                              className={`cardPlayerShootingNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].shooting}
                             </p>
-                            <p className="cardPlayerShootingText">SHO</p>
+                            <p
+                              className={`cardPlayerShootingText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              SHO
+                            </p>
                           </div>
                           <div className="cardPlayerDribbling">
-                            <p className="cardPlayerDribblingNumber">
+                            <p
+                              className={`cardPlayerDribblingNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].dribbling}
                             </p>
-                            <p className="cardPlayerDribblingText">DRI</p>
+                            <p
+                              className={`cardPlayerDribblingText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              DRI
+                            </p>
                           </div>
                           <div className="cardPlayerPassing">
-                            <p className="cardPlayerPassingNumber">
+                            <p
+                              className={`cardPlayerPassingNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].passing}
                             </p>
-                            <p className="cardPlayerPassingText">PAS</p>
+                            <p
+                              className={`cardPlayerPassingText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              PAS
+                            </p>
                           </div>
                           <div className="cardPlayerDefending">
-                            <p className="cardPlayerDefendingNumber">
+                            <p
+                              className={`cardPlayerDefendingNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].defending}
                             </p>
-                            <p className="cardPlayerDefendingText">DEF</p>
+                            <p
+                              className={`cardPlayerDefendingText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              DEF
+                            </p>
                           </div>
                           <div className="cardPlayerPhysic">
-                            <p className="cardPlayerPhysicNumber">
+                            <p
+                              className={`cardPlayerPhysicNumber ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
                               {assignedPlayers[slot.id].physic}
                             </p>
-                            <p className="cardPlayerPhysicText">PHY</p>
+                            <p
+                              className={`cardPlayerPhysicText ${getText(assignedPlayers[slot.id].rarity)}`}
+                            >
+                              PHY
+                            </p>
                           </div>
                         </>
                       )}
@@ -1312,8 +1651,14 @@ function Draft() {
                 className="chemStars"
               />
 
-              <p className="cardOverall">{assignedPlayers[dragKey].overall}</p>
-              <p className="cardPosition">
+              <p
+                className={`cardOverall ${getText(assignedPlayers[dragKey].rarity)}`}
+              >
+                {assignedPlayers[dragKey].overall}
+              </p>
+              <p
+                className={`cardPosition ${getText(assignedPlayers[dragKey].rarity)}`}
+              >
                 {assignedPlayers[dragKey].player_positions.split(", ")[0]}
               </p>
 
@@ -1360,84 +1705,160 @@ function Draft() {
                   }
                 }}
               />
-              <p className="cardName">{assignedPlayers[dragKey].short_name}</p>
+              <p
+                className={`cardName ${getText(assignedPlayers[dragKey].rarity)}`}
+              >
+                {assignedPlayers[dragKey].short_name}
+              </p>
 
               {assignedPlayers[dragKey].player_positions === "GK" ? (
                 <>
                   <div className="cardPlayerDiving">
-                    <p className="cardPlayerDivingNumber">
+                    <p
+                      className={`cardPlayerDivingNumber ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
                       {assignedPlayers[dragKey].goalkeeping_diving}
                     </p>
-                    <p className="cardPlayerDivingText">DIV</p>
+                    <p
+                      className={`cardPlayerDivingText ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
+                      DIV
+                    </p>
                   </div>
                   <div className="cardPlayerHandling">
-                    <p className="cardPlayerHandlingNumber">
+                    <p
+                      className={`cardPlayerHandlingNumber ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
                       {assignedPlayers[dragKey].goalkeeping_handling}
                     </p>
-                    <p className="cardPlayerHandlingText">HAN</p>
+                    <p
+                      className={`cardPlayerHandlingText ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
+                      HAN
+                    </p>
                   </div>
                   <div className="cardPlayerKicking">
-                    <p className="cardPlayerKickingNumber">
+                    <p
+                      className={`cardPlayerKickingNumber ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
                       {assignedPlayers[dragKey].goalkeeping_kicking}
                     </p>
-                    <p className="cardPlayerKickingText">KIC</p>
+                    <p
+                      className={`cardPlayerKickingText ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
+                      KIC
+                    </p>
                   </div>
                   <div className="cardPlayerReflexes">
-                    <p className="cardPlayerReflexesNumber">
+                    <p
+                      className={`cardPlayerReflexesNumber ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
                       {assignedPlayers[dragKey].goalkeeping_reflexes}
                     </p>
-                    <p className="cardPlayerReflexesText">REF</p>
+                    <p
+                      className={`cardPlayerReflexesText ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
+                      REF
+                    </p>
                   </div>
                   <div className="cardPlayerSpeed">
-                    <p className="cardPlayerSpeedNumber">
+                    <p
+                      className={`cardPlayerSpeedNumber ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
                       {assignedPlayers[dragKey].goalkeeping_speed}
                     </p>
-                    <p className="cardPlayerSpeedText">SPD</p>
+                    <p
+                      className={`cardPlayerSpeedText ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
+                      SPD
+                    </p>
                   </div>
                   <div className="cardPlayerPositioning">
-                    <p className="cardPlayerPositioningNumber">
+                    <p
+                      className={`cardPlayerPositioningNumber ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
                       {assignedPlayers[dragKey].goalkeeping_positioning}
                     </p>
-                    <p className="cardPlayerPositioningText">POS</p>
+                    <p
+                      className={`cardPlayerPositioningText ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
+                      POS
+                    </p>
                   </div>
                 </>
               ) : (
                 <>
                   <div className="cardPlayerPace">
-                    <p className="cardPlayerPaceNumber">
+                    <p
+                      className={`cardPlayerPaceNumber ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
                       {assignedPlayers[dragKey].pace}
                     </p>
-                    <p className="cardPlayerPaceText">PAC</p>
+                    <p
+                      className={`cardPlayerPaceText ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
+                      PAC
+                    </p>
                   </div>
                   <div className="cardPlayerShooting">
-                    <p className="cardPlayerShootingNumber">
+                    <p
+                      className={`cardPlayerShootingNumber ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
                       {assignedPlayers[dragKey].shooting}
                     </p>
-                    <p className="cardPlayerShootingText">SHO</p>
+                    <p
+                      className={`cardPlayerShootingText ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
+                      SHO
+                    </p>
                   </div>
                   <div className="cardPlayerDribbling">
-                    <p className="cardPlayerDribblingNumber">
+                    <p
+                      className={`cardPlayerDribblingNumber ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
                       {assignedPlayers[dragKey].dribbling}
                     </p>
-                    <p className="cardPlayerDribblingText">DRI</p>
+                    <p
+                      className={`cardPlayerDribblingText ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
+                      DRI
+                    </p>
                   </div>
                   <div className="cardPlayerPassing">
-                    <p className="cardPlayerPassingNumber">
+                    <p
+                      className={`cardPlayerPassingNumber ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
                       {assignedPlayers[dragKey].passing}
                     </p>
-                    <p className="cardPlayerPassingText">PAS</p>
+                    <p
+                      className={`cardPlayerPassingText ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
+                      PAS
+                    </p>
                   </div>
                   <div className="cardPlayerDefending">
-                    <p className="cardPlayerDefendingNumber">
+                    <p
+                      className={`cardPlayerDefendingNumber ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
                       {assignedPlayers[dragKey].defending}
                     </p>
-                    <p className="cardPlayerDefendingText">DEF</p>
+                    <p
+                      className={`cardPlayerDefendingText ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
+                      DEF
+                    </p>
                   </div>
                   <div className="cardPlayerPhysic">
-                    <p className="cardPlayerPhysicNumber">
+                    <p
+                      className={`cardPlayerPhysicNumber ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
                       {assignedPlayers[dragKey].physic}
                     </p>
-                    <p className="cardPlayerPhysicText">PHY</p>
+                    <p
+                      className={`cardPlayerPhysicText ${getText(assignedPlayers[dragKey].rarity)}`}
+                    >
+                      PHY
+                    </p>
                   </div>
                 </>
               )}

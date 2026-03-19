@@ -1,6 +1,27 @@
 import "./Objectives.css";
 
 function Objectives() {
+  const proba = async () => {
+    try {
+      const results = await getMethodFetch(
+        "http://127.0.0.1:3000/api/objectives",
+      );
+
+      results.results.forEach((element) => {
+        const key = Object.keys(element)[0];
+        const array = element[key];
+        console.log(key);
+        array.forEach((valami) => {
+          console.log(valami);
+        });
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  proba();
+
   return (
     <>
       <div className="objectivesDiv">

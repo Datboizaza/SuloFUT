@@ -108,6 +108,60 @@ async function getDraftRewards() {
   }
 }
 
+async function getObjectives() {
+  const query = `SELECT 
+    c.name AS category,
+    
+    o.id AS objective_id,
+    o.name AS objective_name,
+
+    gr.id AS groupRewardId,
+    gr.coins AS group_coins,
+    grp.id AS group_pack_id,
+    grp.packName AS group_pack_name,
+    grp.packPrice AS group_pack_price,
+    grp.packDesign AS group_pack_design,
+
+    s.id AS sub_id,
+    s.task,
+
+    COALESCE(s.requirement_int, s.requirement_bool) AS requirement,
+
+    r.id AS rewardId,
+    r.coins,
+    p.id AS pack_id,
+    p.packName AS pack_name,
+    p.packPrice AS pack_price,
+    p.packDesign AS pack_design,
+
+    COALESCE(s.progress_int, s.progress_bool) AS progress
+
+FROM objcategories c
+
+JOIN objectives o ON o.category_id = c.id
+JOIN subobjectives s ON s.objective_id = o.id
+
+-- sub reward
+LEFT JOIN rewards r ON r.id = s.reward
+LEFT JOIN packs p 
+    ON r.packIds IS NOT NULL 
+    AND FIND_IN_SET(p.id, r.packIds) > 0
+
+-- group reward
+LEFT JOIN rewards gr ON gr.id = o.group_reward
+LEFT JOIN packs grp 
+    ON gr.packIds IS NOT NULL 
+    AND FIND_IN_SET(grp.id, gr.packIds) > 0
+
+ORDER BY c.name, o.id, s.id;`;
+  try {
+    const [rows] = await pool.execute(query);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
 //!Export
 module.exports = {
   selectall,
@@ -119,4 +173,5 @@ module.exports = {
   getPackById,
   getRewardById,
   getDraftRewards,
+  getObjectives,
 };
