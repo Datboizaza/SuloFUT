@@ -210,8 +210,31 @@
   z-index: 2;
 }
 
+.icon {
+  width: 106%;
+  height: 101%;
+}
+
+.hero {
+  width: 106%;
+  height: 101%;
+}
+
+.toty {
+  width: 96%;
+  height: 101%;
+}
+
 .playerSelectionModal .cardDesign {
   filter: drop-shadow(0 8px 15px rgba(255, 208, 0, 0.425));
+}
+
+.playerSelectionModal .icon {
+  filter: drop-shadow(0 8px 15px rgba(255, 255, 255, 0.425));
+}
+
+.playerSelectionModal .hero {
+  filter: drop-shadow(0 8px 15px rgba(231, 68, 68, 0.425));
 }
 
 .cardOverall {

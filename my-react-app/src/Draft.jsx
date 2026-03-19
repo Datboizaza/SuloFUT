@@ -4,6 +4,7 @@ import "./Draft.css";
 import Gold from "./assets/goldRare.png";
 import Hero from "./assets/Hero.png";
 import Icon from "./assets/Icon.png";
+import Toty from "./assets/toty.png";
 import AltPlayerImg from "./assets/altPlayerImg.png";
 import ZeroChem from "./assets/zeroChem.png";
 import OneChem from "./assets/oneChem.png";
@@ -256,6 +257,7 @@ function Draft() {
     gold: Gold,
     icon: Icon,
     hero: Hero,
+    toty: Toty,
     //!FOLYTATÁS
   };
 
@@ -534,7 +536,7 @@ function Draft() {
                 >
                   <img
                     src={rarityImgs[assignedPlayers[i].rarity]}
-                    className="cardDesign"
+                    className={"cardDesign " + assignedPlayers[i].rarity}
                     alt="Card"
                   ></img>
 
@@ -704,7 +706,7 @@ function Draft() {
                       >
                         <img
                           src={rarityImgs[player.rarity]}
-                          className="cardDesign"
+                          className={"cardDesign " + player.rarity}
                           alt="Card"
                         ></img>
 
@@ -882,7 +884,9 @@ function Draft() {
                     >
                       <img
                         src={rarityImgs[assignedPlayers[slot.id].rarity]}
-                        className="cardDesign"
+                        className={
+                          "cardDesign " + assignedPlayers[slot.id].rarity
+                        }
                         alt="Card"
                       ></img>
 
@@ -1050,7 +1054,9 @@ function Draft() {
                     >
                       <img
                         src={rarityImgs[assignedPlayers[slot.id].rarity]}
-                        className="cardDesign"
+                        className={
+                          "cardDesign " + assignedPlayers[slot.id].rarity
+                        }
                         alt="Card"
                       ></img>
 
@@ -1296,7 +1302,7 @@ function Draft() {
             <div className="cardSlot dragPreview">
               <img
                 src={rarityImgs[assignedPlayers[dragKey].rarity]}
-                className="cardDesign"
+                className={"cardDesign " + assignedPlayers[dragKey].rarity}
                 alt="Card"
               />
 
@@ -1308,10 +1314,7 @@ function Draft() {
 
               <p className="cardOverall">{assignedPlayers[dragKey].overall}</p>
               <p className="cardPosition">
-                {displayedPosition(
-                  assignedPlayers[dragKey],
-                  gameLayout[dragKey].pos,
-                )}
+                {assignedPlayers[dragKey].player_positions.split(", ")[0]}
               </p>
 
               <img
