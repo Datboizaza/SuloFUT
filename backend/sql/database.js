@@ -53,10 +53,26 @@ async function getUserById(id) {
 
 //? User Coin száma
 async function getUserCoinsById(id) {
-  const query = "SELECT coinNumber FROM coins WHERE user_id = ?;";
+  const query = "SELECT coinNumber FROM userClub WHERE user_id = ?;";
   try {
     const [rows] = await pool.execute(query, [id]);
     return rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+
+//? User Packjei
+async function getUserPacksById(id) {
+  const query = `
+    SELECT packs.*
+    FROM packs
+    JOIN userPacks ON packs.id = userPacks.pack_id
+    WHERE userPacks.user_id = ?
+  `;
+  try {
+    const [rows] = await pool.execute(query, [id]);
+    return rows;
   } catch (error) {
     throw error;
   }
@@ -88,7 +104,7 @@ async function getPackById(id) {
 //? Rewardok
 async function getRewardById(id) {
   const query =
-    "SELECT rewards.id AS rewardId, rewards.coins, packs.* FROM rewards LEFT JOIN packs ON rewards.packIds IS NOT NULL AND FIND_IN_SET(packs.id, rewards.packIds) > 0 WHERE rewards.id = ?;";
+    "SELECT rewards.id AS rewardId, rewards.coins, packs.* FROM rewards LEFT JOIN packs ON rewards.packIds = packs.id WHERE rewards.id = ?;";
   try {
     const [rows] = await pool.execute(query, [id]);
     return rows;
@@ -97,19 +113,33 @@ async function getRewardById(id) {
   }
 }
 
-async function getDraftRewards() {
-  const query =
-    "SELECT draftrewards.id AS draftRewardId, draftrewards.coins, draftrewards.rewardValue, packs.* FROM draftrewards LEFT JOIN packs ON draftrewards.packIds IS NOT NULL AND FIND_IN_SET(packs.id, draftrewards.packIds) > 0";
+async function getDraftRewards(rewardValue) {
+  const query = `SELECT 
+      dr.id AS draftRewardId,
+      dr.coins,
+      dr.rewardValue,
+      p.id AS packId,
+      p.packName,
+      p.packPrice,
+      p.packDesign
+    FROM draftrewards dr
+    LEFT JOIN draftreward_packs drp 
+      ON dr.id = drp.draftreward_id
+    LEFT JOIN packs p 
+      ON p.id = drp.pack_id
+    WHERE dr.rewardValue = ?`;
   try {
-    const [rows] = await pool.execute(query);
+    const [rows] = await pool.execute(query, [rewardValue]);
     return rows;
   } catch (error) {
     throw error;
   }
 }
 
-async function getObjectives() {
-  const query = `SELECT 
+//? Objective-ek
+async function getObjectives(id) {
+  const query = `
+SELECT 
     c.name AS category,
     
     o.id AS objective_id,
@@ -125,41 +155,52 @@ async function getObjectives() {
     s.id AS sub_id,
     s.task,
 
-    COALESCE(s.requirement_int, s.requirement_bool) AS requirement,
+    COALESCE(s.requirement_int) AS requirement,
+
+    COALESCE(uop.progress_int, 0) AS progress,
 
     r.id AS rewardId,
     r.coins,
     p.id AS pack_id,
     p.packName AS pack_name,
     p.packPrice AS pack_price,
-    p.packDesign AS pack_design,
-
-    COALESCE(s.progress_int, s.progress_bool) AS progress
+    p.packDesign AS pack_design
 
 FROM objcategories c
 
 JOIN objectives o ON o.category_id = c.id
 JOIN subobjectives s ON s.objective_id = o.id
 
--- sub reward
+LEFT JOIN user_objective_progress uop 
+  ON uop.objective_id = s.id 
+  AND uop.user_id = 1
+
 LEFT JOIN rewards r ON r.id = s.reward
-LEFT JOIN packs p 
-    ON r.packIds IS NOT NULL 
-    AND FIND_IN_SET(p.id, r.packIds) > 0
+LEFT JOIN packs p ON r.packIds = p.id
 
--- group reward
 LEFT JOIN rewards gr ON gr.id = o.group_reward
-LEFT JOIN packs grp 
-    ON gr.packIds IS NOT NULL 
-    AND FIND_IN_SET(grp.id, gr.packIds) > 0
+LEFT JOIN packs grp ON gr.packIds = grp.id
 
-ORDER BY c.name, o.id, s.id;`;
+ORDER BY c.name, o.id, s.id;
+`;
+
   try {
-    const [rows] = await pool.execute(query);
+    const [rows] = await pool.execute(query, [id]);
     return rows;
   } catch (error) {
     throw error;
   }
+}
+
+async function updateSubobjectiveProgress(id, subId) {
+  const query = `
+    INSERT INTO user_subobjective_progress (user_id, subobjective_id, progress_int)
+    VALUES (?, ?, 1)
+    ON DUPLICATE KEY UPDATE 
+      progress_int = progress_int + 1
+  `;
+
+  await pool.execute(query, [id, subId]);
 }
 
 //!Export
@@ -174,4 +215,6 @@ module.exports = {
   getRewardById,
   getDraftRewards,
   getObjectives,
+  getUserPacksById,
+  updateSubobjectiveProgress,
 };

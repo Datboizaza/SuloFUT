@@ -29,21 +29,28 @@ USE sulofut;
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `coins`
+-- Tábla szerkezet ehhez a táblához `userClub`
 --
 
-CREATE TABLE `coins` (
+CREATE TABLE `userClub` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `coinNumber` int(11) NOT NULL DEFAULT 0
+  `coinNumber` int(11) NOT NULL DEFAULT 0,
+  `userPlayers` TEXT DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
--- A tábla adatainak kiíratása `coins`
+-- A tábla adatainak kiíratása `userClub`
 --
 
-INSERT INTO `coins` (`id`, `user_id`, `coinNumber`) VALUES
-(1, 1, 0);
+INSERT INTO `userClub` (`id`, `user_id`, `coinNumber`) VALUES
+(1, 1, 200000);
+
+CREATE TABLE userPacks (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT(11) NOT NULL,
+  pack_id INT(11) NOT NULL
+) ENGINE=InnoDB;
 
 -- --------------------------------------------------------
 
@@ -53,26 +60,50 @@ INSERT INTO `coins` (`id`, `user_id`, `coinNumber`) VALUES
 
 CREATE TABLE `draftrewards` (
   `id` int(11) NOT NULL,
-  `packIds` varchar(20) DEFAULT NULL,
   `coins` int(11) DEFAULT NULL,
   `rewardValue` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+CREATE TABLE draftreward_packs (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  draftreward_id INT NOT NULL,
+  pack_id INT NOT NULL
+) ENGINE=InnoDB;
 
 --
 -- A tábla adatainak kiíratása `draftrewards`
 --
 
-INSERT INTO `draftrewards` (`id`, `packIds`, `coins`, `rewardValue`) VALUES
-(1, '3', 2500, 'bad'),
-(2, '1,2', 5000, 'bad'),
-(3, '2,3', 20000, 'mid'),
-(4, '4', 10000, 'mid'),
-(5, '7', 20000, 'mid'),
-(6, '6', 40000, 'good'),
-(7, '3,4,5', 30000, 'good'),
-(8, '7,16', 30000, 'great'),
-(9, '8', 60000, 'great'),
-(10, '6,9,16', 100000, 'excellent');
+INSERT INTO `draftrewards` (`id`, `coins`, `rewardValue`) VALUES
+(1, 2500, 'bad'),
+(2, 5000, 'bad'),
+(3, 20000, 'mid'),
+(4, 10000, 'mid'),
+(5, 20000, 'mid'),
+(6, 40000, 'good'),
+(7, 30000, 'good'),
+(8, 30000, 'great'),
+(9, 60000, 'great'),
+(10, 100000, 'excellent');
+
+INSERT INTO draftreward_packs (draftreward_id, pack_id) VALUES
+(1, 3),
+(2, 1),
+(2, 2),
+(3, 2),
+(3, 3),
+(4, 4),
+(5, 7),
+(6, 6),
+(7, 3),
+(7, 4),
+(7, 5),
+(8, 7),
+(8, 16),
+(9, 8),
+(10, 6),
+(10, 9),
+(10, 16);
 
 -- --------------------------------------------------------
 
@@ -104,25 +135,24 @@ CREATE TABLE `objectives` (
   `id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `group_reward` int(11) NOT NULL,
-  `group_progress` int(11) NOT NULL
+  `group_reward` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
 -- A tábla adatainak kiíratása `objectives`
 --
 
-INSERT INTO `objectives` (`id`, `category_id`, `name`, `group_reward`, `group_progress`) VALUES
-(1, 1, 'Chemistry Mastery', 6, 0),
-(2, 1, 'Rating Mastery', 17, 0),
-(3, 1, 'Customize your squad', 9, 0),
-(4, 2, 'Draft Mastery', 17, 0),
-(5, 2, 'Squad Building Mastery', 5, 0),
-(6, 2, 'Pack Opening Mastery', 6, 0),
-(7, 3, 'The Best of \'25', 19, 0),
-(8, 3, 'Once a baller always a baller', 13, 0),
-(9, 3, 'Scare your opponent to death', 14, 0),
-(10, 3, 'Pack Luck', 18, 0);
+INSERT INTO `objectives` (`id`, `category_id`, `name`, `group_reward`) VALUES
+(1, 1, 'Chemistry Mastery', 6),
+(2, 1, 'Rating Mastery', 17),
+(3, 1, 'Customize your squad', 9),
+(4, 2, 'Draft Mastery', 17),
+(5, 2, 'Squad Building Mastery', 5),
+(6, 2, 'Pack Opening Mastery', 6),
+(7, 3, 'The Best of \'25', 19),
+(8, 3, 'Once a baller always a baller', 13),
+(9, 3, 'Scare your opponent to death', 14),
+(10, 3, 'Pack Luck', 18);
 
 -- --------------------------------------------------------
 
@@ -171,7 +201,7 @@ INSERT INTO `packs` (`id`, `packName`, `packPrice`, `packDesign`) VALUES
 
 CREATE TABLE `rewards` (
   `id` int(11) NOT NULL,
-  `packIds` varchar(20) DEFAULT NULL,
+  `packIds` int(11) DEFAULT NULL,
   `coins` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
@@ -181,25 +211,25 @@ CREATE TABLE `rewards` (
 
 INSERT INTO `rewards` (`id`, `packIds`, `coins`) VALUES
 (1, NULL, 2000),
-(2, '5', NULL),
-(3, '4', NULL),
-(4, '7', NULL),
-(5, '9', NULL),
-(6, '6,7', 50000),
-(7, '1', NULL),
-(8, '2', NULL),
-(9, '3', 5000),
-(10, '8', NULL),
-(11, '10', NULL),
-(12, '11', NULL),
-(13, '12', NULL),
-(14, '13', NULL),
-(15, '14', 50000),
-(16, '15', NULL),
-(17, '16', NULL),
-(18, '17', NULL),
-(19, '18', NULL),
-(20, '19', NULL);
+(2, 5, NULL),
+(3, 4, NULL),
+(4, 7, NULL),
+(5, 9, NULL),
+(6, 7, 50000),
+(7, 1, NULL),
+(8, 2, NULL),
+(9, 3, 5000),
+(10, 8, NULL),
+(11, 10, NULL),
+(12, 11, NULL),
+(13, 12, NULL),
+(14, 13, NULL),
+(15, 14, 50000),
+(16, 15, NULL),
+(17, 16, NULL),
+(18, 17, NULL),
+(19, 18, NULL),
+(20, 19, NULL);
 
 -- --------------------------------------------------------
 
@@ -231,54 +261,51 @@ CREATE TABLE `subobjectives` (
   `objective_id` int(11) NOT NULL,
   `task` varchar(255) NOT NULL,
   `requirement_int` int(11) DEFAULT NULL,
-  `requirement_bool` tinyint(1) DEFAULT NULL,
-  `reward` int(11) NOT NULL,
-  `progress_int` int(11) DEFAULT NULL,
-  `progress_bool` tinyint(1) DEFAULT NULL
+  `reward` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
 -- A tábla adatainak kiíratása `subobjectives`
 --
 
-INSERT INTO `subobjectives` (`id`, `objective_id`, `task`, `requirement_int`, `requirement_bool`, `reward`, `progress_int`, `progress_bool`) VALUES
-(10, 1, 'Achieve 10 chemistry points in your starting 11', 10, NULL, 1, 0, NULL),
-(11, 1, 'Achieve 20 chemistry points in your starting 11', 20, NULL, 2, 0, NULL),
-(12, 1, 'Achieve 28 chemistry points in your starting 11', 28, NULL, 3, 0, NULL),
-(13, 1, 'Achieve full chemistry in your starting 11', 33, NULL, 4, 0, NULL),
-(14, 2, 'Achieve 75 rating in your squad', 75, NULL, 1, 0, NULL),
-(15, 2, 'Achieve 80 rating in your squad', 80, NULL, 2, 0, NULL),
-(16, 2, 'Achieve 85 rating in your squad', 85, NULL, 4, 0, NULL),
-(17, 2, 'Achieve 90 rating in your squad', 90, NULL, 5, 0, NULL),
-(18, 3, 'Change your formation', NULL, 1, 7, NULL, 0),
-(19, 3, 'Change your team\'s name', NULL, 1, 8, NULL, 0),
-(20, 4, 'Play 1 Draft', 1, NULL, 9, 0, NULL),
-(21, 4, 'Play 3 Draft', 3, NULL, 3, 0, NULL),
-(22, 4, 'Play 5 Draft', 5, NULL, 4, 0, NULL),
-(23, 4, 'Play 10 Draft', 10, NULL, 10, 0, NULL),
-(24, 4, 'Play 20 Draft', 20, NULL, 5, 0, NULL),
-(25, 5, 'Complete 1 SBC', 1, NULL, 1, 0, NULL),
-(26, 5, 'Complete 3 SBC', 3, NULL, 9, 0, NULL),
-(27, 5, 'Complete 5 SBC', 5, NULL, 3, 0, NULL),
-(28, 5, 'Complete 10 SBC', 10, NULL, 4, 0, NULL),
-(29, 6, 'Open 1 pack', 1, NULL, 1, 0, NULL),
-(30, 6, 'Open 3 packs', 3, NULL, 1, 0, NULL),
-(31, 6, 'Open 5 packs', 5, NULL, 1, 0, NULL),
-(32, 6, 'Open 10 packs', 10, NULL, 2, 0, NULL),
-(33, 6, 'Open 20 packs', 20, NULL, 3, 0, NULL),
-(34, 6, 'Open 50 packs', 50, NULL, 10, 0, NULL),
-(35, 7, 'Pick a TOTY card in Draft', NULL, 1, 3, NULL, 0),
-(36, 7, 'Open a TOTY card', NULL, 1, 17, NULL, 0),
-(37, 7, 'Put a TOTY card in your squad', NULL, 1, 4, NULL, 0),
-(38, 8, 'Pick a FLASHBACK card in Draft', NULL, 1, 3, NULL, 0),
-(39, 8, 'Open a FLASHBACK card', NULL, 1, 10, NULL, 0),
-(40, 8, 'Put a FLASHBACK card in your squad', NULL, 1, 2, NULL, 0),
-(41, 9, 'Pick a SCREAM card in Draft', NULL, 1, 3, NULL, 0),
-(42, 9, 'Open a SCREAM card', NULL, 1, 2, NULL, 0),
-(43, 9, 'Put a SCREAM card in your squad', NULL, 1, 1, NULL, 0),
-(44, 10, 'Open a Walkout Player', NULL, 1, 4, NULL, 0),
-(45, 10, 'Open a 90+ Player', NULL, 1, 5, NULL, 0),
-(46, 10, 'Open an Icon', NULL, 1, 17, NULL, 0);
+INSERT INTO `subobjectives` (`id`, `objective_id`, `task`, `requirement_int`, `reward`) VALUES
+(10, 1, 'Achieve 10 chemistry points in your starting 11', 10, 1),
+(11, 1, 'Achieve 20 chemistry points in your starting 11', 20, 2),
+(12, 1, 'Achieve 28 chemistry points in your starting 11', 28, 3),
+(13, 1, 'Achieve full chemistry in your starting 11', 33, 4),
+(14, 2, 'Achieve 75 rating in your squad', 75, 1),
+(15, 2, 'Achieve 80 rating in your squad', 80, 2),
+(16, 2, 'Achieve 85 rating in your squad', 85, 4),
+(17, 2, 'Achieve 90 rating in your squad', 90, 5),
+(18, 3, 'Change your formation', 1, 7),
+(19, 3, 'Change your team name', 1, 8),
+(20, 4, 'Play 1 Draft', 1, 9),
+(21, 4, 'Play 3 Draft', 3, 3),
+(22, 4, 'Play 5 Draft', 5, 4),
+(23, 4, 'Play 10 Draft', 10, 10),
+(24, 4, 'Play 20 Draft', 20, 5),
+(25, 5, 'Complete 1 SBC', 1, 1),
+(26, 5, 'Complete 3 SBC', 3, 9),
+(27, 5, 'Complete 5 SBC', 5, 3),
+(28, 5, 'Complete 10 SBC', 10, 4),
+(29, 6, 'Open 1 pack', 1, 1),
+(30, 6, 'Open 3 packs', 3, 1),
+(31, 6, 'Open 5 packs', 5, 1),
+(32, 6, 'Open 10 packs', 10, 2),
+(33, 6, 'Open 20 packs', 20, 3),
+(34, 6, 'Open 50 packs', 50, 10),
+(35, 7, 'Pick a TOTY card in Draft', 1, 3),
+(36, 7, 'Open a TOTY card', 1, 17),
+(37, 7, 'Put a TOTY card in your squad', 1, 4),
+(38, 8, 'Pick a FLASHBACK card in Draft', 1, 3),
+(39, 8, 'Open a FLASHBACK card', 1, 10),
+(40, 8, 'Put a FLASHBACK card in your squad', 1, 2),
+(41, 9, 'Pick a SCREAM card in Draft', 1, 3),
+(42, 9, 'Open a SCREAM card', 1, 2),
+(43, 9, 'Put a SCREAM card in your squad', 1, 1),
+(44, 10, 'Open a Walkout Player', 1, 4),
+(45, 10, 'Open a 90+ Player', 1, 5),
+(46, 10, 'Open an Icon', 1, 17);
 
 -- --------------------------------------------------------
 
@@ -299,12 +326,26 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `username`, `password`) VALUES
 (1, 'TestUser', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge');
 
+CREATE TABLE user_subobjective_progress (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  subobjective_id INT NOT NULL,
+  progress_int INT DEFAULT 0
+);
+
+CREATE TABLE user_objective_progress (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  objective_id INT NOT NULL,
+  progress_int INT DEFAULT 0
+);
+
 --
 -- Eseményindítók `users`
 --
 DELIMITER $$
-CREATE TRIGGER `createCoins_afterUserInsert` AFTER INSERT ON `users` FOR EACH ROW BEGIN
-  INSERT INTO coins (user_id, coinNumber)
+CREATE TRIGGER `createUserClub_afterUserInsert` AFTER INSERT ON `users` FOR EACH ROW BEGIN
+  INSERT INTO userClub (user_id, coinNumber, userPlayers)
   VALUES (NEW.id, 0);
 END
 $$
@@ -322,9 +363,9 @@ DELIMITER ;
 --
 
 --
--- A tábla indexei `coins`
+-- A tábla indexei `userClub`
 --
-ALTER TABLE `coins`
+ALTER TABLE `userClub`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `user_id` (`user_id`);
 
@@ -385,9 +426,9 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT a táblához `coins`
+-- AUTO_INCREMENT a táblához `userCLub`
 --
-ALTER TABLE `coins`
+ALTER TABLE `userCLub`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
@@ -437,10 +478,34 @@ ALTER TABLE `users`
 --
 
 --
--- Megkötések a táblához `coins`
+-- Megkötések a táblához `userCLub`
 --
-ALTER TABLE `coins`
-  ADD CONSTRAINT `coins_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `userCLub`
+  ADD CONSTRAINT `userCLub_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `userPacks`
+  ADD CONSTRAINT `userPacks_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `userPacks`
+  ADD CONSTRAINT `userPacks_ibfk_2` FOREIGN KEY (`pack_id`) REFERENCES `packs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `draftreward_packs`
+  ADD CONSTRAINT `draftreward_packs_ibfk_1` FOREIGN KEY (`draftreward_id`) REFERENCES `draftrewards` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `draftreward_packs`
+  ADD CONSTRAINT `draftreward_packs_ibfk_2` FOREIGN KEY (`pack_id`) REFERENCES `packs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `user_subobjective_progress`
+  ADD CONSTRAINT `user_subobjective_progress_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `user_subobjective_progress`
+  ADD CONSTRAINT `user_subobjective_progress_ibfk_2` FOREIGN KEY (`subobjective_id`) REFERENCES `subobjectives` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `user_objective_progress`
+  ADD CONSTRAINT `user_objective_progress_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `user_objective_progress`
+  ADD CONSTRAINT `user_objective_progress_ibfk_2` FOREIGN KEY (`objective_id`) REFERENCES `objectives` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Megkötések a táblához `objectives`

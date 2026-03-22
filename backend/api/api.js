@@ -111,7 +111,7 @@ router.get("/users/me", async (request, response) => {
   }
 });
 
-//! User statok
+//! User cuccai
 router.get("/users/me/coins", async (request, response) => {
   try {
     if (!request.session.userId)
@@ -124,6 +124,19 @@ router.get("/users/me/coins", async (request, response) => {
   }
 });
 
+router.get("/users/me/packs", async (request, response) => {
+  try {
+    if (!request.session.userId)
+      return response.status(400).json({ message: "Hiba történt." });
+    const packs = await database.getUserPacksById(request.session.userId);
+    response.status(200).json(packs);
+  } catch (error) {
+    console.log("GET /users/me/packs error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//! User statok
 router.post("/users/me/bestdraft", async (request, response) => {
   try {
     const rating = request.body.rating;
@@ -414,15 +427,16 @@ router.get("/random/:pos", async (request, response) => {
         randomRatingRange === 5 ||
         randomRatingRange === 6
       ) {
-        return { min: 85, max: 88 };
+        return { min: 85, max: 87 };
       }
 
-      return { min: 89, max: 99 };
+      return { min: 88, max: 99 };
     };
 
     const randomPick = (arr, count) => {
       const randomPlayers = [];
       const tombIndexek = [];
+      const usedPlayerIds = [];
       const allowedPos = getPositions(pos);
       const { min, max } = getRatingRange();
 
@@ -440,9 +454,11 @@ router.get("/random/:pos", async (request, response) => {
           player.overall >= min &&
           player.overall <= max &&
           validPosition &&
+          !usedPlayerIds.includes(player.player_id) &&
           !selectedIds.includes(player.player_id)
         ) {
           tombIndexek.push(index);
+          usedPlayerIds.push(player.player_id);
           randomPlayers.push(player);
         } else if (!tombIndexek.includes(index)) {
           tombIndexek.push(index);
@@ -664,9 +680,35 @@ router.get("/rewards/:id", async (request, response) => {
   }
 });
 
-router.get("/draftrewards", async (request, response) => {
+router.get("/draftrewards/:rewardValue", async (request, response) => {
+  const rewardValue = request.params.rewardValue;
   try {
-    const draftrewards = await database.getDraftRewards();
+    const rows = await database.getDraftRewards(rewardValue);
+
+    const rewardsMap = {};
+
+    for (const row of rows) {
+      if (!rewardsMap[row.draftRewardId]) {
+        rewardsMap[row.draftRewardId] = {
+          id: row.draftRewardId,
+          coins: row.coins,
+          rewardValue: row.rewardValue,
+          packs: [],
+        };
+      }
+
+      if (row.packId) {
+        rewardsMap[row.draftRewardId].packs.push({
+          id: row.packId,
+          name: row.packName,
+          price: row.packPrice,
+          design: row.packDesign,
+        });
+      }
+    }
+
+    const draftrewards = Object.values(rewardsMap);
+
     response.status(200).json({
       message: "Ez a végpont működik.",
       results: draftrewards,
@@ -679,9 +721,10 @@ router.get("/draftrewards", async (request, response) => {
   }
 });
 
-router.get("/objectives", async (req, res) => {
+//!Objective-ek
+router.get("/objectives", async (request, response) => {
   try {
-    const rows = await database.getObjectives();
+    const rows = await database.getObjectives(request.session.id);
 
     const result = [{ foundations: [] }, { milestones: [] }, { campaign: [] }];
 
@@ -785,13 +828,34 @@ router.get("/objectives", async (req, res) => {
       }
     });
 
-    res.status(200).json({
+    response.status(200).json({
       message: "Ez a végpont működik!",
       results: result,
     });
   } catch (error) {
     console.log("GET /api/objectives error:", error);
-    res.status(500).json({
+    response.status(500).json({
+      message: "Internal server error",
+    });
+  }
+});
+
+router.post("/objectiveprogress", async (request, response) => {
+  try {
+    const subId = request.body.subId;
+    const userId = request.session.user.id;
+
+    console.log("userId:", userId);
+    console.log("subId:", subId);
+
+    await database.updateSubobjectiveProgress(userId, subId);
+
+    return response.status(200).json({
+      message: "Progress updated",
+    });
+  } catch (error) {
+    console.log("GET /api/objectiveprogress error:", error);
+    response.status(500).json({
       message: "Internal server error",
     });
   }
