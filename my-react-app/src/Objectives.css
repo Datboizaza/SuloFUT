@@ -1,0 +1,143 @@
+/* Konténer */
+.objectivesContainer {
+  padding: 25px;
+  color: white;
+  backdrop-filter: blur(20px);
+  background-color: #003d3f3b;
+  border-radius: 20px;
+  height: 70vh;
+  width: 60vw;
+  overflow-y: scroll;
+}
+
+/* Tabok */
+.tabs {
+  display: flex;
+  margin-bottom: 4%;
+  justify-content: space-between;
+}
+
+.tab {
+  height: 6vh;
+  width: 25%;
+  background: #1111114f;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.tab.active {
+  background: linear-gradient(90deg, #00fff7, #00f078);
+  color: black;
+}
+
+/* Grid */
+.objectivesGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Tile-ok */
+.objectiveCard {
+  background: #0000008c;
+  border-radius: 15px;
+  padding: 50px;
+  transition: 0.2s ease-in-out;
+}
+
+.objectiveCard:hover {
+  transform: scale(1.01);
+}
+
+.objectiveHeader {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+/* Subobjective-ek */
+.subList {
+  margin-top: 30px;
+}
+
+.subItem {
+  margin-top: 10px;
+  padding: 40px;
+  background: #0000009c;
+  border-radius: 8px;
+}
+
+.subText {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Progress bar */
+.progressBar {
+  width: 100%;
+  height: 8px;
+  background: #333;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #00fff7, #00c3ff);
+  border-radius: 10px;
+}
+
+/* Reward-ok */
+.reward {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.144);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.reward.small {
+  font-size: 12px;
+}
+
+.small .coinImg {
+  height: 20px;
+}
+
+.small .packImg {
+  height: 40px;
+}
+
+.coins {
+  color: gold;
+}
+
+.coinImg {
+  height: 30px;
+}
+
+.packImg {
+  height: 60px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0000000a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0000001e;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00ffc89d;
+}

@@ -1,0 +1,139 @@
+/*-----------Elrendezések és alapvető formázások-----------*/
+#leaderboardDiv {
+  background: linear-gradient(
+    90deg,
+    rgba(42, 59, 155, 0.288) 0%,
+    rgba(87, 199, 199, 0.288) 50%,
+    rgba(83, 237, 147, 0.24) 100%
+  );
+  color: white;
+  height: 85vh;
+  width: 70vw;
+  border-radius: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+
+#actualLeaderboard {
+  text-align: center;
+}
+
+#selectLeaderboardDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 60px;
+  padding-right: 60px;
+  height: 5vh;
+}
+
+#leaderboardRow1,
+#leaderboardRow2 {
+  height: 8vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+/*----------------Szövegek-------------------*/
+#rankingsTitle {
+  padding: 20px;
+}
+
+/*-----------Inputok formázása----------------*/
+#selectLeaderboard {
+  width: 180px;
+  height: 50px;
+  background: linear-gradient(
+    90deg,
+    rgba(91, 230, 255, 0.288) 0%,
+    rgba(87, 199, 199, 0.288) 50%,
+    rgba(79, 255, 152, 0.24) 100%
+  );
+  color: white;
+  border: 1px solid white;
+  border-radius: 10px;
+  padding: 10px;
+}
+#selectLeaderboard option {
+  background-color: rgb(54, 135, 150);
+}
+#selectLeaderboard option:checked {
+  background-color: rgb(28, 71, 78) !important;
+}
+
+#searchBtn {
+  width: 180px;
+  height: 50px;
+  color: white;
+  border: 1px solid white;
+  border-radius: 10px;
+  background: linear-gradient(
+    90deg,
+    rgba(91, 230, 255, 0.288) 0%,
+    rgba(87, 199, 199, 0.288) 50%,
+    rgba(79, 255, 152, 0.24) 100%
+  );
+  transition: all 100ms ease-in-out;
+}
+
+#selectLeaderboard:hover,
+#searchBtn:hover {
+  cursor: pointer;
+  box-shadow: 0 8px 16px 0 rgb(33, 66, 61);
+}
+
+#searchBtn:hover {
+  transform: scale(1.05);
+  background: linear-gradient(
+    90deg,
+    rgba(52, 128, 141, 0.288) 0%,
+    rgba(59, 133, 133, 0.288) 50%,
+    rgba(53, 167, 100, 0.24) 100%
+  );
+  color: rgb(50, 206, 185);
+  border: 1px solid rgb(50, 206, 185);
+}
+
+#searchBtn:active {
+  transform: scale(1.07);
+  background-color: rgb(0, 119, 119);
+  color: rgb(255, 255, 255);
+  border: 1px solid rgb(74, 255, 210);
+}
+
+/*----------Táblázat formázása---------------*/
+#rankingsTable {
+  margin-bottom: 0;
+  text-align: center;
+}
+
+/*------------------Media queries---------------------*/
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  /*-----------Elrendezések és alapvető formázások-----------*/
+  #leaderboardDiv {
+    width: 90vw;
+    height: 80vh;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  /*-----------Elrendezések és alapvető formázások-----------*/
+  #leaderboardDiv {
+    width: 90vw;
+    height: 85vh;
+  }
+
+  #selectLeaderboardDiv {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  /*--------------Inputok formázása-------------------*/
+  #selectLeaderboard,
+  #searchBtn {
+    width: 35vw;
+    font-size: 80%;
+  }
+}

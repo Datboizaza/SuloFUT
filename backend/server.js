@@ -10,7 +10,12 @@ const router = express.Router();
 
 const ip = "127.0.0.1";
 const port = 3000;
-app.use(cors({ origin: "http://127.0.0.1:3001" }));
+app.use(
+  cors({
+    origin: "http://127.0.0.1:3001",
+    credentials: true,
+  }),
+);
 
 app.use(express.json()); //?Middleware JSON
 app.set("trust proxy", 1); //?Middleware Proxy
@@ -20,14 +25,19 @@ app.use(
   session({
     secret: "titkos_kulcs", //?Ezt generálni kell a későbbiekben
     resave: false,
-    saveUninitialized: true,
-  })
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+    },
+  }),
 );
 
 //!Routing
 //?Főoldal:
 router.get("/", (request, response) => {
-  response.sendFile(path.join(__dirname, "../frontend/html/index.html"));
+  response.sendFile(path.join(__dirname, "../my-react-app/szerver.html"));
 });
 
 //!API endpoints
@@ -36,7 +46,7 @@ const endpoints = require("./api/api.js");
 app.use("/api", endpoints);
 
 //!Szerver futtatása
-app.use(express.static(path.join(__dirname, "../frontend"))); //?frontend mappa tartalmának betöltése az oldal működéséhez
+app.use(express.static(path.join(__dirname, "../my-react-app"))); //?frontend mappa tartalmának betöltése az oldal működéséhez
 app.listen(port, ip, () => {
   console.log(`Szerver elérhetősége: http://${ip}:${port}`);
 });

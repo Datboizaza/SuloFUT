@@ -1,0 +1,66 @@
+body {
+  background-image: url("./assets/hatter.png");
+  background-repeat: repeat;
+  background-size: cover;
+}
+
+#rootDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#root2and3Div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80vw;
+  justify-content: space-between;
+}
+
+#root2 {
+  height: 8vh;
+}
+
+#root3 {
+  height: 92vh;
+  display: flex;
+  align-items: center;
+}
+
+/*------------------Media queries---------------------*/
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  #rootDiv {
+    flex-direction: column;
+  }
+
+  #root2and3Div {
+    width: 100vw;
+  }
+
+  #root2 {
+    height: 7vh;
+  }
+
+  #root3 {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  #rootDiv {
+    flex-direction: column;
+  }
+
+  #root2and3Div {
+    width: 100vw;
+  }
+
+  #root2 {
+    height: 7vh;
+  }
+
+  #root3 {
+    flex-direction: column;
+  }
+}

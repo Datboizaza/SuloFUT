@@ -1,0 +1,118 @@
+/*---------Elendezések és alapvető formázások-----------*/
+#statBarDiv {
+  background-color: rgba(17, 38, 39, 0.459);
+  backdrop-filter: blur(2px);
+  height: 8vh;
+  width: 100vw;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 40px;
+  padding-right: 40px;
+  box-shadow: 0px 20px 20px rgba(0, 0, 0, 0.349);
+}
+
+#coinsDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: max-content;
+}
+
+#div1,
+#div2,
+#div3 {
+  height: 4vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#actualPage {
+  margin-bottom: 0;
+}
+
+#coinCounter {
+  margin-left: 10px;
+  margin-bottom: 0;
+  font-size: 1.7vh;
+}
+
+/*---------------Képek------------------*/
+#coinsImage {
+  height: 4vh;
+}
+
+#backIcon {
+  height: 6vh;
+}
+
+/*------------------Media queries---------------------*/
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  /*---------Elendezések és alapvető formázások-----------*/
+  #statBarDiv {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  #coinsDiv {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #div1,
+  #div2,
+  #div3 {
+    height: max-content;
+  }
+
+  #coinCounter {
+    margin-bottom: 0;
+    font-size: 1.7vh;
+  }
+
+  /*---------------Képek------------------*/
+  #coinsImage {
+    height: 3vh;
+  }
+
+  #backIcon {
+    height: 5vh;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  /*---------Elendezések és alapvető formázások-----------*/
+  #statBarDiv {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  #coinsDiv {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #div1,
+  #div2,
+  #div3 {
+    height: max-content;
+  }
+
+  #coinCounter {
+    margin-bottom: 0;
+    font-size: 1.7vh;
+  }
+
+  /*---------------Képek------------------*/
+  #coinsImage {
+    height: 3vh;
+  }
+
+  #backIcon {
+    height: 5vh;
+  }
+}
