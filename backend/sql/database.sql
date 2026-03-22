@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2026. Már 19. 22:12
+-- Létrehozás ideje: 2026. Már 22. 21:35
 -- Kiszolgáló verziója: 10.4.28-MariaDB
 -- PHP verzió: 8.0.28
 
@@ -29,32 +29,6 @@ USE sulofut;
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `userClub`
---
-
-CREATE TABLE `userClub` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `coinNumber` int(11) NOT NULL DEFAULT 0,
-  `userPlayers` TEXT DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
-
---
--- A tábla adatainak kiíratása `userClub`
---
-
-INSERT INTO `userClub` (`id`, `user_id`, `coinNumber`) VALUES
-(1, 1, 200000);
-
-CREATE TABLE userPacks (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT(11) NOT NULL,
-  pack_id INT(11) NOT NULL
-) ENGINE=InnoDB;
-
--- --------------------------------------------------------
-
---
 -- Tábla szerkezet ehhez a táblához `draftrewards`
 --
 
@@ -63,12 +37,6 @@ CREATE TABLE `draftrewards` (
   `coins` int(11) DEFAULT NULL,
   `rewardValue` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
-
-CREATE TABLE draftreward_packs (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  draftreward_id INT NOT NULL,
-  pack_id INT NOT NULL
-) ENGINE=InnoDB;
 
 --
 -- A tábla adatainak kiíratása `draftrewards`
@@ -86,24 +54,40 @@ INSERT INTO `draftrewards` (`id`, `coins`, `rewardValue`) VALUES
 (9, 60000, 'great'),
 (10, 100000, 'excellent');
 
-INSERT INTO draftreward_packs (draftreward_id, pack_id) VALUES
-(1, 3),
-(2, 1),
-(2, 2),
-(3, 2),
-(3, 3),
-(4, 4),
-(5, 7),
-(6, 6),
-(7, 3),
-(7, 4),
-(7, 5),
-(8, 7),
-(8, 16),
-(9, 8),
-(10, 6),
-(10, 9),
-(10, 16);
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `draftreward_packs`
+--
+
+CREATE TABLE `draftreward_packs` (
+  `id` int(11) NOT NULL,
+  `draftreward_id` int(11) NOT NULL,
+  `pack_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `draftreward_packs`
+--
+
+INSERT INTO `draftreward_packs` (`id`, `draftreward_id`, `pack_id`) VALUES
+(1, 1, 3),
+(2, 2, 1),
+(3, 2, 2),
+(4, 3, 2),
+(5, 3, 3),
+(6, 4, 4),
+(7, 5, 7),
+(8, 6, 6),
+(9, 7, 3),
+(10, 7, 4),
+(11, 7, 5),
+(12, 8, 7),
+(13, 8, 16),
+(14, 9, 8),
+(15, 10, 6),
+(16, 10, 9),
+(17, 10, 16);
 
 -- --------------------------------------------------------
 
@@ -248,7 +232,7 @@ CREATE TABLE `stats` (
 --
 
 INSERT INTO `stats` (`id`, `user_id`, `best_draft`) VALUES
-(1, 1, 0);
+(1, 1, 115);
 
 -- --------------------------------------------------------
 
@@ -310,6 +294,38 @@ INSERT INTO `subobjectives` (`id`, `objective_id`, `task`, `requirement_int`, `r
 -- --------------------------------------------------------
 
 --
+-- Tábla szerkezet ehhez a táblához `userclub`
+--
+
+CREATE TABLE `userclub` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `coinNumber` int(11) NOT NULL DEFAULT 0,
+  `userPlayers` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `userclub`
+--
+
+INSERT INTO `userclub` (`id`, `user_id`, `coinNumber`, `userPlayers`) VALUES
+(1, 1, 200000, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `userpacks`
+--
+
+CREATE TABLE `userpacks` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `pack_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Tábla szerkezet ehhez a táblához `users`
 --
 
@@ -326,30 +342,9 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `username`, `password`) VALUES
 (1, 'TestUser', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge');
 
-CREATE TABLE user_subobjective_progress (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  subobjective_id INT NOT NULL,
-  progress_int INT DEFAULT 0
-);
-
-CREATE TABLE user_objective_progress (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  objective_id INT NOT NULL,
-  progress_int INT DEFAULT 0
-);
-
 --
 -- Eseményindítók `users`
 --
-DELIMITER $$
-CREATE TRIGGER `createUserClub_afterUserInsert` AFTER INSERT ON `users` FOR EACH ROW BEGIN
-  INSERT INTO userClub (user_id, coinNumber, userPlayers)
-  VALUES (NEW.id, 0);
-END
-$$
-DELIMITER ;
 DELIMITER $$
 CREATE TRIGGER `createStats_afterUserInsert` AFTER INSERT ON `users` FOR EACH ROW BEGIN
   INSERT INTO stats (user_id, best_draft)
@@ -357,23 +352,57 @@ CREATE TRIGGER `createStats_afterUserInsert` AFTER INSERT ON `users` FOR EACH RO
 END
 $$
 DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `createUserClub_afterUserInsert` AFTER INSERT ON `users` FOR EACH ROW BEGIN
+  INSERT INTO userClub (user_id, coinNumber, userPlayers)
+  VALUES (NEW.id, 0);
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `user_objective_progress`
+--
+
+CREATE TABLE `user_objective_progress` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `objective_id` int(11) NOT NULL,
+  `progress_int` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `user_subobjective_progress`
+--
+
+CREATE TABLE `user_subobjective_progress` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `subobjective_id` int(11) NOT NULL,
+  `progress_int` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
 -- Indexek a kiírt táblákhoz
 --
 
 --
--- A tábla indexei `userClub`
---
-ALTER TABLE `userClub`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `user_id` (`user_id`);
-
---
 -- A tábla indexei `draftrewards`
 --
 ALTER TABLE `draftrewards`
   ADD PRIMARY KEY (`id`);
+
+--
+-- A tábla indexei `draftreward_packs`
+--
+ALTER TABLE `draftreward_packs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `draftreward_packs_ibfk_1` (`draftreward_id`),
+  ADD KEY `draftreward_packs_ibfk_2` (`pack_id`);
 
 --
 -- A tábla indexei `objcategories`
@@ -415,6 +444,21 @@ ALTER TABLE `subobjectives`
   ADD KEY `objective_id` (`objective_id`);
 
 --
+-- A tábla indexei `userclub`
+--
+ALTER TABLE `userclub`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `user_id` (`user_id`);
+
+--
+-- A tábla indexei `userpacks`
+--
+ALTER TABLE `userpacks`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `userPacks_ibfk_1` (`user_id`),
+  ADD KEY `userPacks_ibfk_2` (`pack_id`);
+
+--
 -- A tábla indexei `users`
 --
 ALTER TABLE `users`
@@ -422,20 +466,36 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `username` (`username`);
 
 --
--- A kiírt táblák AUTO_INCREMENT értéke
+-- A tábla indexei `user_objective_progress`
 --
+ALTER TABLE `user_objective_progress`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_objective_progress_ibfk_1` (`user_id`),
+  ADD KEY `user_objective_progress_ibfk_2` (`objective_id`);
 
 --
--- AUTO_INCREMENT a táblához `userCLub`
+-- A tábla indexei `user_subobjective_progress`
 --
-ALTER TABLE `userCLub`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+ALTER TABLE `user_subobjective_progress`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_subobjective_progress_ibfk_1` (`user_id`),
+  ADD KEY `user_subobjective_progress_ibfk_2` (`subobjective_id`);
+
+--
+-- A kiírt táblák AUTO_INCREMENT értéke
+--
 
 --
 -- AUTO_INCREMENT a táblához `draftrewards`
 --
 ALTER TABLE `draftrewards`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT a táblához `draftreward_packs`
+--
+ALTER TABLE `draftreward_packs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT a táblához `objcategories`
@@ -468,44 +528,45 @@ ALTER TABLE `subobjectives`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
+-- AUTO_INCREMENT a táblához `userclub`
+--
+ALTER TABLE `userclub`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT a táblához `userpacks`
+--
+ALTER TABLE `userpacks`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT a táblához `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT a táblához `user_objective_progress`
+--
+ALTER TABLE `user_objective_progress`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT a táblához `user_subobjective_progress`
+--
+ALTER TABLE `user_subobjective_progress`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- Megkötések a kiírt táblákhoz
 --
 
 --
--- Megkötések a táblához `userCLub`
+-- Megkötések a táblához `draftreward_packs`
 --
-ALTER TABLE `userCLub`
-  ADD CONSTRAINT `userCLub_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `userPacks`
-  ADD CONSTRAINT `userPacks_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `userPacks`
-  ADD CONSTRAINT `userPacks_ibfk_2` FOREIGN KEY (`pack_id`) REFERENCES `packs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
 ALTER TABLE `draftreward_packs`
-  ADD CONSTRAINT `draftreward_packs_ibfk_1` FOREIGN KEY (`draftreward_id`) REFERENCES `draftrewards` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `draftreward_packs`
+  ADD CONSTRAINT `draftreward_packs_ibfk_1` FOREIGN KEY (`draftreward_id`) REFERENCES `draftrewards` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `draftreward_packs_ibfk_2` FOREIGN KEY (`pack_id`) REFERENCES `packs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `user_subobjective_progress`
-  ADD CONSTRAINT `user_subobjective_progress_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `user_subobjective_progress`
-  ADD CONSTRAINT `user_subobjective_progress_ibfk_2` FOREIGN KEY (`subobjective_id`) REFERENCES `subobjectives` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `user_objective_progress`
-  ADD CONSTRAINT `user_objective_progress_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `user_objective_progress`
-  ADD CONSTRAINT `user_objective_progress_ibfk_2` FOREIGN KEY (`objective_id`) REFERENCES `objectives` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Megkötések a táblához `objectives`
@@ -524,6 +585,33 @@ ALTER TABLE `stats`
 --
 ALTER TABLE `subobjectives`
   ADD CONSTRAINT `subobjectives_ibfk_1` FOREIGN KEY (`objective_id`) REFERENCES `objectives` (`id`);
+
+--
+-- Megkötések a táblához `userclub`
+--
+ALTER TABLE `userclub`
+  ADD CONSTRAINT `userCLub_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Megkötések a táblához `userpacks`
+--
+ALTER TABLE `userpacks`
+  ADD CONSTRAINT `userPacks_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `userPacks_ibfk_2` FOREIGN KEY (`pack_id`) REFERENCES `packs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Megkötések a táblához `user_objective_progress`
+--
+ALTER TABLE `user_objective_progress`
+  ADD CONSTRAINT `user_objective_progress_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `user_objective_progress_ibfk_2` FOREIGN KEY (`objective_id`) REFERENCES `objectives` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Megkötések a táblához `user_subobjective_progress`
+--
+ALTER TABLE `user_subobjective_progress`
+  ADD CONSTRAINT `user_subobjective_progress_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `user_subobjective_progress_ibfk_2` FOREIGN KEY (`subobjective_id`) REFERENCES `subobjectives` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
