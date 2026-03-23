@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2026. Már 22. 21:35
+-- Létrehozás ideje: 2026. Már 23. 12:15
 -- Kiszolgáló verziója: 10.4.28-MariaDB
 -- PHP verzió: 8.0.28
 
@@ -25,7 +25,6 @@ DEFAULT CHARACTER SET utf8
 COLLATE utf8_hungarian_ci;
 
 USE sulofut;
-
 -- --------------------------------------------------------
 
 --
@@ -232,7 +231,7 @@ CREATE TABLE `stats` (
 --
 
 INSERT INTO `stats` (`id`, `user_id`, `best_draft`) VALUES
-(1, 1, 115);
+(1, 1, 117);
 
 -- --------------------------------------------------------
 
@@ -363,14 +362,13 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `user_objective_progress`
+-- Tábla szerkezet ehhez a táblához `user_objective_claims`
 --
 
-CREATE TABLE `user_objective_progress` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `objective_id` int(11) NOT NULL,
-  `progress_int` int(11) DEFAULT 0
+CREATE TABLE `user_objective_claims` (
+  `user_id` int(11) DEFAULT NULL,
+  `objective_id` int(11) DEFAULT NULL,
+  `claimed` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 -- --------------------------------------------------------
@@ -383,8 +381,20 @@ CREATE TABLE `user_subobjective_progress` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `subobjective_id` int(11) NOT NULL,
-  `progress_int` int(11) DEFAULT 0
+  `progress_int` int(11) DEFAULT 0,
+  `claimed` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `user_subobjective_progress`
+--
+
+INSERT INTO `user_subobjective_progress` (`id`, `user_id`, `subobjective_id`, `progress_int`, `claimed`) VALUES
+(3, 1, 20, 2, 0),
+(4, 1, 21, 2, 0),
+(5, 1, 22, 2, 0),
+(6, 1, 23, 2, 0),
+(7, 1, 24, 2, 0);
 
 --
 -- Indexek a kiírt táblákhoz
@@ -465,22 +475,18 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`);
 
-ALTER TABLE user_subobjective_progress
-  ADD UNIQUE KEY unique_user_sub (user_id, subobjective_id);
-
 --
--- A tábla indexei `user_objective_progress`
+-- A tábla indexei `user_objective_claims`
 --
-ALTER TABLE `user_objective_progress`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_objective_progress_ibfk_1` (`user_id`),
-  ADD KEY `user_objective_progress_ibfk_2` (`objective_id`);
+ALTER TABLE `user_objective_claims`
+  ADD UNIQUE KEY `user_id` (`user_id`,`objective_id`);
 
 --
 -- A tábla indexei `user_subobjective_progress`
 --
 ALTER TABLE `user_subobjective_progress`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_user_sub` (`user_id`,`subobjective_id`),
   ADD KEY `user_subobjective_progress_ibfk_1` (`user_id`),
   ADD KEY `user_subobjective_progress_ibfk_2` (`subobjective_id`);
 
@@ -549,16 +555,10 @@ ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT a táblához `user_objective_progress`
---
-ALTER TABLE `user_objective_progress`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT a táblához `user_subobjective_progress`
 --
 ALTER TABLE `user_subobjective_progress`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Megkötések a kiírt táblákhoz
@@ -601,13 +601,6 @@ ALTER TABLE `userclub`
 ALTER TABLE `userpacks`
   ADD CONSTRAINT `userPacks_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `userPacks_ibfk_2` FOREIGN KEY (`pack_id`) REFERENCES `packs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Megkötések a táblához `user_objective_progress`
---
-ALTER TABLE `user_objective_progress`
-  ADD CONSTRAINT `user_objective_progress_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `user_objective_progress_ibfk_2` FOREIGN KEY (`objective_id`) REFERENCES `objectives` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Megkötések a táblához `user_subobjective_progress`
