@@ -34,9 +34,12 @@ function Objectives() {
   //! Claim-elés funkció
   const handleClaim = async (subId) => {
     try {
-      await postMethodFetch("http://127.0.0.1:3000/api/objectives/claim-sub", {
-        subId,
-      });
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/objectives/claimsubobj",
+        {
+          subId,
+        },
+      );
 
       const result = await getMethodFetch(
         "http://127.0.0.1:3000/api/objectives",
@@ -48,6 +51,7 @@ function Objectives() {
     }
   };
 
+  //! CSINALND MEG
   const handleGroupClaim = async (objectiveId) => {
     try {
       await postMethodFetch(

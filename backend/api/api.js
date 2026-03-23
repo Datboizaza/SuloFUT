@@ -873,7 +873,7 @@ router.post("/objectives/claimsubobj", async (request, response) => {
 
     response.status(200).json({ message: "Reward claimed" });
   } catch (error) {
-    console.log("GET /api//objectives/claimsubobj error:", error);
+    console.log("POST /api//objectives/claimsubobj error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });

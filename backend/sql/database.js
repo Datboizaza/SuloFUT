@@ -229,7 +229,12 @@ async function getSubobjAndRew(subId) {
       WHERE subobjectives.id = ?
   `;
 
-  await pool.execute(query, [subId]);
+  try {
+    const [rows] = await pool.execute(query, [subId]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
 }
 
 async function isSubobjClaimed(userId, subId) {
@@ -240,7 +245,12 @@ async function isSubobjClaimed(userId, subId) {
       WHERE user_subobjective_progress.user_id = ? AND user_subobjective_progress.subobjective_id = ?
   `;
 
-  await pool.execute(query, [userId, subId]);
+  try {
+    const [rows] = await pool.execute(query, [userId, subId]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
 }
 
 async function updateCoins(coins, userId) {
@@ -250,7 +260,12 @@ async function updateCoins(coins, userId) {
         WHERE user_id = ?
   `;
 
-  await pool.execute(query, [coins, userId]);
+  try {
+    const [rows] = await pool.execute(query, [coins, userId]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
 }
 
 async function addPack(userId, packId) {
@@ -259,7 +274,12 @@ async function addPack(userId, packId) {
         VALUES (?, ?)
   `;
 
-  await pool.execute(query, [userId, packId]);
+  try {
+    const [rows] = await pool.execute(query, [userId, packId]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
 }
 
 async function setClaimed(userId, subId) {
@@ -269,7 +289,12 @@ async function setClaimed(userId, subId) {
       WHERE user_id = ? AND subobjective_id = ?
   `;
 
-  await pool.execute(query, [userId, subId]);
+  try {
+    const [rows] = await pool.execute(query, [userId, subId]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
 }
 
 //!Export
