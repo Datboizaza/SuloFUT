@@ -115,19 +115,19 @@ async function getRewardById(id) {
 
 async function getDraftRewards(rewardValue) {
   const query = `SELECT 
-      dr.id AS draftRewardId,
-      dr.coins,
-      dr.rewardValue,
-      p.id AS packId,
-      p.packName,
-      p.packPrice,
-      p.packDesign
-    FROM draftrewards dr
-    LEFT JOIN draftreward_packs drp 
-      ON dr.id = drp.draftreward_id
-    LEFT JOIN packs p 
-      ON p.id = drp.pack_id
-    WHERE dr.rewardValue = ?`;
+      draftrewards.id AS draftRewardId,
+      draftrewards.coins,
+      draftrewards.rewardValue,
+      packs.id AS packId,
+      packs.packName,
+      packs.packPrice,
+      packs.packDesign
+    FROM draftrewards
+    LEFT JOIN draftreward_packs 
+      ON draftrewards.id = draftreward_packs.draftreward_id
+    LEFT JOIN packs 
+      ON packs.id = draftreward_packs.pack_id
+    WHERE draftrewards.rewardValue = ?`;
   try {
     const [rows] = await pool.execute(query, [rewardValue]);
     return rows;
@@ -140,48 +140,62 @@ async function getDraftRewards(rewardValue) {
 async function getObjectives(id) {
   const query = `
 SELECT 
-    c.name AS category,
+    objcategories.name AS category,
     
-    o.id AS objective_id,
-    o.name AS objective_name,
+    objectives.id AS objective_id,
+    objectives.name AS objective_name,
 
-    gr.id AS groupRewardId,
-    gr.coins AS group_coins,
-    grp.id AS group_pack_id,
-    grp.packName AS group_pack_name,
-    grp.packPrice AS group_pack_price,
-    grp.packDesign AS group_pack_design,
+    groupRewards.id AS groupRewardId,
+    groupRewards.coins AS group_coins,
+    groupRewardPacks.id AS group_pack_id,
+    groupRewardPacks.packName AS group_pack_name,
+    groupRewardPacks.packPrice AS group_pack_price,
+    groupRewardPacks.packDesign AS group_pack_design,
 
-    s.id AS sub_id,
-    s.task,
+    subobjectives.id AS sub_id,
+    subobjectives.task,
 
-    COALESCE(s.requirement_int) AS requirement,
+    COALESCE(subobjectives.requirement_int, 0) AS requirement,
 
-    COALESCE(uop.progress_int, 0) AS progress,
+    COALESCE(userProgress.progress_int, 0) AS progress,
 
-    r.id AS rewardId,
-    r.coins,
-    p.id AS pack_id,
-    p.packName AS pack_name,
-    p.packPrice AS pack_price,
-    p.packDesign AS pack_design
+    COALESCE(userProgress.claimed, FALSE) AS claimed,
 
-FROM objcategories c
+    subRewards.id AS rewardId,
+    subRewards.coins,
+    subRewardPacks.id AS pack_id,
+    subRewardPacks.packName AS pack_name,
+    subRewardPacks.packPrice AS pack_price,
+    subRewardPacks.packDesign AS pack_design
 
-JOIN objectives o ON o.category_id = c.id
-JOIN subobjectives s ON s.objective_id = o.id
+FROM objcategories
 
-LEFT JOIN user_objective_progress uop 
-  ON uop.objective_id = s.id 
-  AND uop.user_id = 1
+JOIN objectives 
+  ON objectives.category_id = objcategories.id
 
-LEFT JOIN rewards r ON r.id = s.reward
-LEFT JOIN packs p ON r.packIds = p.id
+JOIN subobjectives 
+  ON subobjectives.objective_id = objectives.id
 
-LEFT JOIN rewards gr ON gr.id = o.group_reward
-LEFT JOIN packs grp ON gr.packIds = grp.id
+LEFT JOIN user_subobjective_progress AS userProgress
+  ON userProgress.subobjective_id = subobjectives.id 
+  AND userProgress.user_id = ?
 
-ORDER BY c.name, o.id, s.id;
+LEFT JOIN rewards AS subRewards 
+  ON subRewards.id = subobjectives.reward
+
+LEFT JOIN packs AS subRewardPacks 
+  ON subRewardPacks.id = subRewards.packIds
+
+LEFT JOIN rewards AS groupRewards 
+  ON groupRewards.id = objectives.group_reward
+
+LEFT JOIN packs AS groupRewardPacks 
+  ON groupRewardPacks.id = groupRewards.packIds
+
+ORDER BY 
+  objcategories.name, 
+  objectives.id, 
+  subobjectives.id;
 `;
 
   try {
@@ -203,6 +217,61 @@ async function updateSubobjectiveProgress(id, subId) {
   await pool.execute(query, [id, subId]);
 }
 
+async function getSubobjAndRew(subId) {
+  const query = `
+    SELECT 
+        subobjectives.id,
+        subobjectives.reward,
+        rewards.coins,
+        rewards.packIds
+      FROM subobjectives
+      LEFT JOIN rewards ON rewards.id = subobjectives.reward
+      WHERE subobjectives.id = ?
+  `;
+
+  await pool.execute(query, [subId]);
+}
+
+async function isSubobjClaimed(userId, subId) {
+  const query = `
+    SELECT claimed, progress_int, subobjectives.requirement_int
+      FROM user_subobjective_progress
+      JOIN subobjectives ON subobjectives.id = user_subobjective_progress.subobjective_id
+      WHERE user_subobjective_progress.user_id = ? AND user_subobjective_progress.subobjective_id = ?
+  `;
+
+  await pool.execute(query, [userId, subId]);
+}
+
+async function updateCoins(coins, userId) {
+  const query = `
+        UPDATE userclub 
+        SET coinNumber = coinNumber + ?
+        WHERE user_id = ?
+  `;
+
+  await pool.execute(query, [coins, userId]);
+}
+
+async function addPack(userId, packId) {
+  const query = `
+        INSERT INTO userpacks (user_id, pack_id)
+        VALUES (?, ?)
+  `;
+
+  await pool.execute(query, [userId, packId]);
+}
+
+async function setClaimed(userId, subId) {
+  const query = `
+      UPDATE user_subobjective_progress
+      SET claimed = TRUE
+      WHERE user_id = ? AND subobjective_id = ?
+  `;
+
+  await pool.execute(query, [userId, subId]);
+}
+
 //!Export
 module.exports = {
   selectall,
@@ -217,4 +286,9 @@ module.exports = {
   getObjectives,
   getUserPacksById,
   updateSubobjectiveProgress,
+  getSubobjAndRew,
+  isSubobjClaimed,
+  updateCoins,
+  addPack,
+  setClaimed,
 };

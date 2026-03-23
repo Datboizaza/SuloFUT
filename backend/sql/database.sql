@@ -465,6 +465,9 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`);
 
+ALTER TABLE user_subobjective_progress
+  ADD UNIQUE KEY unique_user_sub (user_id, subobjective_id);
+
 --
 -- A tábla indexei `user_objective_progress`
 --

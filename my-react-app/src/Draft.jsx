@@ -1055,7 +1055,7 @@ function PlayerCard({
 
 const getMethodFetch = async (url) => {
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, { credentials: "include" });
     if (!response.ok) {
       throw new Error(`GET hiba: ${response.status} ${response.statusText}`);
     }

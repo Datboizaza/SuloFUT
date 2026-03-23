@@ -724,112 +724,92 @@ router.get("/draftrewards/:rewardValue", async (request, response) => {
 //!Objective-ek
 router.get("/objectives", async (request, response) => {
   try {
-    const rows = await database.getObjectives(request.session.id);
+    const userId = request.session.userId;
+    const rows = await database.getObjectives(userId);
 
-    const result = [{ foundations: [] }, { milestones: [] }, { campaign: [] }];
-
-    const objectivesMap = {};
-    const subMap = {};
-    const rewardsMap = {};
-    const groupRewardsMap = {};
-    const categoryMap = {
-      foundations: 0,
-      milestones: 1,
-      campaign: 2,
+    const result = {
+      foundations: [],
+      milestones: [],
+      campaign: [],
     };
 
+    const objectivesMap = {};
+
     rows.forEach((row) => {
-      const cat = row.category;
+      const category = row.category;
 
       if (!objectivesMap[row.objective_id]) {
         objectivesMap[row.objective_id] = {
           id: row.objective_id,
           name: row.objective_name,
-          groupreward: null,
+          groupreward: row.groupRewardId
+            ? {
+                id: row.groupRewardId,
+                coins: row.group_coins,
+                packs: [],
+              }
+            : null,
           subobjectives: [],
         };
 
-        const index = categoryMap[cat];
-        const key = Object.keys(result[index])[0];
-
-        result[index][key].push(objectivesMap[row.objective_id]);
+        result[category].push(objectivesMap[row.objective_id]);
       }
 
       const objective = objectivesMap[row.objective_id];
 
-      if (row.groupRewardId) {
-        if (!groupRewardsMap[row.groupRewardId]) {
-          groupRewardsMap[row.groupRewardId] = {
-            id: row.groupRewardId,
-            coins: row.group_coins,
-            packs: [],
-          };
+      if (row.group_pack_id) {
+        const vangrouprewpack = objective.groupreward.packs.some(
+          (p) => p.id === row.group_pack_id,
+        );
+
+        if (!vangrouprewpack) {
+          objective.groupreward.packs.push({
+            id: row.group_pack_id,
+            name: row.group_pack_name,
+            price: row.group_pack_price,
+            design: row.group_pack_design,
+          });
         }
-
-        if (row.group_pack_id) {
-          const exists = groupRewardsMap[row.groupRewardId].packs.some(
-            (p) => p.id === row.group_pack_id,
-          );
-
-          if (!exists) {
-            groupRewardsMap[row.groupRewardId].packs.push({
-              id: row.group_pack_id,
-              name: row.group_pack_name,
-              price: row.group_pack_price,
-              design: row.group_pack_design,
-            });
-          }
-        }
-
-        objective.groupreward = groupRewardsMap[row.groupRewardId];
       }
 
-      if (!subMap[row.sub_id]) {
-        subMap[row.sub_id] = {
+      let subobj = objective.subobjectives.find((s) => s.id === row.sub_id);
+
+      if (!subobj) {
+        subobj = {
           id: row.sub_id,
           task: row.task,
           requirement: row.requirement,
           progress: row.progress,
-          reward: null,
+          reward: row.rewardId
+            ? {
+                id: row.rewardId,
+                coins: row.coins,
+                packs: [],
+              }
+            : null,
         };
 
-        objective.subobjectives.push(subMap[row.sub_id]);
+        objective.subobjectives.push(subobj);
       }
 
-      const sub = subMap[row.sub_id];
+      if (row.pack_id && subobj.reward) {
+        const vanrewpack = subobj.reward.packs.some(
+          (p) => p.id === row.pack_id,
+        );
 
-      if (row.rewardId) {
-        if (!rewardsMap[row.rewardId]) {
-          rewardsMap[row.rewardId] = {
-            id: row.rewardId,
-            coins: row.coins,
-            packs: [],
-          };
-        }
-
-        if (row.pack_id) {
-          const exists = rewardsMap[row.rewardId].packs.some(
-            (p) => p.id === row.pack_id,
-          );
-
-          if (!exists) {
-            rewardsMap[row.rewardId].packs.push({
-              id: row.pack_id,
-              name: row.pack_name,
-              price: row.pack_price,
-              design: row.pack_design,
-            });
-          }
-        }
-
-        if (!sub.reward) {
-          sub.reward = rewardsMap[row.rewardId];
+        if (!vanrewpack) {
+          subobj.reward.packs.push({
+            id: row.pack_id,
+            name: row.pack_name,
+            price: row.pack_price,
+            design: row.pack_design,
+          });
         }
       }
     });
 
     response.status(200).json({
-      message: "Ez a végpont működik!",
+      message: "Ez a végpont működik",
       results: result,
     });
   } catch (error) {
@@ -840,13 +820,14 @@ router.get("/objectives", async (request, response) => {
   }
 });
 
-router.post("/objectiveprogress", async (request, response) => {
+router.post("/users/me/objectiveprogress", async (request, response) => {
   try {
     const subId = request.body.subId;
-    const userId = request.session.user.id;
+    const userId = request.session.userId;
 
-    console.log("userId:", userId);
-    console.log("subId:", subId);
+    if (!userId) {
+      return response.status(401).json({ message: "Not logged in" });
+    }
 
     await database.updateSubobjectiveProgress(userId, subId);
 
@@ -858,6 +839,42 @@ router.post("/objectiveprogress", async (request, response) => {
     response.status(500).json({
       message: "Internal server error",
     });
+  }
+});
+
+router.post("/objectives/claimsubobj", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const { subId } = request.body;
+
+    const subRows = await database.getSubobjAndRew(subId);
+    const sub = subRows[0];
+
+    const progressRows = await database.isSubobjClaimed(userId, subId);
+    const progress = progressRows[0];
+
+    if (!progress || progress.progress_int < progress.requirement_int) {
+      return response.status(400).json({ message: "Not completed yet" });
+    }
+
+    if (progress.claimed) {
+      return response.status(400).json({ message: "Already claimed" });
+    }
+
+    if (sub.coins) {
+      await database.updateCoins(sub.coins, userId);
+    }
+
+    if (sub.packIds) {
+      await database.addPack(userId, sub.packIds);
+    }
+
+    await database.setClaimed(userId, subId);
+
+    response.status(200).json({ message: "Reward claimed" });
+  } catch (error) {
+    console.log("GET /api//objectives/claimsubobj error:", error);
+    response.status(500).json({ message: "Internal server error" });
   }
 });
 
