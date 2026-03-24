@@ -114,7 +114,7 @@ function Objectives() {
 
               {obj.claimed && (
                 <button className="claimBtn claimed" disabled>
-                  Claimed ✔
+                  Claimed &#x1F5F8;
                 </button>
               )}
 
