@@ -51,11 +51,11 @@ function Objectives() {
     }
   };
 
-  //! CSINALND MEG
+  //! Group reward claim-elése
   const handleGroupClaim = async (objectiveId) => {
     try {
       await postMethodFetch(
-        "http://127.0.0.1:3000/api/objectives/claim-group",
+        "http://127.0.0.1:3000/api/objectives/claimobjgroup",
         {
           objectiveId,
         },
@@ -90,7 +90,7 @@ function Objectives() {
       <div className="objectivesGrid">
         {current.map((obj) => {
           const isCompleted = obj.subobjectives.every(
-            (s) => s.progress >= s.requirement,
+            (s) => s.progress >= s.requirement && s.claimed,
           );
           return (
             <div key={obj.id} className="objectiveCard">

@@ -137,41 +137,40 @@ async function getDraftRewards(rewardValue) {
 }
 
 //? Objective-ek
-async function getObjectives(id) {
+async function getObjectives(userId) {
   const query = `
 SELECT 
-    objcategories.name AS category,
-    
-    objectives.id AS objective_id,
-    objectives.name AS objective_name,
+  objcategories.name AS category,
 
-    groupRewards.id AS groupRewardId,
-    groupRewards.coins AS group_coins,
-    groupRewardPacks.id AS group_pack_id,
-    groupRewardPacks.packName AS group_pack_name,
-    groupRewardPacks.packPrice AS group_pack_price,
-    groupRewardPacks.packDesign AS group_pack_design,
+  objectives.id AS objective_id,
+  objectives.name AS objective_name,
 
-    subobjectives.id AS sub_id,
-    subobjectives.task,
+  COALESCE(userObjClaims.claimed, 0) AS objective_claimed,
 
-    COALESCE(subobjectives.requirement_int, 0) AS requirement,
+  -- GROUP REWARD
+  groupRewards.coins AS group_coins,
+  groupRewardPacks.id AS group_pack_id,
+  groupRewardPacks.packName AS group_pack_name,
+  groupRewardPacks.packDesign AS group_pack_design,
 
-    COALESCE(userProgress.progress_int, 0) AS progress,
+  -- SUBOBJECTIVE
+  subobjectives.id AS sub_id,
+  subobjectives.task,
+  subobjectives.requirement_int,
 
-    COALESCE(userProgress.claimed, FALSE) AS claimed,
+  COALESCE(userProgress.progress_int, 0) AS progress_int,
+  COALESCE(userProgress.claimed, 0) AS sub_claimed,
 
-    subRewards.id AS rewardId,
-    subRewards.coins,
-    subRewardPacks.id AS pack_id,
-    subRewardPacks.packName AS pack_name,
-    subRewardPacks.packPrice AS pack_price,
-    subRewardPacks.packDesign AS pack_design
+  -- SUB REWARD
+  subRewards.coins AS sub_coins,
+  subRewardPacks.id AS sub_pack_id,
+  subRewardPacks.packName AS sub_pack_name,
+  subRewardPacks.packDesign AS sub_pack_design
 
-FROM objcategories
+FROM objectives
 
-JOIN objectives 
-  ON objectives.category_id = objcategories.id
+JOIN objcategories 
+  ON objcategories.id = objectives.category_id
 
 JOIN subobjectives 
   ON subobjectives.objective_id = objectives.id
@@ -192,14 +191,18 @@ LEFT JOIN rewards AS groupRewards
 LEFT JOIN packs AS groupRewardPacks 
   ON groupRewardPacks.id = groupRewards.packIds
 
+LEFT JOIN user_objective_claims AS userObjClaims
+  ON userObjClaims.objective_id = objectives.id
+  AND userObjClaims.user_id = ?
+
 ORDER BY 
-  objcategories.name, 
-  objectives.id, 
+  objcategories.id,
+  objectives.id,
   subobjectives.id;
 `;
 
   try {
-    const [rows] = await pool.execute(query, [id]);
+    const [rows] = await pool.execute(query, [userId, userId]);
     return rows;
   } catch (error) {
     throw error;
@@ -297,6 +300,76 @@ async function setClaimed(userId, subId) {
   }
 }
 
+async function getSubobjectivesByObjective(userId, objectiveId) {
+  const query = `
+    SELECT 
+      subobjectives.id,
+      subobjectives.requirement_int,
+      COALESCE(user_subobjective_progress.progress_int, 0) AS progress_int,
+      COALESCE(user_subobjective_progress.claimed, 0) AS claimed
+    FROM subobjectives
+    LEFT JOIN user_subobjective_progress 
+      ON user_subobjective_progress.subobjective_id = subobjectives.id
+      AND user_subobjective_progress.user_id = ?
+    WHERE subobjectives.objective_id = ?
+  `;
+
+  try {
+    const [rows] = await pool.execute(query, [userId, objectiveId]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function isGroupClaimed(userId, objectiveId) {
+  const query = `
+    SELECT claimed
+    FROM user_objective_claims
+    WHERE user_id = ? AND objective_id = ?
+  `;
+
+  try {
+    const [rows] = await pool.execute(query, [userId, objectiveId]);
+    return rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getGroupReward(objectiveId) {
+  const query = `
+    SELECT 
+      rewards.coins,
+      rewards.packIds
+    FROM objectives
+    LEFT JOIN rewards ON rewards.id = objectives.group_reward
+    WHERE objectives.id = ?
+  `;
+
+  try {
+    const [rows] = await pool.execute(query, [objectiveId]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function setGroupClaimed(userId, objectiveId) {
+  const query = `
+    INSERT INTO user_objective_claims (user_id, objective_id, claimed)
+    VALUES (?, ?, 1)
+    ON DUPLICATE KEY UPDATE claimed = 1
+  `;
+
+  try {
+    const [rows] = await pool.execute(query, [userId, objectiveId]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
 //!Export
 module.exports = {
   selectall,
@@ -316,4 +389,8 @@ module.exports = {
   updateCoins,
   addPack,
   setClaimed,
+  getSubobjectivesByObjective,
+  isGroupClaimed,
+  getGroupReward,
+  setGroupClaimed,
 };

@@ -736,33 +736,39 @@ router.get("/objectives", async (request, response) => {
     const objectivesMap = {};
 
     rows.forEach((row) => {
-      const category = row.category;
+      const category = row.category.toLowerCase();
 
       if (!objectivesMap[row.objective_id]) {
         objectivesMap[row.objective_id] = {
           id: row.objective_id,
           name: row.objective_name,
-          groupreward: row.groupRewardId
-            ? {
-                id: row.groupRewardId,
-                coins: row.group_coins,
-                packs: [],
-              }
-            : null,
+
+          claimed: !!row.objective_claimed,
+
+          groupreward:
+            row.group_coins || row.group_pack_id
+              ? {
+                  coins: row.group_coins,
+                  packs: [],
+                }
+              : null,
+
           subobjectives: [],
         };
 
-        result[category].push(objectivesMap[row.objective_id]);
+        if (result[category]) {
+          result[category].push(objectivesMap[row.objective_id]);
+        }
       }
 
       const objective = objectivesMap[row.objective_id];
 
-      if (row.group_pack_id) {
-        const vangrouprewpack = objective.groupreward.packs.some(
+      if (row.group_pack_id && objective.groupreward) {
+        const exists = objective.groupreward.packs.some(
           (p) => p.id === row.group_pack_id,
         );
 
-        if (!vangrouprewpack) {
+        if (!exists) {
           objective.groupreward.packs.push({
             id: row.group_pack_id,
             name: row.group_pack_name,
@@ -778,31 +784,34 @@ router.get("/objectives", async (request, response) => {
         subobj = {
           id: row.sub_id,
           task: row.task,
-          requirement: row.requirement,
-          progress: row.progress,
-          reward: row.rewardId
-            ? {
-                id: row.rewardId,
-                coins: row.coins,
-                packs: [],
-              }
-            : null,
+          requirement: row.requirement_int,
+          progress: row.progress_int,
+
+          claimed: !!row.sub_claimed,
+
+          reward:
+            row.sub_coins || row.sub_pack_id
+              ? {
+                  coins: row.sub_coins,
+                  packs: [],
+                }
+              : null,
         };
 
         objective.subobjectives.push(subobj);
       }
 
-      if (row.pack_id && subobj.reward) {
-        const vanrewpack = subobj.reward.packs.some(
-          (p) => p.id === row.pack_id,
+      if (row.sub_pack_id && subobj.reward) {
+        const exists = subobj.reward.packs.some(
+          (p) => p.id === row.sub_pack_id,
         );
 
-        if (!vanrewpack) {
+        if (!exists) {
           subobj.reward.packs.push({
-            id: row.pack_id,
-            name: row.pack_name,
-            price: row.pack_price,
-            design: row.pack_design,
+            id: row.sub_pack_id,
+            name: row.sub_pack_name,
+            price: row.sub_pack_price,
+            design: row.sub_pack_design,
           });
         }
       }
@@ -874,6 +883,48 @@ router.post("/objectives/claimsubobj", async (request, response) => {
     response.status(200).json({ message: "Reward claimed" });
   } catch (error) {
     console.log("POST /api//objectives/claimsubobj error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.post("/objectives/claimobjgroup", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const { objectiveId } = request.body;
+
+    const sub = await database.getSubobjectivesByObjective(userId, objectiveId);
+
+    const completed = sub.every(
+      (e) => e.progress_int >= e.requirement_int && e.claimed,
+    );
+
+    if (!completed) {
+      return response.status(400).json({ message: "Not completed yet" });
+    }
+
+    const groupclaimed = await database.isGroupClaimed(userId, objectiveId);
+    if (groupclaimed?.claimed) {
+      return response
+        .status(400)
+        .json({ message: "Group reward already claimed" });
+    }
+
+    const groupRewardRows = await database.getGroupReward(objectiveId);
+    const reward = groupRewardRows[0];
+
+    if (reward.coins) {
+      await database.updateCoins(reward.coins, userId);
+    }
+
+    if (reward.packIds) {
+      await database.addPack(userId, reward.packIds);
+    }
+
+    await database.setGroupClaimed(userId, objectiveId);
+
+    response.status(200).json({ message: "Group reward claimed" });
+  } catch (error) {
+    console.log("POST /api/objectives/claimobjgroup error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });

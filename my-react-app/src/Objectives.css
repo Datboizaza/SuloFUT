@@ -141,3 +141,8 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #00ffc89d;
 }
+
+/* Claim Gomb */
+.claimBtn {
+  width: 100%;
+}
