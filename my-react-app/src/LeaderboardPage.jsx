@@ -25,13 +25,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   createRoot(document.getElementById("root1")).render(
     <StrictMode>
-      <StatBar title="Leaderboards" />
-    </StrictMode>
+      <StatBar title="leaderboards" />
+    </StrictMode>,
   );
 
   createRoot(document.getElementById("root2")).render(
     <StrictMode>
       <Leaderboard />
-    </StrictMode>
+    </StrictMode>,
   );
 });

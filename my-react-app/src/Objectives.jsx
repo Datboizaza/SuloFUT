@@ -98,7 +98,7 @@ function Objectives() {
                 className="objectiveHeader"
                 onClick={() => setOpenId(openId === obj.id ? null : obj.id)}
               >
-                <h3>{obj.name}</h3>
+                <p className="objHeaderTitle">{obj.name}</p>
 
                 <Reward reward={obj.groupreward} />
               </div>

@@ -682,7 +682,7 @@ function Draft() {
               onClick={() => setOpenSubs((prev) => !prev)}
               aria-expanded={open}
             >
-              SUB / RES
+              sub / res
             </button>
 
             <div className="subBarContent">
@@ -762,7 +762,7 @@ function Draft() {
         gameLayout &&
         createPortal(
           <div className="chemRatingDisplay">
-            <h4 className="draftSquadText">Draft Squad</h4>
+            <h4 className="draftSquadText">draft squad</h4>
             <div className="ratingStars">{ratingStars(teamRating)}</div>
             <h5 className="ratingText">
               Rating{" "}
@@ -794,7 +794,7 @@ function Draft() {
         createPortal(
           <div className="draftSummaryOverlay">
             <div className="draftSummary">
-              <div className="draftSummaryTitle">Draft Summary</div>
+              <div className="draftSummaryTitle">DRAFT summary</div>
               <div className="draftSummaryStats">
                 <div className="draftGraphDiv">
                   <div
@@ -804,8 +804,8 @@ function Draft() {
                     }}
                   >
                     <div className="ratingInner">
-                      <div>Squad</div>
-                      <div>Rating</div>
+                      <div>squad</div>
+                      <div>rating</div>
                       <strong>{teamChemistry + teamRating}</strong>
                     </div>
                   </div>

@@ -8,7 +8,7 @@ function SideBar() {
       <nav className="navbar navbar-expand-lg" id="sideBar">
         <div id="logoDiv">
           <img src={HubLogo} alt="SuloFUT Logo" id="sulofutLogo" />
-          <h3>sulofut</h3>
+          <h3 className="logoSzoveg">sulofut</h3>
         </div>
         <button
           className="navbarIcon d-lg-none"

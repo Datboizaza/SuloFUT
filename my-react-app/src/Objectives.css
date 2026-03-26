@@ -1,3 +1,14 @@
+/* Fontok */
+@font-face {
+  font-family: bristone;
+  src: url("./assets/Bristone.otf");
+}
+
+@font-face {
+  font-family: easportsfc;
+  src: url("./assets/EaSportsFc_FontByGibsfut-Regular.ttf");
+}
+
 /* Konténer */
 .objectivesContainer {
   padding: 25px;
@@ -5,8 +16,8 @@
   backdrop-filter: blur(20px);
   background-color: #003d3f3b;
   border-radius: 20px;
-  height: 70vh;
-  width: 60vw;
+  height: 80vh;
+  width: 70vw;
   overflow-y: scroll;
 }
 
@@ -19,18 +30,19 @@
 
 .tab {
   height: 6vh;
-  width: 25%;
+  width: 30%;
   background: #1111114f;
   border: none;
   color: white;
   cursor: pointer;
   border-radius: 8px;
   transition: 0.2s;
+  font-family: easportsfc;
 }
 
 .tab.active {
   background: linear-gradient(90deg, #00fff7, #00f078);
-  color: black;
+  color: rgb(44, 82, 69);
 }
 
 /* Grid */
@@ -56,6 +68,11 @@
   display: flex;
   justify-content: space-between;
   cursor: pointer;
+}
+
+.objHeaderTitle {
+  font-family: bristone;
+  font-size: 100%;
 }
 
 /* Subobjective-ek */

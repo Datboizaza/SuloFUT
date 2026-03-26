@@ -1,3 +1,10 @@
+/* Fontok */
+
+@font-face {
+  font-family: easportsfc;
+  src: url("./assets/EaSportsFc_FontByGibsfut-Regular.ttf");
+}
+
 /*---------Elendezések és alapvető formázások-----------*/
 #statBarDiv {
   background-color: rgba(17, 38, 39, 0.459);
@@ -33,6 +40,8 @@
 
 #actualPage {
   margin-bottom: 0;
+  font-family: easportsfc;
+  font-size: 160%;
 }
 
 #coinCounter {

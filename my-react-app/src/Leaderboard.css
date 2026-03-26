@@ -1,3 +1,14 @@
+/* Fontok */
+@font-face {
+  font-family: bristone;
+  src: url("./assets/Bristone.otf");
+}
+
+@font-face {
+  font-family: easportsfc;
+  src: url("./assets/EaSportsFc_FontByGibsfut-Regular.ttf");
+}
+
 /*-----------Elrendezések és alapvető formázások-----------*/
 #leaderboardDiv {
   background: linear-gradient(

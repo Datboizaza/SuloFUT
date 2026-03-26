@@ -1,3 +1,14 @@
+/* Fontok */
+@font-face {
+  font-family: bristone;
+  src: url("./assets/Bristone.otf");
+}
+
+@font-face {
+  font-family: easportsfc;
+  src: url("./assets/EaSportsFc_FontByGibsfut-Regular.ttf");
+}
+
 /*------------------Sidebar elrendezések--------------*/
 #sideBar {
   height: 100vh;
@@ -35,11 +46,19 @@
   align-items: center;
 }
 
+.logoSzoveg {
+  font-family: easportsfc;
+  font-size: 1.3vw;
+  margin-top: 10%;
+}
+
 /*------------------Szövegek------------------*/
 #navbarItem {
   color: white;
   width: 100%;
   border: none;
+  font-family: bristone;
+  font-size: 80%;
 }
 
 #navbarItem:hover {
@@ -110,6 +129,10 @@
     transform: none;
   }
 
+  .logoSzoveg {
+    font-size: 20px;
+  }
+
   /*------------Ikonok/képek---------------*/
   #navbarIcon {
     height: 4vh;
@@ -159,6 +182,10 @@
 
   .disabled {
     transform: none;
+  }
+
+  .logoSzoveg {
+    font-size: 17px;
   }
 
   /*------------Ikonok/képek---------------*/
