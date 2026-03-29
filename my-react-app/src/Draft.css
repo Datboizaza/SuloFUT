@@ -20,6 +20,8 @@
   top: 54%;
   left: 50%;
   transform: translate(-50%, -50%);
+  opacity: 0;
+  animation: fadeIn 0.6s ease forwards;
 }
 
 /*-----------------Baloldali formázások------------------*/
@@ -209,6 +211,7 @@
   max-width: 190px;
   aspect-ratio: 3/3.8;
   height: 63%;
+  min-height: 235px;
   transition: all 100ms ease-in-out;
   display: flex;
   align-items: center;
@@ -564,6 +567,7 @@
   position: absolute;
   width: 100%;
   height: 68%;
+  min-height: 120px;
   aspect-ratio: 3/3.8;
   justify-self: center;
   bottom: 22%;
@@ -686,6 +690,7 @@
   position: relative;
   width: clamp(40px, 8vw, 7%);
   height: 16vh;
+  min-height: 138px;
   transform: none;
   z-index: 0;
   aspect-ratio: 3/4.2;
@@ -737,7 +742,8 @@
   align-self: center;
   color: rgb(113, 255, 212);
   font-family: easportsfc;
-  font-size: 140%;
+  font-size: 120%;
+  text-wrap: nowrap;
 }
 
 .ratingStars {
@@ -757,6 +763,44 @@
 .ratingNum,
 .chemNum {
   color: rgb(0, 255, 179);
+  font-family: monospace;
+  font-weight: bold;
+  font-size: 130%;
+}
+
+/* Drag */
+.dragOverlay {
+  position: fixed;
+  z-index: 999999;
+  pointer-events: none;
+  left: 50px;
+  top: 0;
+  width: 100px;
+  height: 130px;
+}
+
+.dragPreview {
+  transform: scale(1.1);
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.45));
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden;
+  position: relative;
+}
+
+.dragSource {
+  opacity: 0.6;
+}
+
+.dragOverlay .cardSlot {
+  cursor: grab;
+  user-select: none;
+  position: relative;
+}
+
+.dragOverlay .cardSlot img {
+  pointer-events: none;
+  user-select: none;
 }
 
 /* Submit draft */
@@ -775,6 +819,7 @@
   transition: all 150ms ease-in-out;
   font-family: bristone;
   font-size: 70%;
+  animation: glowPulse 1s infinite alternate;
 }
 
 .submitDraftBtn:hover {
@@ -799,6 +844,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  transform: scale(0.8);
+  opacity: 0;
+  animation: scalePopIn 0.4s ease forwards;
 }
 
 .draftSummaryOverlay {
@@ -846,30 +894,6 @@
   font-size: 70%;
 }
 
-.exitButton {
-  width: 80%;
-  height: 20%;
-  align-self: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 20px;
-  box-shadow: 0px 0px 100px 10px rgba(0, 0, 0, 0.76);
-  border: 3px rgba(0, 255, 251, 0.548) solid;
-  background-color: rgb(0, 165, 121);
-  color: white;
-  transition: all 150ms ease-in-out;
-  font-family: bristone;
-  font-size: 60%;
-}
-
-.exitButton:hover {
-  transform: scale(1.05);
-  background-color: rgb(1, 123, 91);
-  border: 1px rgb(0, 254, 156) solid;
-  color: rgba(0, 255, 221, 0.856);
-}
-
 .draftGraphDiv {
   width: 40%;
   display: flex;
@@ -901,6 +925,66 @@
   font-family: easportsfc;
 }
 
+/* Reward-ok */
+.reward {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  background: rgba(0, 0, 0, 0.144);
+  padding: 30px;
+  border-radius: 20px;
+  width: 50%;
+}
+
+.coins {
+  color: gold;
+  opacity: 0;
+  transform: scale(0.6) rotate(-5deg);
+  animation: rewardAnim 0.8s ease forwards;
+}
+
+.coinImg {
+  height: 30px;
+  margin-left: 5px;
+}
+
+.pack {
+  font-size: 90%;
+  opacity: 0;
+  transform: scale(0.6) rotate(-5deg);
+  animation: rewardAnim 1s ease forwards;
+}
+
+.packImg {
+  height: 80px;
+}
+
+.exitButton {
+  width: 30%;
+  height: 17%;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  box-shadow: 0px 0px 100px 10px rgba(0, 0, 0, 0.76);
+  border: 3px rgba(0, 255, 251, 0.548) solid;
+  background-color: rgb(0, 165, 121);
+  color: white;
+  transition: all 150ms ease-in-out;
+  font-family: bristone;
+  font-size: 60%;
+  animation: glowPulse 1s infinite alternate;
+}
+
+.exitButton:hover {
+  transform: scale(1.05);
+  background-color: rgb(1, 123, 91);
+  border: 1px rgb(0, 254, 156) solid;
+  color: rgba(0, 255, 221, 0.856);
+}
+
 /*? Animációk */
 @keyframes fadeIn {
   from {
@@ -911,6 +995,29 @@
   to {
     opacity: 1;
     backdrop-filter: blur(4px);
+  }
+}
+
+@keyframes scalePopIn {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes glowPulse {
+  from {
+    box-shadow: 0 0 5px #00fff2;
+  }
+  to {
+    box-shadow: 0 0 20px #00fff2;
+  }
+}
+
+@keyframes rewardAnim {
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0);
   }
 }
 
@@ -1351,38 +1458,4 @@
   .draftGraphDiv {
     width: 100%;
   }
-}
-
-.dragOverlay {
-  position: fixed;
-  z-index: 999999;
-  pointer-events: none;
-  left: 50px;
-  top: 0;
-  width: 100px;
-  height: 130px;
-}
-
-.dragPreview {
-  transform: scale(1.1);
-  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.45));
-  width: 100% !important;
-  height: 100% !important;
-  overflow: hidden;
-  position: relative;
-}
-
-.dragSource {
-  opacity: 0.6;
-}
-
-.dragOverlay .cardSlot {
-  cursor: grab;
-  user-select: none;
-  position: relative;
-}
-
-.dragOverlay .cardSlot img {
-  pointer-events: none;
-  user-select: none;
 }

@@ -22,4 +22,8 @@ content-type: application/json
 
 ###
 
-GET http://127.0.0.1:3000/api/draftrewards HTTP/1.1
+GET http://127.0.0.1:3000/api/draftrewards/mid HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/api/leaderboard/best_draft HTTP/1.1

@@ -19,6 +19,9 @@
   height: 80vh;
   width: 70vw;
   overflow-y: scroll;
+  transform: scale(0.8);
+  opacity: 0;
+  animation: scalePopIn 0.4s ease forwards;
 }
 
 /* Tabok */
@@ -36,7 +39,7 @@
   color: white;
   cursor: pointer;
   border-radius: 8px;
-  transition: 0.2s;
+  transition: all 0.3s ease-in-out;
   font-family: easportsfc;
 }
 
@@ -78,6 +81,8 @@
 /* Subobjective-ek */
 .subList {
   margin-top: 30px;
+  opacity: 0;
+  animation: fadeIn 0.5s ease forwards;
 }
 
 .subItem {
@@ -170,6 +175,7 @@
   background: linear-gradient(90deg, #3da5a7, #00c3ff);
   color: white;
   transition: all 150ms ease-in-out;
+  animation: glowPulse 1.5s infinite alternate;
 }
 .claimBtn:hover {
   transform: scale(1.01);
@@ -187,4 +193,123 @@
   border: none;
   background: rgb(48, 255, 172);
   color: rgb(65, 65, 65);
+}
+
+/* Animációk */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scalePopIn {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes glowPulse {
+  from {
+    box-shadow: 0 0 5px #00fff2;
+  }
+  to {
+    box-shadow: 0 0 20px #00fff2;
+  }
+}
+
+/*------------------Media queries---------------------*/
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  /* Konténer */
+  .objectivesContainer {
+    padding: 45px;
+    width: 90vw;
+  }
+
+  /* Tabok */
+  .tabs {
+    margin-bottom: 7%;
+  }
+
+  /* Grid */
+  .objectivesGrid {
+    gap: 15px;
+  }
+
+  /* Reward-ok */
+  .reward {
+    font-size: 50%;
+  }
+
+  .small .pack {
+    width: 170px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  /* Konténer */
+  .objectivesContainer {
+    padding: 15px;
+    height: 80vh;
+    width: 95vw;
+  }
+
+  /* Tabok */
+  .tab {
+    width: 32%;
+    font-family: easportsfc;
+    font-size: 60%;
+  }
+
+  /* Grid */
+  .objectivesGrid {
+    gap: 6px;
+  }
+
+  /* Tile-ok */
+  .objectiveCard {
+    padding: 30px;
+  }
+
+  /* Subobjective-ek */
+  .subItem {
+    margin-top: 7px;
+    padding: 20px;
+  }
+
+  /* Reward-ok */
+  .reward {
+    gap: 5px;
+    font-size: 60%;
+  }
+
+  .reward.small {
+    font-size: 8px;
+  }
+
+  .small .coinImg {
+    height: 17px;
+  }
+
+  .small .packImg {
+    height: 25px;
+  }
+
+  .coinImg {
+    height: 17px;
+  }
+
+  .packImg {
+    height: 25px;
+  }
+
+  /* Claim Gomb */
+  .claimBtn {
+    height: 35px;
+  }
 }

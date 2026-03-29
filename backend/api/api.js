@@ -721,6 +721,43 @@ router.get("/draftrewards/:rewardValue", async (request, response) => {
   }
 });
 
+router.post("/draftrewards/claim", async (request, response) => {
+  const { rewardId } = request.body;
+  const userId = request.session.userId;
+  try {
+    const rows = await database.getDraftRewardById(rewardId);
+    const reward = {
+      id: rows[0].draftRewardId,
+      coins: rows[0].coins,
+      rewardValue: rows[0].rewardValue,
+      packs: [],
+    };
+    for (const row of rows) {
+      if (row.packId) {
+        reward.packs.push({
+          id: row.packId,
+          name: row.packName,
+          price: row.packPrice,
+          design: row.packDesign,
+        });
+      }
+    }
+
+    if (reward.coins) {
+      await database.updateCoins(reward.coins, userId);
+    }
+
+    for (const pack of reward.packs) {
+      await database.addPack(userId, pack.id);
+    }
+
+    response.status(200).json({ message: "Draft reward claimed!" });
+  } catch (error) {
+    console.log("POST /api/draftrewards/claim error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
 //!Objective-ek
 router.get("/objectives", async (request, response) => {
   try {
@@ -925,6 +962,27 @@ router.post("/objectives/claimobjgroup", async (request, response) => {
     response.status(200).json({ message: "Group reward claimed" });
   } catch (error) {
     console.log("POST /api/objectives/claimobjgroup error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//! Leaderboard
+router.get("/leaderboard/:type", async (request, response) => {
+  try {
+    const type = request.params.type;
+    const types = {
+      best_draft: "best_draft",
+      top_squad: "top_squad",
+      club_value: "club_value",
+      cards_opened: "cards_opened",
+    };
+    const rows = await database.getLeaderboard(type);
+
+    response.status(200).json({
+      results: rows,
+    });
+  } catch (error) {
+    console.log("GET /api/leaderboard/:type error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });

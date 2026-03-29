@@ -17,6 +17,8 @@ import InterMilan from "./assets/intermilan.png";
 import ACMilan from "./assets/acmilan.png";
 import Atalanta from "./assets/atalanta.png";
 import Lazio from "./assets/lazio.png";
+import Coins from "./assets/coins.png";
+import SpecialPack from "./assets/specialpack.png";
 
 //! Kispad layout
 const benchLayout = [
@@ -63,6 +65,9 @@ function Draft() {
   const [isDragging, setIsDragging] = useState(false);
   const [dragKey, setDragKey] = useState(null);
   const [dragPos, setDragPos] = useState({ x: 0, y: 0 });
+
+  const [rewardData, setRewardData] = useState(null);
+  const [showReward, setShowReward] = useState(false);
 
   //! Formációk betöltése és draft reset-elése
   useEffect(() => {
@@ -345,6 +350,15 @@ function Draft() {
     return "☆☆☆☆☆";
   };
 
+  //! RewardValue-k
+  const getRewardValue = (score) => {
+    if (score > 122) return "excellent";
+    if (score > 117) return "great";
+    if (score > 112) return "good";
+    if (score > 105) return "mid";
+    return "bad";
+  };
+
   //! Pozíció átírása az aktuális pozícióra amin szerepel (ha van)
   const displayedPosition = (player, slotPos) => {
     const positions = player.player_positions.split(", ");
@@ -462,6 +476,17 @@ function Draft() {
       setShowDraftSummary(true);
 
       const actualDraft = teamChemistry + teamRating;
+
+      const rewValue = getRewardValue(actualDraft);
+      const rewardResult = await getMethodFetch(
+        `http://127.0.0.1:3000/api/draftrewards/${rewValue}`,
+      );
+      setRewardData(rewardResult.results[0]);
+
+      setTimeout(() => {
+        setShowReward(true);
+      }, 8000);
+
       await postMethodFetch("http://127.0.0.1:3000/api/users/me/bestdraft", {
         rating: actualDraft,
       });
@@ -506,8 +531,14 @@ function Draft() {
     Math.max(0, Math.min((teamChemistry + teamRating) / 133, 1)) * 360;
 
   //! Visszatérés a menübe
-  const handleExitToMenu = () => {
+  const handleExitToMenu = async () => {
     try {
+      if (rewardData) {
+        await postMethodFetch("http://127.0.0.1:3000/api/draftrewards/claim", {
+          rewardId: rewardData.id,
+        });
+      }
+
       window.location.href = "/";
     } catch (error) {
       console.log(error);
@@ -796,39 +827,50 @@ function Draft() {
             <div className="draftSummary">
               <div className="draftSummaryTitle">DRAFT summary</div>
               <div className="draftSummaryStats">
-                <div className="draftGraphDiv">
-                  <div
-                    className="draftGraph"
-                    style={{
-                      background: `conic-gradient(rgb(0, 255, 251) ${graphProgress}deg, rgba(0, 255, 251, 0.26) ${graphProgress}deg)`,
-                    }}
-                  >
-                    <div className="ratingInner">
-                      <div>squad</div>
-                      <div>rating</div>
-                      <strong>{teamChemistry + teamRating}</strong>
+                {!showReward && (
+                  <>
+                    <div className="draftGraphDiv">
+                      <div
+                        className="draftGraph"
+                        style={{
+                          background: `conic-gradient(rgb(0, 255, 251) ${graphProgress}deg, rgba(0, 255, 251, 0.26) ${graphProgress}deg)`,
+                        }}
+                      >
+                        <div className="ratingInner">
+                          <div>squad</div>
+                          <div>rating</div>
+                          <strong>{teamChemistry + teamRating}</strong>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className="vl"></div>
-                <div className="draftNumbers">
-                  <div className="ratingStars">{ratingStars(teamRating)}</div>
-                  <h5 className="ratingText">
-                    Rating{" "}
-                    <span id="ratingNum" className="ratingNum">
-                      {teamRating}
-                    </span>
-                  </h5>
-                  <h5 className="chemText">
-                    Chemistry{" "}
-                    <span id="chemNum" className="chemNum">
-                      {teamChemistry}
-                    </span>
-                  </h5>
-                  <button className="exitButton" onClick={handleExitToMenu}>
-                    Exit
-                  </button>
-                </div>
+                    <div className="vl"></div>
+                    <div className="draftNumbers">
+                      <div className="ratingStars">
+                        {ratingStars(teamRating)}
+                      </div>
+                      <h5 className="ratingText">
+                        Rating{" "}
+                        <span id="ratingNum" className="ratingNum">
+                          {teamRating}
+                        </span>
+                      </h5>
+                      <h5 className="chemText">
+                        Chemistry{" "}
+                        <span id="chemNum" className="chemNum">
+                          {teamChemistry}
+                        </span>
+                      </h5>
+                    </div>
+                  </>
+                )}
+                {showReward && rewardData && (
+                  <>
+                    <Reward reward={rewardData} />
+                    <button className="exitButton" onClick={handleExitToMenu}>
+                      Exit and Claim
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>,
@@ -1050,6 +1092,28 @@ function PlayerCard({
         </div>
       )}
     </>
+  );
+}
+
+function Reward({ reward }) {
+  if (!reward) return null;
+
+  return (
+    <div className="reward">
+      {reward.coins && (
+        <span className="coins">
+          {reward.coins}
+          <img src={Coins} className="coinImg" />
+        </span>
+      )}
+
+      {reward.packs?.map((p) => (
+        <span key={p.id} className="pack">
+          <img src={SpecialPack} className="packImg" />
+          {p.name}
+        </span>
+      ))}
+    </div>
   );
 }
 

@@ -76,8 +76,6 @@ function SideBar() {
                   Leaderboards
                 </a>
               </li>
-            </ul>
-            <ul className="navbar-nav">
               <li className="nav-item">
                 <a className="nav-link" id="navbarItem" href="">
                   Settings

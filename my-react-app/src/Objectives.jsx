@@ -41,6 +41,8 @@ function Objectives() {
         },
       );
 
+      window.dispatchEvent(new Event("coinsUpdated"));
+
       const result = await getMethodFetch(
         "http://127.0.0.1:3000/api/objectives",
       );
@@ -60,6 +62,8 @@ function Objectives() {
           objectiveId,
         },
       );
+
+      window.dispatchEvent(new Event("coinsUpdated"));
 
       const result = await getMethodFetch(
         "http://127.0.0.1:3000/api/objectives",
