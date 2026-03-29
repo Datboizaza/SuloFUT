@@ -922,6 +922,12 @@ function PlayerCard({
 
   const isGK = player.player_positions === "GK";
   const textClass = getText(player.rarity);
+  const altPositions = [];
+  player.player_positions.split(", ").forEach((element) => {
+    if (element !== displayedPosition(player, slotPos)) {
+      altPositions.push(element);
+    }
+  });
 
   return (
     <>
@@ -935,6 +941,7 @@ function PlayerCard({
       <p className={`cardPosition ${textClass}`}>
         {displayedPosition(player, slotPos)}
       </p>
+      <p className={`cardAltPosition ${textClass}`}>{altPositions}</p>
 
       <img
         className="cardImg"

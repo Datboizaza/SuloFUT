@@ -319,6 +319,15 @@
   color: rgb(58, 54, 4);
   font-weight: bold;
 }
+.cardAltPosition {
+  position: absolute;
+  top: 27%;
+  left: 16.5%;
+  font-size: 60%;
+  z-index: 3;
+  color: rgb(58, 54, 4);
+  font-weight: bold;
+}
 .cardImg {
   position: absolute;
   top: 4.2%;
