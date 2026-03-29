@@ -28,6 +28,14 @@ function StatBar({ title }) {
     };
 
     fetchCoins();
+
+    const handleCoinsUpdate = () => {
+      fetchCoins();
+    };
+    window.addEventListener("coinsUpdated", handleCoinsUpdate);
+    return () => {
+      window.removeEventListener("coinsUpdated", handleCoinsUpdate);
+    };
   }, []);
 
   return (

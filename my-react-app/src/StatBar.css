@@ -1,3 +1,10 @@
+/* Fontok */
+
+@font-face {
+  font-family: easportsfc;
+  src: url("./assets/EaSportsFc_FontByGibsfut-Regular.ttf");
+}
+
 /*---------Elendezések és alapvető formázások-----------*/
 #statBarDiv {
   background-color: rgba(17, 38, 39, 0.459);
@@ -20,6 +27,9 @@
   justify-content: center;
   align-items: center;
   height: max-content;
+  opacity: 0;
+  filter: blur(10px);
+  animation: blurInAnim 0.4s ease forwards;
 }
 
 #div1,
@@ -33,6 +43,11 @@
 
 #actualPage {
   margin-bottom: 0;
+  font-family: easportsfc;
+  font-size: 160%;
+  opacity: 0;
+  filter: blur(10px);
+  animation: blurInAnim 0.4s ease forwards;
 }
 
 #coinCounter {
@@ -48,6 +63,17 @@
 
 #backIcon {
   height: 6vh;
+  opacity: 0;
+  filter: blur(10px);
+  animation: blurInAnim 0.4s ease forwards;
+}
+
+/* Animációk */
+@keyframes blurInAnim {
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
 }
 
 /*------------------Media queries---------------------*/

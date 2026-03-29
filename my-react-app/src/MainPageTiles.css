@@ -1,3 +1,19 @@
+/* Fontok */
+@font-face {
+  font-family: bristone;
+  src: url("./assets/Bristone.otf");
+}
+
+@font-face {
+  font-family: easportsfc;
+  src: url("./assets/EaSportsFc_FontByGibsfut-Regular.ttf");
+}
+
+h3 {
+  font-family: easportsfc;
+  font-size: 120% !important;
+}
+
 /*-------------Főoldal csempék------------------*/
 #tileContainer {
   min-width: 60vw;
@@ -72,6 +88,7 @@
     rgba(87, 199, 199, 0.288) 50%,
     rgba(40, 109, 126, 0.24) 100%
   );
+  color: rgb(95, 241, 215);
 }
 
 #tileRow0 {

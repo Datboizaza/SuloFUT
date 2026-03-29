@@ -1,3 +1,14 @@
+/* Fontok */
+@font-face {
+  font-family: bristone;
+  src: url("./assets/Bristone.otf");
+}
+
+@font-face {
+  font-family: easportsfc;
+  src: url("./assets/EaSportsFc_FontByGibsfut-Regular.ttf");
+}
+
 /*------------------Sidebar elrendezések--------------*/
 #sideBar {
   height: 100vh;
@@ -23,6 +34,11 @@
   flex-direction: column !important;
 }
 
+.nav-item {
+  opacity: 0;
+  animation: fadeSlideIn 0.5s ease forwards;
+}
+
 .offcanvas-body {
   display: flex;
   flex-direction: column;
@@ -33,6 +49,15 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  opacity: 0;
+  filter: blur(10px);
+  animation: blurInAnim 0.4s ease forwards;
+}
+
+.logoSzoveg {
+  font-family: easportsfc;
+  font-size: 1.3vw;
+  margin-top: 10%;
 }
 
 /*------------------Szövegek------------------*/
@@ -40,6 +65,8 @@
   color: white;
   width: 100%;
   border: none;
+  font-family: bristone;
+  font-size: 80%;
 }
 
 #navbarItem:hover {
@@ -68,6 +95,46 @@
 #sulofutLogo {
   height: 5vw;
   margin-right: 10px;
+}
+
+/* Animációk */
+@keyframes fadeSlideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes blurInAnim {
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.nav-item:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.nav-item:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.nav-item:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.nav-item:nth-child(4) {
+  animation-delay: 0.2s;
+}
+.nav-item:nth-child(5) {
+  animation-delay: 0.25s;
+}
+.nav-item:nth-child(6) {
+  animation-delay: 0.3s;
+}
+.nav-item:nth-child(7) {
+  animation-delay: 0.35s;
+}
+.nav-item:nth-child(8) {
+  animation-delay: 0.4s;
 }
 
 /*------------------Media queries---------------------*/
@@ -108,6 +175,10 @@
 
   .disabled {
     transform: none;
+  }
+
+  .logoSzoveg {
+    font-size: 20px;
   }
 
   /*------------Ikonok/képek---------------*/
@@ -159,6 +230,10 @@
 
   .disabled {
     transform: none;
+  }
+
+  .logoSzoveg {
+    font-size: 17px;
   }
 
   /*------------Ikonok/képek---------------*/

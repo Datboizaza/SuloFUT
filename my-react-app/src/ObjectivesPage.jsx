@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   createRoot(document.getElementById("root1")).render(
     <StrictMode>
-      <StatBar title="Objectives" />
+      <StatBar title="objectives" />
     </StrictMode>,
   );
 

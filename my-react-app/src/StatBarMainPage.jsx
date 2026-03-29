@@ -34,7 +34,7 @@ function StatBarMainPage() {
       <div id="statBarDiv">
         <div id="div1"></div>
         <div id="div2">
-          <h4 id="actualPage">Home</h4>
+          <h4 id="actualPage">HOME</h4>
         </div>
         <div id="div3">
           <div id="coinsDiv">

@@ -13,7 +13,7 @@ function MainPageTilesUnassigned() {
         <div className="row" id="tileRow0">
           <a className="col-12" id="tile0" href="">
             <div id="tileTexts1" className="col-8">
-              <h3>Unassigned Items</h3>
+              <h3>UNASSIGNED ITEMS</h3>
               <p>5 Items Remaining</p>
             </div>
             <div id="tileImages1" className="col-4">
@@ -28,7 +28,7 @@ function MainPageTilesUnassigned() {
         <div className="row" id="tileRow1">
           <a className="col-12" id="tile1" href="">
             <div id="tileTexts1" className="col-8">
-              <h3>SuloFUT Hub</h3>
+              <h3>SULOFUT HUB</h3>
               <p>Check out seasonal rewards.</p>
             </div>
             <div id="tileImages1" className="col-4">
@@ -52,7 +52,7 @@ function MainPageTilesUnassigned() {
         <div className="row" id="tileRow2">
           <a className="col-12" id="tile2" href="../draft.html">
             <div id="tileTexts2" className="col-12 col-md-8">
-              <h3>Draft Mode</h3>
+              <h3>DRAFT MODE</h3>
               <p>Build a team from randomly selected players.</p>
             </div>
             <div id="tileImages2" className="col-12 col-md-4">
@@ -61,7 +61,7 @@ function MainPageTilesUnassigned() {
           </a>
           <a className="col-12" id="tile2" href="">
             <div id="tileTexts2" className="col-12  col-md-8">
-              <h3>Store</h3>
+              <h3>STORE</h3>
               <p>Open packs to obtain new cards.</p>
             </div>
             <div id="tileImages2" className="col-12 col-md-4">
@@ -70,7 +70,7 @@ function MainPageTilesUnassigned() {
           </a>
           <a className="col-12" id="tile2" href="../objectives.html">
             <div id="tileTexts2" className="col-12  col-md-8">
-              <h3>Objectives</h3>
+              <h3>OBJECTIVES</h3>
               <p>Complete tasks to earn packs or coins.</p>
             </div>
             <div id="tileImages2" className="col-12 col-md-4">

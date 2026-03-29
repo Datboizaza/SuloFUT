@@ -1,3 +1,14 @@
+/* Fontok */
+@font-face {
+  font-family: bristone;
+  src: url("./assets/Bristone.otf");
+}
+
+@font-face {
+  font-family: easportsfc;
+  src: url("./assets/EaSportsFc_FontByGibsfut-Regular.ttf");
+}
+
 /* Konténer */
 .objectivesContainer {
   padding: 25px;
@@ -5,9 +16,12 @@
   backdrop-filter: blur(20px);
   background-color: #003d3f3b;
   border-radius: 20px;
-  height: 70vh;
-  width: 60vw;
+  height: 80vh;
+  width: 70vw;
   overflow-y: scroll;
+  transform: scale(0.8);
+  opacity: 0;
+  animation: scalePopIn 0.4s ease forwards;
 }
 
 /* Tabok */
@@ -19,18 +33,19 @@
 
 .tab {
   height: 6vh;
-  width: 25%;
+  width: 30%;
   background: #1111114f;
   border: none;
   color: white;
   cursor: pointer;
   border-radius: 8px;
-  transition: 0.2s;
+  transition: all 0.3s ease-in-out;
+  font-family: easportsfc;
 }
 
 .tab.active {
   background: linear-gradient(90deg, #00fff7, #00f078);
-  color: black;
+  color: rgb(44, 82, 69);
 }
 
 /* Grid */
@@ -58,9 +73,16 @@
   cursor: pointer;
 }
 
+.objHeaderTitle {
+  font-family: bristone;
+  font-size: 100%;
+}
+
 /* Subobjective-ek */
 .subList {
   margin-top: 30px;
+  opacity: 0;
+  animation: fadeIn 0.5s ease forwards;
 }
 
 .subItem {
@@ -86,7 +108,7 @@
 
 .progressFill {
   height: 100%;
-  background: linear-gradient(90deg, #00fff7, #00c3ff);
+  background: linear-gradient(90deg, #00fff7, #17ffa6);
   border-radius: 10px;
 }
 
@@ -140,4 +162,154 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #00ffc89d;
+}
+
+/* Claim Gomb */
+.claimBtn {
+  margin-top: 10px;
+  width: 100%;
+  height: 40px;
+  border-radius: 20px;
+  box-shadow: 1px 1px 100px 10px rgba(0, 0, 0, 0.76);
+  border: 3px rgba(0, 255, 149, 0.727) solid;
+  background: linear-gradient(90deg, #3da5a7, #00c3ff);
+  color: white;
+  transition: all 150ms ease-in-out;
+  animation: glowPulse 1.5s infinite alternate;
+}
+.claimBtn:hover {
+  transform: scale(1.01);
+  background: linear-gradient(90deg, #53d9db, #6affab);
+  border: 1px rgb(0, 254, 156) solid;
+  color: rgba(6, 92, 85, 0.856);
+}
+.claimed {
+  border: none;
+  background: rgb(48, 255, 172);
+  color: rgb(65, 65, 65);
+}
+.claimed:hover {
+  transform: none;
+  border: none;
+  background: rgb(48, 255, 172);
+  color: rgb(65, 65, 65);
+}
+
+/* Animációk */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scalePopIn {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes glowPulse {
+  from {
+    box-shadow: 0 0 5px #00fff2;
+  }
+  to {
+    box-shadow: 0 0 20px #00fff2;
+  }
+}
+
+/*------------------Media queries---------------------*/
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  /* Konténer */
+  .objectivesContainer {
+    padding: 45px;
+    width: 90vw;
+  }
+
+  /* Tabok */
+  .tabs {
+    margin-bottom: 7%;
+  }
+
+  /* Grid */
+  .objectivesGrid {
+    gap: 15px;
+  }
+
+  /* Reward-ok */
+  .reward {
+    font-size: 50%;
+  }
+
+  .small .pack {
+    width: 170px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  /* Konténer */
+  .objectivesContainer {
+    padding: 15px;
+    height: 80vh;
+    width: 95vw;
+  }
+
+  /* Tabok */
+  .tab {
+    width: 32%;
+    font-family: easportsfc;
+    font-size: 60%;
+  }
+
+  /* Grid */
+  .objectivesGrid {
+    gap: 6px;
+  }
+
+  /* Tile-ok */
+  .objectiveCard {
+    padding: 30px;
+  }
+
+  /* Subobjective-ek */
+  .subItem {
+    margin-top: 7px;
+    padding: 20px;
+  }
+
+  /* Reward-ok */
+  .reward {
+    gap: 5px;
+    font-size: 60%;
+  }
+
+  .reward.small {
+    font-size: 8px;
+  }
+
+  .small .coinImg {
+    height: 17px;
+  }
+
+  .small .packImg {
+    height: 25px;
+  }
+
+  .coinImg {
+    height: 17px;
+  }
+
+  .packImg {
+    height: 25px;
+  }
+
+  /* Claim Gomb */
+  .claimBtn {
+    height: 35px;
+  }
 }

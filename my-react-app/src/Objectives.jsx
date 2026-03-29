@@ -4,10 +4,15 @@ import Coins from "./assets/coins.png";
 import SpecialPack from "./assets/specialpack.png";
 
 function Objectives() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({
+    foundations: [],
+    milestones: [],
+    campaign: [],
+  });
   const [activeTab, setActiveTab] = useState("foundations");
   const [openId, setOpenId] = useState(null);
 
+  //! Adatok kiírása
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -23,7 +28,52 @@ function Objectives() {
     fetchData();
   }, []);
 
-  const current = data.find((e) => e[activeTab])?.[activeTab] || [];
+  //! Aktuális oldal
+  const current = data[activeTab] || [];
+
+  //! Claim-elés funkció
+  const handleClaim = async (subId) => {
+    try {
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/objectives/claimsubobj",
+        {
+          subId,
+        },
+      );
+
+      window.dispatchEvent(new Event("coinsUpdated"));
+
+      const result = await getMethodFetch(
+        "http://127.0.0.1:3000/api/objectives",
+      );
+
+      setData(result.results);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  //! Group reward claim-elése
+  const handleGroupClaim = async (objectiveId) => {
+    try {
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/objectives/claimobjgroup",
+        {
+          objectiveId,
+        },
+      );
+
+      window.dispatchEvent(new Event("coinsUpdated"));
+
+      const result = await getMethodFetch(
+        "http://127.0.0.1:3000/api/objectives",
+      );
+
+      setData(result.results);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="objectivesContainer">
@@ -42,46 +92,75 @@ function Objectives() {
 
       {/* Grid */}
       <div className="objectivesGrid">
-        {current.map((obj) => (
-          <div key={obj.id} className="objectiveCard">
-            <div
-              className="objectiveHeader"
-              onClick={() => setOpenId(openId === obj.id ? null : obj.id)}
-            >
-              <h3>{obj.name}</h3>
+        {current.map((obj) => {
+          const isCompleted = obj.subobjectives.every(
+            (s) => s.progress >= s.requirement && s.claimed,
+          );
+          return (
+            <div key={obj.id} className="objectiveCard">
+              <div
+                className="objectiveHeader"
+                onClick={() => setOpenId(openId === obj.id ? null : obj.id)}
+              >
+                <p className="objHeaderTitle">{obj.name}</p>
 
-              <Reward reward={obj.groupreward} />
-            </div>
-
-            {/* Progress */}
-            <ProgressBar
-              current={
-                obj.subobjectives.filter((s) => s.progress >= s.requirement)
-                  .length
-              }
-              max={obj.subobjectives.length}
-            />
-
-            {/* Subobjectives */}
-            {openId === obj.id && (
-              <div className="subList">
-                {obj.subobjectives.map((sub) => (
-                  <div key={sub.id} className="subItem">
-                    <div className="subText">
-                      <span>{sub.task}</span>
-                      <Reward reward={sub.reward} small />
-                    </div>
-
-                    <ProgressBar
-                      current={sub.progress}
-                      max={sub.requirement || 1}
-                    />
-                  </div>
-                ))}
+                <Reward reward={obj.groupreward} />
               </div>
-            )}
-          </div>
-        ))}
+
+              {isCompleted && !obj.claimed && (
+                <button
+                  className="claimBtn"
+                  onClick={() => handleGroupClaim(obj.id)}
+                >
+                  Claim Group Reward
+                </button>
+              )}
+
+              {obj.claimed && (
+                <button className="claimBtn claimed" disabled>
+                  Claimed &#x1F5F8;
+                </button>
+              )}
+
+              {/* Progress */}
+              <ProgressBar
+                current={
+                  obj.subobjectives.filter((s) => s.progress >= s.requirement)
+                    .length
+                }
+                max={obj.subobjectives.length}
+              />
+
+              {/* Subobjectives */}
+              {openId === obj.id && (
+                <div className="subList">
+                  {obj.subobjectives.map((sub) => (
+                    <div key={sub.id} className="subItem">
+                      <div className="subText">
+                        <span>{sub.task}</span>
+                        <Reward reward={sub.reward} small />
+                      </div>
+
+                      <ProgressBar
+                        current={sub.progress}
+                        max={sub.requirement || 1}
+                      />
+
+                      {sub.progress >= sub.requirement && !sub.claimed && (
+                        <button
+                          onClick={() => handleClaim(sub.id)}
+                          className="claimBtn"
+                        >
+                          Claim
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -121,9 +200,26 @@ function Reward({ reward, small }) {
 
 const getMethodFetch = async (url) => {
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, { credentials: "include" });
     if (!response.ok) {
       throw new Error(`GET hiba: ${response.status} ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    throw new Error(`Hiba történt: ${error.message}`);
+  }
+};
+
+const postMethodFetch = async (url, data) => {
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error(`POST Hiba: ${response.status} ${response.statusText}`);
     }
     return await response.json();
   } catch (error) {

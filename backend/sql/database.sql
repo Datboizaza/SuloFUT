@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2026. Már 22. 21:35
+-- Létrehozás ideje: 2026. Már 23. 12:15
 -- Kiszolgáló verziója: 10.4.28-MariaDB
 -- PHP verzió: 8.0.28
 
@@ -25,7 +25,6 @@ DEFAULT CHARACTER SET utf8
 COLLATE utf8_hungarian_ci;
 
 USE sulofut;
-
 -- --------------------------------------------------------
 
 --
@@ -224,15 +223,70 @@ INSERT INTO `rewards` (`id`, `packIds`, `coins`) VALUES
 CREATE TABLE `stats` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `best_draft` int(11) NOT NULL DEFAULT 0
+  `best_draft` int(11) NOT NULL DEFAULT 0,
+  `top_squad` int(11) NOT NULL DEFAULT 0,
+  `club_value` int(11) NOT NULL DEFAULT 0,
+  `cards_opened` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
 -- A tábla adatainak kiíratása `stats`
 --
 
-INSERT INTO `stats` (`id`, `user_id`, `best_draft`) VALUES
-(1, 1, 115);
+INSERT INTO `stats` (`id`, `user_id`, `best_draft`, `top_squad`, `club_value`, `cards_opened`) VALUES
+(1, 1, 117, 100, 23750, 245),
+(2, 2, 115, 99, 23000, 240),
+(3, 3, 118, 101, 24000, 250),
+(4, 4, 116, 100, 23500, 248),
+(5, 5, 117, 100, 23750, 245),
+(6, 6, 119, 102, 24500, 255),
+(7, 7, 114, 98, 22500, 235),
+(8, 8, 120, 103, 25000, 260),
+(9, 9, 113, 97, 22000, 230),
+(10, 10, 117, 100, 136789, 245),
+(11, 11, 118, 101, 24000, 250),
+(12, 12, 116, 100, 23500, 248),
+(13, 13, 119, 112, 24500, 302),
+(14, 14, 115, 99, 23000, 240),
+(15, 15, 117, 113, 23750, 245),
+(16, 16, 118, 101, 24000, 567),
+(17, 17, 114, 98, 22500, 142),
+(18, 18, 120, 103, 25000, 260),
+(19, 19, 113, 97, 22000, 230),
+(20, 20, 117, 100, 112675, 543),
+(21, 21, 116, 100, 234612, 248),
+(22, 22, 119, 102, 24500, 73),
+(23, 23, 115, 99, 23000, 500),
+(24, 24, 118, 101, 24000, 250),
+(25, 25, 117, 100, 23750, 245),
+(26, 26, 114, 117, 22500, 313),
+(27, 27, 120, 103, 69250, 438),
+(28, 28, 113, 97, 22000, 230),
+(29, 29, 118, 101, 24000, 250),
+(30, 30, 116, 118, 23500, 248),
+(31, 31, 119, 102, 24500, 255),
+(32, 32, 115, 99, 23000, 240),
+(33, 33, 117, 100, 23750, 245),
+(34, 34, 118, 101, 24000, 250),
+(35, 35, 114, 98, 22500, 235),
+(36, 36, 120, 119, 25000, 260),
+(37, 37, 113, 97, 300000, 230),
+(38, 38, 117, 100, 23750, 245),
+(39, 39, 116, 100, 23500, 248),
+(40, 40, 119, 118, 24500, 398),
+(41, 41, 115, 99, 23000, 240),
+(42, 42, 118, 101, 24000, 250),
+(43, 43, 117, 122, 23750, 245),
+(44, 44, 114, 98, 312560, 358),
+(45, 45, 120, 103, 25000, 260),
+(46, 46, 113, 97, 22000, 230),
+(47, 47, 118, 101, 24000, 250),
+(48, 48, 116, 100, 23500, 248),
+(49, 49, 119, 102, 24500, 255),
+(50, 50, 115, 99, 23000, 240),
+(51, 51, 117, 100, 23750, 379),
+(52, 52, 120, 121, 412780, 245),
+(53, 53, 119, 122, 436720, 493);
 
 -- --------------------------------------------------------
 
@@ -340,15 +394,67 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`) VALUES
-(1, 'TestUser', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge');
+(1, 'TestUser', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(2, 'AlphaWolf', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(3, 'NeonFalcon', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(4, 'ShadowByte', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(5, 'CrimsonFox', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(6, 'NovaStrike', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(7, 'IronClaw', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(8, 'GhostPulse', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(9, 'TurboKnight', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(10, 'PixelHunter', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(11, 'CyberDrift', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(12, 'LunarBlaze', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(13, 'StormBreaker', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(14, 'FrostNova', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(15, 'BlazeRider', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(16, 'DarkVortex', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(17, 'QuantumEdge', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(18, 'SteelPhantom', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(19, 'RapidEcho', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(20, 'VenomStrike', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(21, 'NightGlider', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(22, 'SolarFlareX', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(23, 'EchoSniper', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(24, 'HyperRogue', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(25, 'ThunderCore', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(26, 'MysticDrake', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(27, 'PhantomZero', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(28, 'InfernoX', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(29, 'GlitchMaster', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(30, 'OmegaRush', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(31, 'CyberKnightX', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(32, 'AstroBlade', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(33, 'VoidSniper', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(34, 'BlitzCore', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(35, 'ShadowRift', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(36, 'NeonSpecter', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(37, 'IronSpectra', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(38, 'SkyBreaker', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(39, 'NovaHunter', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(40, 'PhantomDash', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(41, 'StormPulse', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(42, 'TurboShadow', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(43, 'VortexPrime', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(44, 'CrystalByte', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(45, 'NightFuryX', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(46, 'SolarKnight', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(47, 'EchoStorm', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(48, 'DarkNovaX', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(49, 'GlacierWolf', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(50, 'BlazePhantom', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(51, 'CyberTitan', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(52, 'datboizaza', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
+(53, 'bobberito', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge');
 
 --
 -- Eseményindítók `users`
 --
 DELIMITER $$
 CREATE TRIGGER `createStats_afterUserInsert` AFTER INSERT ON `users` FOR EACH ROW BEGIN
-  INSERT INTO stats (user_id, best_draft)
-  VALUES (NEW.id, 0);
+  INSERT INTO stats (user_id, best_draft, top_squad, club_value, cards_opened)
+  VALUES (NEW.id, 0, 0, 0, 0);
 END
 $$
 DELIMITER ;
@@ -363,14 +469,13 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `user_objective_progress`
+-- Tábla szerkezet ehhez a táblához `user_objective_claims`
 --
 
-CREATE TABLE `user_objective_progress` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `objective_id` int(11) NOT NULL,
-  `progress_int` int(11) DEFAULT 0
+CREATE TABLE `user_objective_claims` (
+  `user_id` int(11) DEFAULT NULL,
+  `objective_id` int(11) DEFAULT NULL,
+  `claimed` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 -- --------------------------------------------------------
@@ -383,8 +488,20 @@ CREATE TABLE `user_subobjective_progress` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `subobjective_id` int(11) NOT NULL,
-  `progress_int` int(11) DEFAULT 0
+  `progress_int` int(11) DEFAULT 0,
+  `claimed` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `user_subobjective_progress`
+--
+
+INSERT INTO `user_subobjective_progress` (`id`, `user_id`, `subobjective_id`, `progress_int`, `claimed`) VALUES
+(3, 1, 20, 2, 0),
+(4, 1, 21, 2, 0),
+(5, 1, 22, 2, 0),
+(6, 1, 23, 2, 0),
+(7, 1, 24, 2, 0);
 
 --
 -- Indexek a kiírt táblákhoz
@@ -466,18 +583,17 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `username` (`username`);
 
 --
--- A tábla indexei `user_objective_progress`
+-- A tábla indexei `user_objective_claims`
 --
-ALTER TABLE `user_objective_progress`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_objective_progress_ibfk_1` (`user_id`),
-  ADD KEY `user_objective_progress_ibfk_2` (`objective_id`);
+ALTER TABLE `user_objective_claims`
+  ADD UNIQUE KEY `user_id` (`user_id`,`objective_id`);
 
 --
 -- A tábla indexei `user_subobjective_progress`
 --
 ALTER TABLE `user_subobjective_progress`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_user_sub` (`user_id`,`subobjective_id`),
   ADD KEY `user_subobjective_progress_ibfk_1` (`user_id`),
   ADD KEY `user_subobjective_progress_ibfk_2` (`subobjective_id`);
 
@@ -546,16 +662,10 @@ ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT a táblához `user_objective_progress`
---
-ALTER TABLE `user_objective_progress`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT a táblához `user_subobjective_progress`
 --
 ALTER TABLE `user_subobjective_progress`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Megkötések a kiírt táblákhoz
@@ -598,13 +708,6 @@ ALTER TABLE `userclub`
 ALTER TABLE `userpacks`
   ADD CONSTRAINT `userPacks_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `userPacks_ibfk_2` FOREIGN KEY (`pack_id`) REFERENCES `packs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Megkötések a táblához `user_objective_progress`
---
-ALTER TABLE `user_objective_progress`
-  ADD CONSTRAINT `user_objective_progress_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `user_objective_progress_ibfk_2` FOREIGN KEY (`objective_id`) REFERENCES `objectives` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Megkötések a táblához `user_subobjective_progress`
