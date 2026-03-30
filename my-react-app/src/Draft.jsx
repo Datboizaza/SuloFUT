@@ -417,14 +417,11 @@ function Draft() {
   useEffect(() => {
     if (!isDragging) return;
 
-    const handlePointerMove = (e) => {
-      // 👉 csak akkor mozogjon, ha nyomva van (egér / touch)
-      if (e.buttons !== 1 && e.pointerType !== "touch") return;
-
+    const handleMouseMove = (e) => {
       setDragPos({ x: e.clientX, y: e.clientY });
     };
 
-    const handlePointerUp = async (e) => {
+    const handleMouseUp = async (e) => {
       const from = dragKey;
 
       setIsDragging(false);
@@ -447,12 +444,12 @@ function Draft() {
       await handleSwapPlayers(from, to);
     };
 
-    window.addEventListener("pointermove", handlePointerMove);
-    window.addEventListener("pointerup", handlePointerUp);
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
 
     return () => {
-      window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("pointerup", handlePointerUp);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
     };
   }, [isDragging, dragKey, assignedPlayers, handleSwapPlayers]);
 
@@ -565,8 +562,7 @@ function Draft() {
                   <button
                     key={index}
                     className="formationSelectBtn"
-                    onPointerEnter={() => handleFormationHover(formation)}
-                    onPointerDown={() => handleFormationHover(formation)}
+                    onMouseOver={() => handleFormationHover(formation)}
                     onClick={() => startDraft(formation)}
                   >
                     <div className="miniFormationLayout">
@@ -639,12 +635,7 @@ function Draft() {
               {assignedPlayers[i] && (
                 <div
                   key={i}
-                  onPointerDown={(e) => {
-                    setIsDragging(true);
-                    setDragKey(i);
-
-                    e.currentTarget.setPointerCapture(e.pointerId);
-                  }}
+                  onMouseDown={(e) => startDrag(e, i)}
                   className={`cardSlot ${isDragging && dragKey === i ? "dragSource" : ""}`}
                 >
                   <PlayerCard
@@ -714,8 +705,8 @@ function Draft() {
           <div
             className={`subBar ${openSubs ? "open" : ""}`}
             id="subBar"
-            onPointerEnter={() => setOpenSubs(true)}
-            onPointerLeave={() => setOpenSubs(false)}
+            onMouseEnter={() => setOpenSubs(true)}
+            onMouseLeave={() => setOpenSubs(false)}
           >
             <button
               className="subBarTab"
@@ -740,7 +731,7 @@ function Draft() {
                 >
                   {assignedPlayers[slot.id] && (
                     <div
-                      onPointerDown={(e) => startDrag(e, slot.id)}
+                      onMouseDown={(e) => startDrag(e, slot.id)}
                       className={`cardSlot ${isDragging && dragKey === slot.id ? "dragSource" : ""}`}
                     >
                       <PlayerCard
@@ -773,7 +764,7 @@ function Draft() {
                 >
                   {assignedPlayers[slot.id] && (
                     <div
-                      onPointerDown={(e) => startDrag(e, slot.id)}
+                      onMouseDown={(e) => startDrag(e, slot.id)}
                       className={`cardSlot ${isDragging && dragKey === slot.id ? "dragSource" : ""}`}
                     >
                       <PlayerCard
