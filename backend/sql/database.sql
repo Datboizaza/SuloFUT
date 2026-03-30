@@ -363,7 +363,59 @@ CREATE TABLE `userclub` (
 --
 
 INSERT INTO `userclub` (`id`, `user_id`, `coinNumber`, `userPlayers`) VALUES
-(1, 1, 200000, NULL);
+(1, 1, 183452, NULL),
+(2, 2, 92734, NULL),
+(3, 3, 245678, NULL),
+(4, 4, 156789, NULL),
+(5, 5, 312456, NULL),
+(6, 6, 87432, NULL),
+(7, 7, 198765, NULL),
+(8, 8, 223344, NULL),
+(9, 9, 167890, NULL),
+(10, 10, 95432, NULL),
+(11, 11, 278901, NULL),
+(12, 12, 134567, NULL),
+(13, 13, 189234, NULL),
+(14, 14, 305678, NULL),
+(15, 15, 112233, NULL),
+(16, 16, 267890, NULL),
+(17, 17, 145678, NULL),
+(18, 18, 198234, NULL),
+(19, 19, 176543, NULL),
+(20, 20, 234567, NULL),
+(21, 21, 98765, NULL),
+(22, 22, 210987, NULL),
+(23, 23, 154321, NULL),
+(24, 24, 276543, NULL),
+(25, 25, 198765, NULL),
+(26, 26, 223456, NULL),
+(27, 27, 145678, NULL),
+(28, 28, 189765, NULL),
+(29, 29, 256789, NULL),
+(30, 30, 167890, NULL),
+(31, 31, 298765, NULL),
+(32, 32, 134890, NULL),
+(33, 33, 176543, NULL),
+(34, 34, 243210, NULL),
+(35, 35, 198432, NULL),
+(36, 36, 165789, NULL),
+(37, 37, 278654, NULL),
+(38, 38, 143276, NULL),
+(39, 39, 189765, NULL),
+(40, 40, 212345, NULL),
+(41, 41, 176890, NULL),
+(42, 42, 234567, NULL),
+(43, 43, 198765, NULL),
+(44, 44, 156789, NULL),
+(45, 45, 289012, NULL),
+(46, 46, 134567, NULL),
+(47, 47, 176543, NULL),
+(48, 48, 245678, NULL),
+(49, 49, 198234, NULL),
+(50, 50, 167890, NULL),
+(51, 51, 223456, NULL),
+(52, 52, 189765, NULL),
+(53, 53, 254321, NULL);
 
 -- --------------------------------------------------------
 
@@ -461,7 +513,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE TRIGGER `createUserClub_afterUserInsert` AFTER INSERT ON `users` FOR EACH ROW BEGIN
   INSERT INTO userClub (user_id, coinNumber, userPlayers)
-  VALUES (NEW.id, 0);
+  VALUES (NEW.id, 0, NULL);
 END
 $$
 DELIMITER ;

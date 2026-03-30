@@ -313,7 +313,7 @@
 .cardPosition {
   position: absolute;
   top: 20%;
-  left: 18.5%;
+  left: 17.5%;
   font-size: 80%;
   z-index: 3;
   color: rgb(58, 54, 4);
@@ -322,11 +322,18 @@
 .cardAltPosition {
   position: absolute;
   top: 27%;
-  left: 16.5%;
+  left: 18.5%;
   font-size: 60%;
   z-index: 3;
   color: rgb(58, 54, 4);
   font-weight: bold;
+  opacity: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.cardAltPosition span + span {
+  margin-top: -3px;
 }
 .cardImg {
   position: absolute;

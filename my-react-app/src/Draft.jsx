@@ -941,7 +941,11 @@ function PlayerCard({
       <p className={`cardPosition ${textClass}`}>
         {displayedPosition(player, slotPos)}
       </p>
-      <p className={`cardAltPosition ${textClass}`}>{altPositions}</p>
+      <p className={`cardAltPosition ${textClass}`}>
+        {altPositions.map((pos, index) => (
+          <span key={index}>{pos}</span>
+        ))}
+      </p>
 
       <img
         className="cardImg"
