@@ -604,7 +604,7 @@ function Draft() {
                       <p
                         key={i}
                         className="posText"
-                        style={{ left: p.x + "%", top: `calc(${p.y}% + 7.5%)` }}
+                        style={{ left: p.x + "%", top: `calc(${p.y}% + 6.5%)` }}
                       >
                         {p.pos}
                       </p>

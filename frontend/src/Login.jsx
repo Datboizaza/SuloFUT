@@ -56,6 +56,9 @@ const login = async () => {
     usernameErrorSpan.innerHTML = "";
     if (usernameValue === "" || passwordValue === "") {
       passwordErrorSpan.innerHTML = "Please fill in all the details";
+      passwordErrorSpan.classList.remove("shake");
+      void passwordErrorSpan.offsetWidth;
+      passwordErrorSpan.classList.add("shake");
     } else {
       const response = await postMethodFetch(
         "http://127.0.0.1:3000/api/users/login",
@@ -80,9 +83,15 @@ const login = async () => {
     const passwordErrorSpan = document.getElementById("passwordError");
     if (error.message.includes("400")) {
       usernameErrorSpan.innerHTML = "Invalid username";
+      usernameErrorSpan.classList.remove("shake");
+      void usernameErrorSpan.offsetWidth;
+      usernameErrorSpan.classList.add("shake");
     }
     if (error.message.includes("403")) {
       passwordErrorSpan.innerHTML = "Wrong password";
+      passwordErrorSpan.classList.remove("shake");
+      void passwordErrorSpan.offsetWidth;
+      passwordErrorSpan.classList.add("shake");
     }
     console.log(error);
   }

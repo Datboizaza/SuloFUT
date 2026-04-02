@@ -147,34 +147,85 @@ CREATE TABLE `packs` (
   `id` int(11) NOT NULL,
   `packName` text NOT NULL,
   `packPrice` int(11) NOT NULL,
-  `packDesign` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+  `packDesign` text NOT NULL,
+  `playerCount` int(11) NOT NULL,
+  `playerQuality` text NOT NULL,
+  `packWeightID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_hungarian_ci;
+
+--
+-- Dumping data for table `packs`
+--
+
+INSERT INTO `packs` (`id`, `packName`, `packPrice`, `packDesign`, `playerCount`, `playerQuality`, `packWeightID`) VALUES
+(1, 'Bronze Pack', 750, 'bronze', 12, 'bronze', 1),
+(2, 'Silver Pack', 3000, 'silver', 12, 'silver', 2),
+(3, 'Gold Pack', 7500, 'gold', 12, 'gold/flashback/scream/toty/icon/hero', 3),
+(4, 'Jumbo Gold Pack', 12000, 'gold', 24, 'gold/flashback/scream/toty/icon/hero', 4),
+(5, 'Mixed Players Pack', 6000, 'special', 12, 'bronze/silver/gold', 5),
+(6, 'Mega Pack', 10000, 'special', 30, 'gold/flashback/scream/toty/icon/hero', 6),
+(7, '80+x10 Players Pack', 20000, 'special', 10, 'gold/flashback/scream/toty/icon/hero', 7),
+(8, '82+x10 Players Pack', 25000, 'special', 10, 'gold/flashback/scream/toty/icon/hero', 8),
+(9, '85+x4 Players Pack', 30000, 'special', 4, 'gold/flashback/scream/toty/icon/hero', 9),
+(10, 'Icon Pack', 100000, 'special', 1, 'icon', 10),
+(11, '90+ Icon Pack', 200000, 'special', 1, 'icon', 11),
+(12, 'SuloFUT Flashback Pack', 70000, 'flashback', 12, 'gold/flashback/scream/toty/icon/hero', 12),
+(13, 'SuloFUT Scream Pack', 50000, 'scream', 12, 'gold/flashback/scream/toty/icon/hero', 13),
+(14, 'Hero Pack', 60000, 'special', 1, 'hero', 14),
+(15, '87+ Hero Pack', 20000, 'special', 1, 'hero', 15),
+(16, 'Campaign Mix Pack', 80000, 'special', 1, 'flashback/scream/toty/icon/hero', 16),
+(17, '88+ Hero or Icon Pack', 80000, 'special', 1, 'icon/hero', 17),
+(18, 'TOTY Grind Pack', 50000, 'toty', 12, 'gold/flashback/scream/toty/icon/hero', 18),
+(19, 'TOTY Pack', 200000, 'toty', 1, 'toty', 19),
+(20, 'Welcome Pack', 0, 'special', 24, 'bronze/silver/gold', 20);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `packweights`
+--
+
+CREATE TABLE `packweights` (
+  `id` int(11) NOT NULL,
+  `bronzeWeight` float(11) NOT NULL,
+  `silverWeight` float(11) NOT NULL,
+  `goldWeight` float(11) NOT NULL,
+  `flashbackWeight` float(11) NOT NULL,
+  `screamWeight` float(11) NOT NULL,
+  `totyWeight` float(11) NOT NULL,
+  `iconWeight` float(11) NOT NULL,
+  `heroWeight` float(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_hungarian_ci;
+
+--
+-- Dumping data for table `packweights`
+--
+
+INSERT INTO `packweights` (`id`, `bronzeWeight`, `silverWeight`, `goldWeight`, `flashbackWeight`, `screamWeight`, `totyWeight`, `iconWeight`, `heroWeight`) VALUES
+(1, 100, 0, 0, 0, 0, 0, 0, 0),
+(2, 0, 100, 0, 0, 0, 0, 0, 0),
+(3, 0, 0, 94, 2, 2, 0.5, 0.5, 1),
+(4, 0, 0, 97, 1, 1, 0.3, 0.3, 0.4),
+(5, 33, 33, 33, 0.3, 0.3, 0.1, 0.1, 0.2),
+(6, 0, 0, 98, 0.7, 0.7, 0.1, 0.1, 0.4),
+(7, 0, 0, 94, 2, 2, 0.5, 0.5, 1),
+(8, 0, 0, 98, 0.7, 0.7, 0.1, 0.1, 0.4),
+(9, 0, 0, 80, 6, 6, 2, 2, 4),
+(10, 0, 0, 0, 0, 0, 0, 100, 0),
+(11, 0, 0, 0, 0, 0, 0, 100, 0),
+(12, 0, 0, 94, 3, 1, 0.5, 0.5, 1),
+(13, 0, 0, 94, 1, 3, 0.5, 0.5, 1),
+(14, 0, 0, 0, 0, 0, 0, 0, 100),
+(15, 0, 0, 0, 0, 0, 0, 0, 100),
+(16, 0, 0, 0, 33, 33, 33, 0, 0),
+(17, 0, 0, 0, 0, 0, 0, 80, 20),
+(18, 0, 0, 94, 1.5, 1.5, 1.5, 0.5, 1),
+(19, 0, 0, 0, 0, 0, 100, 0, 0),
+(20, 33, 33, 33, 0, 0, 0, 0, 0);
 
 --
 -- A tábla adatainak kiíratása `packs`
 --
-
-INSERT INTO `packs` (`id`, `packName`, `packPrice`, `packDesign`) VALUES
-(1, 'Bronze Pack', 750, 'bronze'),
-(2, 'Silver Pack', 3000, 'silver'),
-(3, 'Gold Pack', 7500, 'gold'),
-(4, 'Jumbo Gold Pack', 12000, 'gold'),
-(5, 'Mixed Players Pack', 6000, 'special'),
-(6, 'Mega Pack', 10000, 'special'),
-(7, '80+x10 Players Pack', 20000, 'special'),
-(8, '82+x10 Players Pack', 25000, 'special'),
-(9, '85+x4 Players Pack', 30000, 'special'),
-(10, 'Icon Pack', 100000, 'special'),
-(11, '90+ Icon Pack', 200000, 'special'),
-(12, 'SuloFUT Flashback Pack', 70000, 'flashback'),
-(13, 'SuloFUT Scream Pack', 50000, 'scream'),
-(14, 'Hero Pack', 60000, 'special'),
-(15, '87+ Hero Pack', 20000, 'special'),
-(16, 'Campaign Mix Pack', 80000, 'special'),
-(17, '88+ Hero or Icon Pack', 80000, 'special'),
-(18, 'TOTY Grind Pack', 50000, 'toty'),
-(19, 'TOTY Pack', 200000, 'toty'),
-(20, 'Welcome Pack', 0, 'special');
 
 -- --------------------------------------------------------
 
@@ -590,8 +641,11 @@ ALTER TABLE `objectives`
 -- A tábla indexei `packs`
 --
 ALTER TABLE `packs`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `packWeightID` (`packWeightID`);
 
+ALTER TABLE `packweights`
+  ADD PRIMARY KEY (`id`);
 --
 -- A tábla indexei `rewards`
 --
