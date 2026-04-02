@@ -402,6 +402,38 @@ async function getLeaderboard(type) {
   }
 }
 
+//? Packs
+async function getPackOptions() {
+  const query = "SELECT * FROM packs";
+  try {
+    const [rows] = await pool.execute(query);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getPackDetails(id) {
+  const query = "SELECT playerCount, playerQuality FROM packs WHERE id = ?";
+  try {
+    const [rows] = await pool.execute(query, [id]);
+    return rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getallWeightData(id) {
+  const query =
+    "SELECT packWeights.bronzeWeight, packWeights.silverWeight, packWeights.goldWeight, packWeights.flashbackWeight, packWeights.screamWeight, packWeights.totyWeight, packWeights.iconWeight, packWeights.heroWeight FROM packWeights JOIN packs ON packWeights.id = packs.packWeightID WHERE packs.id = ?";
+  try {
+    const [rows] = await pool.execute(query, [id]);
+    return rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+
 //!Export
 module.exports = {
   selectall,
@@ -427,4 +459,7 @@ module.exports = {
   setGroupClaimed,
   getDraftRewardById,
   getLeaderboard,
+  getallWeightData,
+  getPackOptions,
+  getPackDetails,
 };

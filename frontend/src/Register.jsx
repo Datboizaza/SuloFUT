@@ -65,9 +65,15 @@ const register = async () => {
       passwordAgainValue === ""
     ) {
       passwordErrorSpan.innerHTML = "Please fill in all the details";
+      passwordErrorSpan.classList.remove("shake");
+      void passwordErrorSpan.offsetWidth;
+      passwordErrorSpan.classList.add("shake");
     } else {
       if (passwordValue !== passwordAgainValue) {
         passwordErrorSpan.innerHTML = "Passwords don't match";
+        passwordErrorSpan.classList.remove("shake");
+        void passwordErrorSpan.offsetWidth;
+        passwordErrorSpan.classList.add("shake");
       } else {
         const uppercase = (passwordValue) =>
           /[A-ZÁÉÓÚŐŰÖÜÍ]/.test(passwordValue);
@@ -78,6 +84,9 @@ const register = async () => {
           !number(passwordValue)
         ) {
           passwordErrorSpan.innerHTML = "Password is too weak";
+          passwordErrorSpan.classList.remove("shake");
+          void passwordErrorSpan.offsetWidth;
+          passwordErrorSpan.classList.add("shake");
         } else {
           const response = await postMethodFetch(
             "http://127.0.0.1:3000/api/users",
@@ -104,6 +113,9 @@ const register = async () => {
     const usernameErrorSpan = document.getElementById("usernameError");
     if (error.message.includes("409")) {
       usernameErrorSpan.innerHTML = "This username is already taken";
+      usernameErrorSpan.classList.remove("shake");
+      void usernameErrorSpan.offsetWidth;
+      usernameErrorSpan.classList.add("shake");
     }
     console.log(error);
   }

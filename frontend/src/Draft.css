@@ -197,6 +197,14 @@
   animation: fadeIn 0.4s ease;
 }
 
+.playerSelectionModal .cardSlot {
+  min-width: 160px;
+  width: 13%;
+  max-width: 200px;
+  height: auto;
+  min-height: 150px;
+}
+
 .modalOverlay {
   position: fixed;
   inset: 0;
@@ -318,22 +326,24 @@
   z-index: 3;
   color: rgb(58, 54, 4);
   font-weight: bold;
+  margin-top: 2%;
 }
 .cardAltPosition {
   position: absolute;
   top: 27%;
   left: 18.5%;
-  font-size: 60%;
+  font-size: 50%;
   z-index: 3;
   color: rgb(58, 54, 4);
   font-weight: bold;
-  opacity: 80%;
+  opacity: 90%;
   display: flex;
   flex-direction: column;
   gap: 0;
+  margin-top: 3%;
 }
 .cardAltPosition span + span {
-  margin-top: -3px;
+  margin-top: -4px;
 }
 .cardImg {
   position: absolute;
@@ -586,7 +596,7 @@
   min-height: 120px;
   aspect-ratio: 3/3.8;
   justify-self: center;
-  bottom: 22%;
+  bottom: 4.7vh;
 }
 
 .pos .cardSlot:hover {
@@ -603,6 +613,9 @@
   top: 20%;
   left: 17%;
   font-size: 60%;
+}
+.pos .cardAltPosition {
+  font-size: 40%;
 }
 
 .pos .cardName {
@@ -727,9 +740,9 @@
   top: 0;
   bottom: 0;
   min-width: 85px;
-  width: 100%;
   width: clamp(85px, 100%, 120px);
-  height: 100%;
+  height: auto;
+  font-size: 95%;
 }
 
 /* Rating & Chemistry Display */
@@ -760,6 +773,7 @@
   font-family: easportsfc;
   font-size: 120%;
   text-wrap: nowrap;
+  margin: 0;
 }
 
 .ratingStars {
@@ -774,6 +788,7 @@
   justify-content: space-between;
   font-family: bristone;
   font-size: 80%;
+  margin: 0;
 }
 
 .ratingNum,
@@ -782,6 +797,7 @@
   font-family: monospace;
   font-weight: bold;
   font-size: 130%;
+  margin: 0;
 }
 
 /* Drag */
@@ -1082,7 +1098,7 @@
     width: 9%;
     max-width: 40px;
     height: 5%;
-    transform: translate(-50%, -90%);
+    transform: translate(-50%, -70%);
   }
 
   /*---------------Gombok---------------*/
@@ -1123,6 +1139,15 @@
     min-width: 750px;
   }
 
+  .playerSelectionModal .cardSlot {
+    width: 30%;
+    max-width: 140px;
+    height: auto;
+    min-height: 150px;
+    font-size: 70%;
+    min-width: 100px;
+  }
+
   /* Kiválasztott játékosok */
 
   .pos .cardSlot {
@@ -1138,6 +1163,10 @@
   }
   .pos .cardPosition {
     top: 21%;
+  }
+
+  .cardAltPosition {
+    font-size: 60%;
   }
 
   .pos .cardName {
@@ -1200,12 +1229,34 @@
 
   /* Rating & Chemistry Display */
   .chemRatingDisplay {
-    top: 10%;
-    right: 1%;
-    height: 25vh;
-    min-height: 200px;
-    width: 21vw;
-    min-width: 200px;
+    position: fixed;
+    top: 7%;
+    left: 50%;
+    transform: translateX(-50%);
+    right: auto;
+    width: 100vw;
+    min-width: unset;
+    height: auto;
+    min-height: unset;
+    padding: 4px 14px;
+    border-radius: 0px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .ratingStars {
+    position: relative;
+    bottom: 2px;
+  }
+
+  .ratingNum,
+  .chemNum {
+    margin-left: 10px;
+    position: relative;
+    bottom: 1px;
   }
 
   /* Submit draft */
@@ -1233,7 +1284,7 @@
 
   /*------------------Alap elrendezés------------------*/
   #formationSelectDiv {
-    width: 90vw;
+    width: 92vw;
   }
 
   /*-----------------Baloldali formázások------------------*/
@@ -1244,7 +1295,7 @@
 
   .chooseFormationTitle {
     margin-left: 20px;
-    font-size: 110%;
+    font-size: 60%;
   }
 
   /* Mini pálya */
@@ -1257,12 +1308,13 @@
   #formationImage h2 {
     padding-left: 20px;
     padding-top: 10px;
-    font-size: 120%;
+    font-size: 80%;
   }
 
   /* Nagy pálya */
   .formationLayout {
     width: 100%;
+    height: 80%;
   }
 
   .pos {
@@ -1274,7 +1326,7 @@
     width: 12%;
     max-width: 30px;
     height: 4%;
-    transform: translate(-50%, -130%);
+    transform: translate(-50%, -115%);
     font-size: 45%;
   }
 
@@ -1304,18 +1356,39 @@
     height: 3.5%;
     min-height: 25px;
     font-size: 50%;
+    transform: translate(-50%, -100%);
   }
 
   /*--------------Játékos kiválasztó modal-----------------*/
 
   .playerSelectionModal {
-    min-width: 750px;
+    top: 0%;
+    width: 100vw;
+    min-width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    flex-direction: column;
+    overflow: scroll;
+  }
+
+  .playerSelectionModal .cardSlot {
+    width: 30%;
+    max-width: 140px;
+    height: auto;
+    min-height: 150px;
+    font-size: 70%;
+    min-width: 60px;
   }
 
   /* Kiválasztott játékosok */
 
   .pos .cardSlot {
-    bottom: 22%;
+    bottom: 30%;
+    position: absolute;
+    width: 85%;
+    height: auto;
+    min-height: 80px;
+    font-size: 85%;
   }
 
   .pos .cardSlot:hover {
@@ -1328,6 +1401,10 @@
   .pos .cardPosition {
     top: 21%;
     font-size: 50%;
+  }
+
+  .cardAltPosition {
+    font-size: 60%;
   }
 
   .pos .cardName {
@@ -1383,13 +1460,14 @@
   }
 
   .subBarContent .pos {
-    width: 10%;
+    width: 20%;
     max-width: 80px;
     height: max-content;
   }
 
   .subBarContent .cardSlot {
     position: relative;
+    top: 10%;
   }
 
   /* Rating & Chemistry Display */
@@ -1413,10 +1491,23 @@
     gap: 14px;
   }
 
+  .ratingStars {
+    position: relative;
+    bottom: 2px;
+  }
+
+  .ratingNum,
+  .chemNum {
+    margin-left: 10px;
+    position: relative;
+    bottom: 1px;
+  }
+
   .draftSquadText {
     align-self: auto;
     margin: 0;
-    font-size: 90%;
+    font-size: 70%;
+    text-wrap: wrap;
     font-weight: bolder;
     color: rgb(20, 255, 185);
   }
@@ -1432,6 +1523,7 @@
     margin: 0;
     gap: 6px;
     white-space: nowrap;
+    font-size: 60%;
   }
 
   /* Submit draft */

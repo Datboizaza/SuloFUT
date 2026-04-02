@@ -11,13 +11,10 @@
 
 /* Login formázás */
 .loginContainer {
-  background: linear-gradient(
-    90deg,
-    rgba(13, 87, 50, 0.621) 0%,
-    rgba(31, 90, 105, 0.526) 50%,
-    rgba(0, 81, 76, 0.475) 100%
-  );
-  box-shadow: 10px 10px 50px 10px rgba(0, 0, 0, 0.204);
+  background: rgba(0, 0, 0, 0.07);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.27);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.136);
   height: 80vh;
   width: 45vw;
   border-radius: 30px;
@@ -27,6 +24,9 @@
   justify-content: space-evenly;
   color: white;
   font-family: bristone;
+  transform: scale(0.8);
+  opacity: 0;
+  animation: scalePopIn 0.4s ease forwards;
 }
 
 .loginTitle {
@@ -44,7 +44,7 @@
 .loginForm {
   display: flex;
   flex-direction: column;
-  height: 40%;
+  height: 45%;
   width: 70%;
   justify-content: space-around;
 }
@@ -55,8 +55,8 @@
 
 .loginInput {
   height: 40px;
-  border: 1px rgb(0, 165, 121) solid;
-  background-color: rgba(0, 255, 229, 0.215);
+  border: 1px rgba(0, 165, 121, 0.616) solid;
+  background-color: rgba(0, 255, 229, 0.093);
   color: white;
   border-radius: 10px;
   text-align: center;
@@ -76,17 +76,17 @@
   width: 40%;
   height: 45px;
   align-self: center;
-  border: 3px rgba(0, 255, 251, 0.548) solid;
-  box-shadow: 10px 10px 30px 10px rgba(8, 30, 37, 0.401);
+  border: 3px rgba(0, 255, 251, 0.114) solid;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.173);
   border-radius: 30px;
-  background-color: rgb(0, 165, 121);
+  background-color: rgba(0, 165, 121, 0.241);
   color: white;
   transition: all 150ms ease-in-out;
 }
 
 .loginButton:hover {
-  transform: scale(1.1);
-  background-color: rgb(1, 123, 91);
+  transform: scale(1.05);
+  background-color: rgba(1, 123, 90, 0.6);
   border: 1px rgb(0, 254, 156) solid;
   color: rgba(0, 255, 221, 0.856);
 }
@@ -145,6 +145,30 @@
   color: rgb(204, 0, 0);
   font-size: 90%;
   text-align: center;
+}
+
+.shake {
+  animation: horizontal-shaking 0.4s ease-in-out 2;
+}
+
+/* Animációk */
+@keyframes scalePopIn {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes horizontal-shaking {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 /*------------------Media queries---------------------*/

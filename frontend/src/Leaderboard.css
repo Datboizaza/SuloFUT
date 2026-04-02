@@ -14,8 +14,8 @@
   height: 80vh;
   width: 60vw;
   padding: 30px;
-  background: rgba(0, 0, 0, 0.295);
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.366);
   color: white;
   overflow-y: scroll;
   overflow-x: hidden;
