@@ -22,6 +22,7 @@ h3 {
   padding-left: 5vh;
   padding-right: 5vh;
   backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.158);
   box-shadow: 0 3px 15px rgba(0, 0, 0, 0.366);
   border-radius: 20px;
   display: flex;

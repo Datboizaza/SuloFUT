@@ -1,0 +1,143 @@
+/* Store */
+.storeContainer {
+  padding: 25px;
+  color: white;
+  backdrop-filter: blur(20px);
+  background-color: #003d3f3b;
+  border-radius: 20px;
+  height: 80vh;
+  width: 70vw;
+  overflow-y: scroll;
+  transform: scale(0.8);
+  opacity: 0;
+  animation: scalePopIn 0.4s ease forwards;
+}
+
+/* Tabok */
+.tabs {
+  display: flex;
+  margin-bottom: 4%;
+  justify-content: space-between;
+}
+
+.tab {
+  height: 6vh;
+  width: 48%;
+  background: #1111114f;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease-in-out;
+}
+
+.tab.active {
+  background: linear-gradient(90deg, #00fff7, #00f078);
+  color: rgb(44, 82, 69);
+}
+
+/* Grid */
+.storeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+/* Pack card */
+.packCard {
+  background: #00000056;
+  border-radius: 15px;
+  padding: 40px;
+  text-align: center;
+  transition: 0.2s ease-in-out;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  transform: scale(0.8);
+  opacity: 0;
+  animation: scalePopIn 0.3s ease forwards !important;
+}
+
+.packCard p {
+  font-weight: bold;
+  font-size: 120%;
+}
+
+.packImage {
+  width: 100px;
+}
+
+/* Price */
+.price {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  color: gold;
+  margin: 10px 0;
+  font-size: 90% !important;
+  font-weight: normal !important;
+}
+
+.price img {
+  height: 20px;
+}
+
+/* Gomb */
+.storeBtn {
+  width: 80%;
+  height: 45px;
+  border-radius: 20px;
+  border: 1px rgba(0, 255, 149, 0.7) solid;
+  background: linear-gradient(90deg, #3da5a7, #00c3ff56);
+  color: white;
+  transition: all 150ms ease-in-out;
+}
+
+.storeBtn:hover {
+  transform: scale(1.03);
+  background: linear-gradient(90deg, #53d9db, #6affab);
+  color: rgba(6, 92, 85, 0.842);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0000000a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0000001e;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00ffc89d;
+}
+
+/* Animáció */
+@keyframes scalePopIn {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/*------------------Media queries---------------------*/
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  .storeContainer {
+    height: 85vh;
+    width: 80vw;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .storeContainer {
+    height: 90vh;
+    width: 95vw;
+  }
+}

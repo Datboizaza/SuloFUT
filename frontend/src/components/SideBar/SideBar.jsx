@@ -59,9 +59,9 @@ function SideBar() {
                 </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" id="navbarItem" href="">
+                <Link className="nav-link" id="navbarItem" to="/store">
                   Store
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
                 <a className="nav-link" id="navbarItem" href="">

@@ -597,6 +597,7 @@
   aspect-ratio: 3/3.8;
   justify-self: center;
   bottom: 4.7vh;
+  touch-action: none;
 }
 
 .pos .cardSlot:hover {
@@ -765,6 +766,7 @@
   justify-content: space-around;
   padding: 25px;
   cursor: default;
+  z-index: 0;
 }
 
 .draftSquadText {
@@ -1091,7 +1093,7 @@
 
   .pos {
     width: 14%;
-    max-width: 60px;
+    max-width: 90px;
   }
 
   .formationLayout .posText {
@@ -1319,7 +1321,7 @@
 
   .pos {
     width: 25%;
-    max-width: 50px;
+    max-width: 70px;
   }
 
   .formationLayout .posText {
@@ -1565,5 +1567,10 @@
 
   .draftGraphDiv {
     width: 100%;
+  }
+
+  /* drag */
+  .dragOverlay {
+    height: 90px;
   }
 }
