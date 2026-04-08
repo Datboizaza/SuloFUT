@@ -21,6 +21,5 @@ body {
       transparent 50%
     ),
     linear-gradient(160deg, #050816 0%, #02030a 100%) !important;
-  background-repeat: no-repeat;
-  background-size: cover;
+  background-size: 100vw 1800px !important;
 }

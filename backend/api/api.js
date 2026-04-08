@@ -478,13 +478,6 @@ router.get("/random/:pos", async (request, response) => {
 //! Chemistry kiszámolása
 router.get("/chemistry", async (request, response) => {
   try {
-    function chemFromClubCount(count) {
-      if (count >= 7) return 3;
-      if (count >= 4) return 2;
-      if (count >= 2) return 1;
-      return 0;
-    }
-
     function chemFromCountryCount(count) {
       if (count >= 8) return 3;
       if (count >= 5) return 2;
@@ -495,6 +488,18 @@ router.get("/chemistry", async (request, response) => {
       if (count >= 8) return 3;
       if (count >= 5) return 2;
       if (count >= 3) return 1;
+      return 0;
+    }
+    function chemFromClubCount(count) {
+      if (count >= 7) return 3;
+      if (count >= 4) return 2;
+      if (count >= 2) return 1;
+      return 0;
+    }
+    function chemFromIconCount(count) {
+      if (count >= 6) return 3;
+      if (count >= 4) return 2;
+      if (count >= 2) return 1;
       return 0;
     }
 
@@ -517,7 +522,7 @@ router.get("/chemistry", async (request, response) => {
 
     function calculateChemistry(players) {
       const activePlayers = players.filter((p) => p && inPosition(p));
-
+      let iconCount = 0;
       const nationCount = {};
       const leagueCount = {};
       const clubCount = {};
@@ -529,15 +534,38 @@ router.get("/chemistry", async (request, response) => {
         } else {
           nationCount[p.nationality_name]++;
         }
+        if (p.rarity === "icon") {
+          nationCount[p.nationality_name] += 4;
+        }
+        if (p.rarity === "hero") {
+          nationCount[p.nationality_name] += 2;
+        }
+
         if (!leagueCount[p.league_name]) {
           leagueCount[p.league_name] = 1;
         } else {
           leagueCount[p.league_name]++;
         }
+        if (p.rarity === "icon") {
+          leagueCount[p.league_name] += 1;
+        }
+        if (p.rarity === "hero") {
+          leagueCount[p.league_name] += 2;
+        }
         if (!clubCount[p.club_name]) {
           clubCount[p.club_name] = 1;
         } else {
           clubCount[p.club_name]++;
+        }
+        if (p.rarity === "icon") {
+          clubCount[p.club_name] += 1;
+        }
+        if (p.rarity === "hero") {
+          clubCount[p.club_name] += 1;
+        }
+
+        if (p.rarity === "icon") {
+          iconCount += 1;
         }
       });
 
@@ -550,6 +578,7 @@ router.get("/chemistry", async (request, response) => {
             player_id: player.player_id,
             chemistry: 0,
             inPosition: false,
+            iconCount: iconCount,
           };
         }
 
@@ -559,7 +588,7 @@ router.get("/chemistry", async (request, response) => {
         );
         chemistry += chemFromLeagueCount(leagueCount[player.league_name] || 0);
         chemistry += chemFromClubCount(clubCount[player.club_name] || 0);
-
+        chemistry += chemFromIconCount(iconCount);
         if (chemistry > 3) {
           chemistry = 3;
         }
@@ -1095,6 +1124,17 @@ router.get("/generatePack/:id", async (request, response) => {
       .json({ randomjatekosok: randompack(data, playerCount, condition) });
   } catch (error) {
     console.log("GET /api/packplayers error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//!Store
+router.get("/storepacks", async (request, response) => {
+  try {
+    const packs = await database.getStorePacks();
+    response.status(200).json(packs);
+  } catch (error) {
+    console.log("GET /storepacks error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });

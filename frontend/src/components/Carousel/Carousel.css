@@ -1,8 +1,10 @@
+/* Font */
 @font-face {
   font-family: easportsfc;
   src: url("../../assets/EaSportsFc_FontByGibsfut-Regular.ttf");
 }
 
+/* Elrendezés */
 .carousel {
   position: relative;
   width: 100%;
@@ -15,6 +17,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
 .carousel-slide img {
@@ -52,6 +55,18 @@
 
 .dot.active {
   background: rgb(57, 160, 134);
+}
+
+/* Animáció */
+@keyframes fadeIn {
+  from {
+    opacity: 0.5;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /*------------------Media queries---------------------*/

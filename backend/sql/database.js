@@ -434,6 +434,17 @@ async function getallWeightData(id) {
   }
 }
 
+//! Store
+async function getStorePacks() {
+  const query = "SELECT * FROM packs";
+  try {
+    const [rows] = await pool.execute(query);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
 //!Export
 module.exports = {
   selectall,
@@ -462,4 +473,5 @@ module.exports = {
   getallWeightData,
   getPackOptions,
   getPackDetails,
+  getStorePacks,
 };

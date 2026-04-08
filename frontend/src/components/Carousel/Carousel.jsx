@@ -47,7 +47,7 @@ function Carousel() {
 
   return (
     <div className="carousel">
-      <div className="carousel-slide">
+      <div className="carousel-slide" key={index}>
         <h2>{slides[index].title}</h2>
         <p>{slides[index].text}</p>
         <img src={slides[index].image} alt={slides[index].title} />
