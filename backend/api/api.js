@@ -255,7 +255,7 @@ router.get("/randomplayers", async (request, response) => {
       ) {
         const index = Math.floor(Math.random() * arr.length);
 
-        if (!tombIndexek.includes(index) && arr[index].overall >= 85) {
+        if (!tombIndexek.includes(index) && arr[index].overall >= 88) {
           tombIndexek.push(index);
           randomjatekosok.push(arr[index]);
         }
