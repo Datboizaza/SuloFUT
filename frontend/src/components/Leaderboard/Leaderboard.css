@@ -1,0 +1,334 @@
+/* Fontok */
+@font-face {
+  font-family: bristone;
+  src: url("../../assets/Bristone.otf");
+}
+
+@font-face {
+  font-family: easportsfc;
+  src: url("../../assets/EaSportsFc_FontByGibsfut-Regular.ttf");
+}
+
+/* Leaderboard */
+.leaderboardDiv {
+  height: 80vh;
+  width: 60vw;
+  padding: 30px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.366);
+  color: white;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  border-radius: 20px;
+  transform: scale(0.8);
+  opacity: 0;
+  animation: scalePopIn 0.4s ease forwards;
+}
+
+#actualLeaderboard {
+  text-align: left;
+  font-size: 4vh;
+  font-weight: bold;
+  color: #00ffb3;
+  text-shadow: 0 0 10px rgba(0, 247, 255, 0.616);
+  font-family: easportsfc;
+}
+
+#leaderboardRow1 {
+  margin: 30px 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.selectLeaderboard {
+  position: relative;
+  width: 220px;
+}
+
+.selectBox {
+  padding: 12px 15px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1c2b33, #06141a);
+  font-family: bristone;
+  font-size: 70%;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid rgba(0, 255, 242, 0.2);
+  transition: 0.4s;
+}
+
+.selectBox:hover {
+  box-shadow: 0 0 15px rgba(0, 255, 242, 0.5);
+  transform: scale(1.01);
+}
+
+.arrow {
+  font-size: 12px;
+  opacity: 0.4;
+}
+
+.options {
+  position: absolute;
+  top: 100%;
+  width: 90%;
+  border-radius: 12px;
+  background: rgba(20, 30, 35, 0.822);
+  backdrop-filter: blur(3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  animation: fadeIn 0.2s ease;
+  z-index: 2;
+}
+
+.option {
+  padding: 12px 15px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-family: bristone;
+  font-size: 70%;
+}
+
+.option:hover {
+  background: rgba(0, 255, 242, 0.1);
+  color: #00fff2;
+}
+
+/* Rankings */
+#rankingsDiv {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.007);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(0, 255, 242, 0.144);
+}
+
+#rankingsTitle {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 22px;
+  font-family: bristone;
+}
+
+#rankingsTable {
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+#rankingsTable thead th {
+  background: rgb(0, 255, 191);
+  color: black;
+  font-weight: bold;
+  font-family: bristone;
+}
+
+#rankingsTable tbody tr {
+  transition: 0.2s;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: rowIn 0.4s ease forwards;
+}
+
+#rankingsTable tbody tr:hover {
+  transform: scale(1.01);
+}
+
+#rankingsTable td,
+#rankingsTable th {
+  padding: 20px;
+  text-align: center;
+}
+
+.gold td {
+  background: rgba(255, 217, 0, 0.322);
+}
+
+.gold th {
+  background: rgba(255, 217, 0, 0.322);
+}
+
+.silver td {
+  background: rgba(155, 155, 155, 0.384);
+}
+
+.silver th {
+  background: rgba(155, 155, 155, 0.384);
+}
+
+.bronze td {
+  background: rgba(85, 55, 0, 0.63);
+}
+
+.bronze th {
+  background: rgba(85, 55, 0, 0.63);
+}
+
+/* Ikonok */
+.coinIcon {
+  height: 20px;
+  margin-left: 5px;
+}
+
+/* Current user */
+.currentUser th,
+.currentUser td {
+  color: rgb(0, 255, 255);
+  font-weight: bold;
+  background: #00ffaa36;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0000000a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0000001e;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00ffc89d;
+}
+
+/* Animációk */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scalePopIn {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes rowIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#rankingsTable tbody tr:nth-child(1) {
+  animation-delay: 0.05s;
+}
+#rankingsTable tbody tr:nth-child(2) {
+  animation-delay: 0.1s;
+}
+#rankingsTable tbody tr:nth-child(3) {
+  animation-delay: 0.15s;
+}
+#rankingsTable tbody tr:nth-child(4) {
+  animation-delay: 0.2s;
+}
+#rankingsTable tbody tr:nth-child(5) {
+  animation-delay: 0.25s;
+}
+#rankingsTable tbody tr:nth-child(6) {
+  animation-delay: 0.3s;
+}
+#rankingsTable tbody tr:nth-child(7) {
+  animation-delay: 0.35s;
+}
+#rankingsTable tbody tr:nth-child(8) {
+  animation-delay: 0.4s;
+}
+#rankingsTable tbody tr:nth-child(9) {
+  animation-delay: 0.45s;
+}
+#rankingsTable tbody tr:nth-child(10) {
+  animation-delay: 0.5s;
+}
+#rankingsTable tbody tr:nth-child(11) {
+  animation-delay: 0.55s;
+}
+#rankingsTable tbody tr:nth-child(12) {
+  animation-delay: 0.6s;
+}
+
+/*------------------Media queries---------------------*/
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  /* Leaderboard */
+  .leaderboardDiv {
+    width: 70vw;
+  }
+
+  #actualLeaderboard {
+    font-size: 3vh;
+  }
+
+  .selectLeaderboard {
+    width: 200px;
+  }
+
+  /* Rankings */
+  #rankingsDiv {
+    margin-top: 10px;
+  }
+
+  #rankingsTable thead th {
+    font-size: 80%;
+  }
+
+  /* Ikonok */
+  .coinIcon {
+    height: 15px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  /* Leaderboard */
+  .leaderboardDiv {
+    height: 90vh;
+    width: 95vw;
+    padding: 20px;
+  }
+
+  #actualLeaderboard {
+    font-size: 30px;
+  }
+
+  #leaderboardRow1 {
+    margin: 20px 0px;
+  }
+
+  .selectLeaderboard {
+    width: 200px;
+  }
+
+  /* Rankings */
+  #rankingsDiv {
+    margin-top: 10px;
+    padding: 10px;
+  }
+
+  #rankingsTitle {
+    font-size: 20px;
+  }
+
+  #rankingsTable td,
+  #rankingsTable th {
+    padding: 15px 0px;
+  }
+
+  /* Ikonok */
+  .coinIcon {
+    height: 14px;
+  }
+}

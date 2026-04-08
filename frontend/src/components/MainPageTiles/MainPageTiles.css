@@ -1,0 +1,361 @@
+/* Fontok */
+@font-face {
+  font-family: bristone;
+  src: url("../../assets/Bristone.otf");
+}
+
+@font-face {
+  font-family: easportsfc;
+  src: url("../../assets/EaSportsFc_FontByGibsfut-Regular.ttf");
+}
+
+h3 {
+  font-family: easportsfc;
+  font-size: 120% !important;
+}
+
+/*-------------Főoldal csempék------------------*/
+#tileContainer {
+  min-width: 60vw;
+  padding-top: 5vh;
+  padding-bottom: 5vh;
+  padding-left: 5vh;
+  padding-right: 5vh;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.366);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  font-size: 1vw;
+}
+
+#tile1 {
+  background-color: rgba(0, 0, 0, 0.137);
+  min-height: fit-content;
+  height: 25vh;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px;
+  width: 27vw;
+  text-decoration: none;
+  color: white;
+  transform: scale(1);
+  transition: transform 100ms ease-in-out;
+}
+
+#tileRow1 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+#tile2 {
+  background-color: rgba(0, 0, 0, 0.137);
+  min-height: fit-content;
+  height: 27.5vh;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 30px;
+  width: 17.9vw;
+  text-decoration: none;
+  color: white;
+  transition: transform 100ms ease-in-out;
+}
+
+#tileRow2 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+#tile0:hover,
+#tile1:hover,
+#tile2:hover {
+  transform: scale(1.05);
+  background: linear-gradient(
+    90deg,
+    rgba(10, 198, 195, 0.288) 0%,
+    rgba(10, 198, 163, 0.288) 50%,
+    rgba(15, 139, 73, 0.24) 100%
+  );
+  color: rgb(95, 241, 215);
+}
+
+#tileRow0 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+#tile0 {
+  background-color: rgba(0, 0, 0, 0.137);
+  min-height: fit-content;
+  height: 25vh;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px;
+  width: 54.5vw;
+  text-decoration: none;
+  color: white;
+  transition: transform 100ms ease-in-out;
+}
+
+/*----------------Ikonok/képek----------------------*/
+#tileImages1 {
+  width: max-content;
+}
+
+#tileImages2 {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+#tileImages2 {
+  width: 100%;
+}
+
+#unassignedPacksIcon {
+  width: 8vw;
+  height: auto;
+  max-width: fit-content;
+}
+
+#hubLogo {
+  width: 6vw;
+  height: auto;
+  max-width: fit-content;
+}
+
+#sbcLogo {
+  height: 14vh;
+  width: auto;
+  max-height: fit-content;
+}
+
+#draftLogo {
+  height: 5vh;
+  width: auto;
+  max-height: fit-content;
+}
+
+#storeLogo {
+  height: 6vh;
+  width: auto;
+  max-height: fit-content;
+}
+
+#objectivesLogo {
+  height: 6vh;
+  width: auto;
+  max-height: fit-content;
+}
+
+/*-----------------Egyéb formázások-------------------*/
+#tileTexts2 {
+  width: 100%;
+}
+
+h3 {
+  font-size: 1.8vw;
+}
+
+/*------------------Media queries---------------------*/
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  /*-------Tile elrendezések és formázások------*/
+  #tileContainer {
+    width: 98%;
+    padding-top: 3vh;
+    padding-bottom: 3vh;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    row-gap: 10px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    font-size: 18px;
+  }
+
+  #tile0 {
+    height: 30vh;
+    padding: 30px;
+    padding-right: 30px;
+    width: 90%;
+  }
+
+  #tile1 {
+    height: 30vh;
+    padding: 30px;
+    width: 90%;
+  }
+
+  #tileRow1 {
+    row-gap: 10px;
+  }
+
+  #tile2 {
+    height: 30vh;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;
+    width: 90%;
+  }
+
+  #tileRow2 {
+    row-gap: 10px;
+  }
+
+  /*-----------------Egyéb formázások-------------------*/
+  #tileTexts2 {
+    max-width: max-content;
+  }
+
+  h3 {
+    font-size: 30px;
+  }
+
+  /*------------Ikonok/képek--------------*/
+  #tileImages2 {
+    width: max-content;
+  }
+
+  #unassignedPacksIcon {
+    width: 15vw;
+    height: auto;
+    max-width: fit-content;
+  }
+
+  #hubLogo {
+    width: 13vw;
+    height: auto;
+    max-width: fit-content;
+  }
+
+  #sbcLogo {
+    height: 20vh;
+    width: auto;
+    max-height: fit-content;
+  }
+
+  #draftLogo {
+    height: 15vh;
+    width: auto;
+    max-height: fit-content;
+  }
+
+  #storeLogo {
+    width: 30vw;
+    height: auto;
+    max-width: fit-content;
+    max-height: 100px;
+  }
+
+  #objectivesLogo {
+    width: 30vw;
+    height: auto;
+    max-width: fit-content;
+    max-height: 100px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  /*-------Tile elrendezések és formázások------*/
+  #tileContainer {
+    width: 98%;
+    padding-top: 3vh;
+    padding-bottom: 3vh;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    row-gap: 10px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    font-size: 15px;
+  }
+
+  #tile0 {
+    height: 30vh;
+    padding: 30px;
+    padding-right: 30px;
+    width: 90%;
+  }
+
+  #tile1 {
+    height: 30vh;
+    padding: 30px;
+    width: 90%;
+  }
+
+  #tileRow1 {
+    row-gap: 10px;
+  }
+
+  #tile2 {
+    height: 30vh;
+    padding: 30px;
+    width: 90%;
+  }
+
+  #tileRow2 {
+    row-gap: 10px;
+  }
+
+  /*-----------------Egyéb formázások-------------------*/
+  #tileTexts2 {
+    max-width: 250px;
+  }
+
+  h3 {
+    font-size: 25px;
+  }
+
+  /*------------Ikonok/képek--------------*/
+  #unassignedPacksIcon {
+    width: 20vw;
+    height: auto;
+    max-width: fit-content;
+  }
+
+  #hubLogo {
+    width: 17vw;
+    height: auto;
+    max-width: fit-content;
+  }
+
+  #sbcLogo {
+    width: 30vw;
+    height: auto;
+    max-width: fit-content;
+  }
+
+  #draftLogo {
+    width: 20vw;
+    height: auto;
+    max-width: fit-content;
+    max-height: 100px;
+  }
+
+  #storeLogo {
+    width: 20vw;
+    height: auto;
+    max-width: fit-content;
+    max-height: 100px;
+  }
+
+  #objectivesLogo {
+    width: 30vw;
+    height: auto;
+    max-width: fit-content;
+    max-height: 100px;
+  }
+}

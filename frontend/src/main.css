@@ -1,0 +1,26 @@
+body {
+  background:
+    radial-gradient(
+      circle at 80% 50%,
+      rgba(120, 255, 0, 0.45) 0%,
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 75% 65%,
+      rgba(0, 170, 255, 0.401) 0%,
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 15% 30%,
+      rgba(0, 170, 255, 0.105) 0%,
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 35% 90%,
+      rgba(0, 255, 200, 0.34) 0%,
+      transparent 50%
+    ),
+    linear-gradient(160deg, #050816 0%, #02030a 100%) !important;
+  background-repeat: no-repeat;
+  background-size: cover;
+}

@@ -1,0 +1,84 @@
+/* Háttér */
+.mainPage {
+  height: 100vh;
+}
+
+/* Layout */
+.mainLayout {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+/* Jobb oldal */
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80vw;
+  justify-content: space-between;
+}
+
+/* StatBar */
+.mainHeader {
+  height: 8vh;
+  width: 80vw;
+}
+
+/* Tartalom */
+.mainBody {
+  height: 92vh;
+  display: flex;
+  align-items: center;
+
+  opacity: 0;
+  transform: scale(0.8);
+  animation: scalePopIn 0.6s ease forwards;
+}
+
+/* Animáció */
+@keyframes scalePopIn {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/*------------------Media queries---------------------*/
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  .mainLayout {
+    flex-direction: column;
+  }
+
+  .mainContent {
+    width: 100vw;
+  }
+
+  .mainHeader {
+    height: 7vh;
+    width: 100vw;
+  }
+
+  .mainBody {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .mainLayout {
+    flex-direction: column;
+  }
+
+  .mainContent {
+    width: 100vw;
+  }
+
+  .mainHeader {
+    height: 7vh;
+    width: 100vw;
+  }
+
+  .mainBody {
+    flex-direction: column;
+  }
+}

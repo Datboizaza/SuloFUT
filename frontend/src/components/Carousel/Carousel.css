@@ -1,0 +1,80 @@
+@font-face {
+  font-family: easportsfc;
+  src: url("../../assets/EaSportsFc_FontByGibsfut-Regular.ttf");
+}
+
+.carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+}
+
+.carousel-slide {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.carousel-slide img {
+  width: 68%;
+  height: auto;
+  object-fit: cover;
+  align-self: center;
+}
+
+.carousel-slide h2 {
+  font-size: 100%;
+  font-family: easportsfc;
+}
+
+.carousel-slide p {
+  font-size: 70%;
+}
+
+.carousel-dots {
+  position: absolute;
+  bottom: -20px;
+  width: 100%;
+  text-align: center;
+}
+
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin: 0 5px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.dot.active {
+  background: rgb(57, 160, 134);
+}
+
+/*------------------Media queries---------------------*/
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  .carousel {
+    height: fit-content;
+  }
+  .carousel-slide img {
+    width: auto;
+    height: 15vh;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .carousel {
+    height: fit-content;
+  }
+  .carousel-slide img {
+    width: auto;
+    height: 15vh;
+    max-height: 100px;
+  }
+  .carousel-dots {
+    bottom: -30px;
+  }
+}
