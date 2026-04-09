@@ -1139,4 +1139,33 @@ router.get("/storepacks", async (request, response) => {
   }
 });
 
+router.post("/deletemypack", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const packId = request.body.packId;
+
+    await database.deleteMyPack(userId, packId);
+
+    response.status(200).json({ message: "Pack deleted from user" });
+  } catch (error) {
+    console.log("POST /api/deletemypack error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//!Update Coins
+router.post("/updatecoins", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const coins = request.body.coins;
+
+    await database.updateCoins(coins, userId);
+
+    response.status(200).json({ message: "Coins updated" });
+  } catch (error) {
+    console.log("POST /api/updatecoins error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
 module.exports = router;

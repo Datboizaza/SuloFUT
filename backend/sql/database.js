@@ -445,6 +445,19 @@ async function getStorePacks() {
   }
 }
 
+async function deleteMyPack(userId, packId) {
+  const query = `
+  DELETE FROM userpacks 
+  WHERE user_id = ? AND pack_id = ? 
+  LIMIT 1`;
+  try {
+    const [rows] = await pool.execute(query, [userId, packId]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
 //!Export
 module.exports = {
   selectall,
@@ -474,4 +487,5 @@ module.exports = {
   getPackOptions,
   getPackDetails,
   getStorePacks,
+  deleteMyPack,
 };

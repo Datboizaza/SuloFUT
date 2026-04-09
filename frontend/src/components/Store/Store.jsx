@@ -30,11 +30,12 @@ function Store() {
   //!My Packs fetch
   const fetchMyPacks = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:3000/api/users/me/packs", {
-        credentials: "include",
-      });
-
-      const result = await response.json();
+      const result = await getMethodFetch(
+        "http://127.0.0.1:3000/api/users/me/packs",
+        {
+          credentials: "include",
+        },
+      );
 
       setData((prev) => ({
         ...prev,
@@ -48,9 +49,9 @@ function Store() {
   //!Buy Packs fetch
   const fetchStorePacks = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:3000/api/storepacks");
-
-      const result = await response.json();
+      const result = await getMethodFetch(
+        "http://127.0.0.1:3000/api/storepacks",
+      );
 
       setData((prev) => ({
         ...prev,
@@ -73,10 +74,69 @@ function Store() {
   const current = data[activeTab];
 
   //!Pack nyitás
-  const handleOpen = async (pack) => {};
+  const handleOpen = async (pack) => {
+    try {
+      await postMethodFetch("http://127.0.0.1:3000/api/deletemypack", {
+        packId: pack.id,
+      });
+
+      window.dispatchEvent(new Event("packDeleted"));
+
+      try {
+        let packPlayersArr = [];
+        const packPlayers = await getMethodFetch(
+          `http://127.0.0.1:3000/api/generatePack/${pack.id}`,
+        );
+        packPlayers.randomjatekosok.forEach((element) => {
+          packPlayersArr.push(element);
+        });
+
+        packPlayersArr.forEach((element) => {
+          console.log(element);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   //!Pack vásárlás
-  const handleBuy = async (pack) => {};
+  const handleBuy = async (pack) => {
+    try {
+      const coins = await getMethodFetch(
+        "http://127.0.0.1:3000/api/users/me/coins",
+      );
+      if (coins.coinNumber < pack.packPrice) {
+        console.log("csóró geci");
+      } else {
+        await postMethodFetch("http://127.0.0.1:3000/api/updatecoins", {
+          coins: -pack.packPrice,
+        });
+
+        window.dispatchEvent(new Event("coinsUpdated"));
+
+        try {
+          let packPlayersArr = [];
+          const packPlayers = await getMethodFetch(
+            `http://127.0.0.1:3000/api/generatePack/${pack.id}`,
+          );
+          packPlayers.randomjatekosok.forEach((element) => {
+            packPlayersArr.push(element);
+          });
+
+          packPlayersArr.forEach((element) => {
+            console.log(element);
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="storeContainer">
@@ -130,5 +190,30 @@ function Store() {
     </div>
   );
 }
+
+const getMethodFetch = async (url) => {
+  const response = await fetch(url, { credentials: "include" });
+  if (!response.ok) {
+    throw new Error("GET hiba");
+  }
+  return await response.json();
+};
+
+const postMethodFetch = async (url, data) => {
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error(`POST Hiba: ${response.status} ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    throw new Error(`Hiba történt: ${error.message}`);
+  }
+};
 
 export default Store;
