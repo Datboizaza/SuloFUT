@@ -102,6 +102,98 @@
   color: rgba(6, 92, 85, 0.842);
 }
 
+/* Pack Opening */
+.packOpeningModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.39);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  align-items: center;
+  gap: 20px;
+  overflow-y: scroll;
+
+  z-index: 9999;
+}
+
+.cardRow {
+  width: 50%;
+  background-color: rgba(0, 0, 0, 0.479);
+  padding: 20px;
+  border-radius: 18px;
+  transition: transform 100ms ease-in-out;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.cardRow:hover {
+  transform: scale(1.01);
+}
+
+.cardWrapper {
+  position: relative;
+  width: 23%;
+  max-width: 190px;
+  aspect-ratio: 3/3.8;
+  height: 100%;
+  min-height: 225px;
+  transition: all 100ms ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cardWrapper:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+}
+
+.packPlayerName {
+  color: rgb(203, 255, 252);
+  font-family: bristone;
+  font-size: 70%;
+}
+
+.packOpeningModal .cardDesign {
+  filter: drop-shadow(0 8px 15px rgba(255, 208, 0, 0.425));
+}
+
+.packOpeningModal .bronze {
+  filter: drop-shadow(0 8px 15px rgba(82, 46, 0, 0.507));
+}
+
+.packOpeningModal .silver {
+  filter: drop-shadow(0 8px 15px rgba(255, 255, 255, 0.315));
+}
+
+.packOpeningModal .icon {
+  filter: drop-shadow(0 8px 15px rgba(255, 255, 255, 0.425));
+}
+
+.packOpeningModal .hero {
+  filter: drop-shadow(0 8px 15px rgba(231, 68, 68, 0.425));
+}
+
+.packOpeningModal .toty {
+  filter: drop-shadow(0 8px 15px rgba(231, 220, 68, 0.425));
+}
+
+.packOpeningModal .flashback {
+  filter: drop-shadow(0 8px 15px rgba(128, 231, 68, 0.425));
+}
+
+.packOpeningModal .scream {
+  filter: drop-shadow(0 8px 15px rgba(255, 166, 0, 0.425));
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 5px;

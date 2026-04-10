@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import "./Store.css";
 import Coins from "../../assets/coins.png";
 import Bronze from "../../assets/bronzePack.png";
@@ -8,6 +9,7 @@ import Special from "../../assets/specialpack.png";
 import Toty from "../../assets/totypack.png";
 import Flashback from "../../assets/promopack.png";
 import Scream from "../../assets/specialpack.png";
+import PlayerCard from "../PlayerCard/PlayerCard.jsx";
 
 const packImages = {
   bronze: Bronze,
@@ -26,6 +28,9 @@ function Store() {
     mypacks: [],
     buypacks: [],
   });
+
+  const [packOpening, setPackOpening] = useState(false);
+  const [packPlayersArr, setPackPlayersArr] = useState([]);
 
   //!My Packs fetch
   const fetchMyPacks = async () => {
@@ -76,24 +81,23 @@ function Store() {
   //!Pack nyitás
   const handleOpen = async (pack) => {
     try {
-      await postMethodFetch("http://127.0.0.1:3000/api/deletemypack", {
-        packId: pack.id,
-      });
+      // await postMethodFetch("http://127.0.0.1:3000/api/deletemypack", {
+      //   packId: pack.id,
+      // });
 
       window.dispatchEvent(new Event("packDeleted"));
 
       try {
-        let packPlayersArr = [];
+        const players = [];
         const packPlayers = await getMethodFetch(
           `http://127.0.0.1:3000/api/generatePack/${pack.id}`,
         );
         packPlayers.randomjatekosok.forEach((element) => {
-          packPlayersArr.push(element);
+          players.push(element);
         });
 
-        packPlayersArr.forEach((element) => {
-          console.log(element);
-        });
+        setPackPlayersArr(players);
+        setPackOpening(true);
       } catch (error) {
         console.log(error);
       }
@@ -118,17 +122,16 @@ function Store() {
         window.dispatchEvent(new Event("coinsUpdated"));
 
         try {
-          let packPlayersArr = [];
+          const players = [];
           const packPlayers = await getMethodFetch(
             `http://127.0.0.1:3000/api/generatePack/${pack.id}`,
           );
           packPlayers.randomjatekosok.forEach((element) => {
-            packPlayersArr.push(element);
+            players.push(element);
           });
 
-          packPlayersArr.forEach((element) => {
-            console.log(element);
-          });
+          setPackPlayersArr(players);
+          setPackOpening(true);
         } catch (error) {
           console.log(error);
         }
@@ -139,55 +142,81 @@ function Store() {
   };
 
   return (
-    <div className="storeContainer">
-      {/* Tabs */}
-      <div className="tabs">
-        {["mypacks", "buypacks"].map((tab) => (
-          <button
-            key={tab}
-            className={`tab ${activeTab === tab ? "active" : ""}`}
-            onClick={() => setActiveTab(tab)}
-          >
-            {tab === "mypacks" ? "MY PACKS" : "BUY PACKS"}
-          </button>
-        ))}
-      </div>
+    <>
+      <div className="storeContainer">
+        {/* Tabs */}
+        <div className="tabs">
+          {["mypacks", "buypacks"].map((tab) => (
+            <button
+              key={tab}
+              className={`tab ${activeTab === tab ? "active" : ""}`}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab === "mypacks" ? "MY PACKS" : "BUY PACKS"}
+            </button>
+          ))}
+        </div>
 
-      <div className="storeGrid">
-        {current.map((pack) => {
-          const img = packImages[pack.packDesign] || Special;
+        <div className="storeGrid">
+          {current.map((pack) => {
+            const img = packImages[pack.packDesign] || Special;
 
-          return (
-            <div key={`${activeTab}-${pack.id}`} className="packCard">
-              <img src={img} alt="pack" className="packImage" />
+            return (
+              <div key={`${activeTab}-${pack.id}`} className="packCard">
+                <img src={img} alt="pack" className="packImage" />
 
-              <p>{pack.packName}</p>
+                <p>{pack.packName}</p>
 
-              {/* My packs */}
-              {activeTab === "mypacks" && (
-                <button className="storeBtn" onClick={() => handleOpen(pack)}>
-                  Open
-                </button>
-              )}
-
-              {/* Buy packd */}
-              {activeTab === "buypacks" && (
-                <>
-                  <p className="price">
-                    {pack.packPrice.toLocaleString("hu-HU")}
-                    <img src={Coins} alt="coins" />
-                  </p>
-
-                  <button className="storeBtn" onClick={() => handleBuy(pack)}>
-                    Buy
+                {/* My packs */}
+                {activeTab === "mypacks" && (
+                  <button className="storeBtn" onClick={() => handleOpen(pack)}>
+                    Open
                   </button>
-                </>
-              )}
-            </div>
-          );
-        })}
+                )}
+
+                {/* Buy packd */}
+                {activeTab === "buypacks" && (
+                  <>
+                    <p className="price">
+                      {pack.packPrice.toLocaleString("hu-HU")}
+                      <img src={Coins} alt="coins" />
+                    </p>
+
+                    <button
+                      className="storeBtn"
+                      onClick={() => handleBuy(pack)}
+                    >
+                      Buy
+                    </button>
+                  </>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
-    </div>
+      {packOpening &&
+        createPortal(
+          <div className="packOpeningModal">
+            {packPlayersArr.map((player) => (
+              <div key={player.player_id} className="cardRow">
+                <div key={player.player_id} className="cardWrapper">
+                  <PlayerCard
+                    player={player}
+                    isModal={true}
+                    displayedPosition={(p) => p.player_positions.split(", ")[0]}
+                    slotPos={null}
+                    playerChemMap={{}}
+                    chemImg={() => null}
+                  />
+                </div>
+                <p className="packPlayerName">{player.long_name}</p>
+              </div>
+            ))}
+          </div>,
+          document.body,
+        )}
+    </>
   );
 }
 

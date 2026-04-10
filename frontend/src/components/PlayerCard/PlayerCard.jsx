@@ -3,12 +3,16 @@ import ACMilan from "../../assets/acmilan.png";
 import Atalanta from "../../assets/atalanta.png";
 import Lazio from "../../assets/lazio.png";
 import AltPlayerImg from "../../assets/altPlayerImg.png";
+import Bronze from "../../assets/BronzeRare.png";
+import Silver from "../../assets/SilverRare.png";
 import Gold from "../../assets/goldRare.png";
 import Hero from "../../assets/Hero.png";
 import Icon from "../../assets/Icon.png";
 import Toty from "../../assets/toty.png";
 import Scream from "../../assets/Scream.png";
 import Flashback from "../../assets/Flashback.png";
+
+import "./PlayerCard.css";
 
 import { memo } from "react";
 
@@ -25,6 +29,10 @@ function PlayerCard({
   //! Card szövegek
   const getText = (rarity) => {
     switch (rarity) {
+      case "bronze":
+        return "text-bronze";
+      case "silver":
+        return "text-silver";
       case "gold":
         return "text-gold";
       case "icon":
@@ -44,6 +52,8 @@ function PlayerCard({
 
   //! Card design-ok
   const rarityImgs = {
+    bronze: Bronze,
+    silver: Silver,
     gold: Gold,
     icon: Icon,
     hero: Hero,

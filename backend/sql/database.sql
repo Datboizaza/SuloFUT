@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2026. Már 23. 12:15
+-- Létrehozás ideje: 2026. Ápr 10. 11:57
 -- Kiszolgáló verziója: 10.4.28-MariaDB
 -- PHP verzió: 8.0.28
 
@@ -151,10 +151,10 @@ CREATE TABLE `packs` (
   `playerCount` int(11) NOT NULL,
   `playerQuality` text NOT NULL,
   `packWeightID` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_hungarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
--- Dumping data for table `packs`
+-- A tábla adatainak kiíratása `packs`
 --
 
 INSERT INTO `packs` (`id`, `packName`, `packPrice`, `packDesign`, `playerCount`, `playerQuality`, `packWeightID`) VALUES
@@ -182,23 +182,23 @@ INSERT INTO `packs` (`id`, `packName`, `packPrice`, `packDesign`, `playerCount`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `packweights`
+-- Tábla szerkezet ehhez a táblához `packweights`
 --
 
 CREATE TABLE `packweights` (
   `id` int(11) NOT NULL,
-  `bronzeWeight` float(11) NOT NULL,
-  `silverWeight` float(11) NOT NULL,
-  `goldWeight` float(11) NOT NULL,
-  `flashbackWeight` float(11) NOT NULL,
-  `screamWeight` float(11) NOT NULL,
-  `totyWeight` float(11) NOT NULL,
-  `iconWeight` float(11) NOT NULL,
-  `heroWeight` float(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_hungarian_ci;
+  `bronzeWeight` float NOT NULL,
+  `silverWeight` float NOT NULL,
+  `goldWeight` float NOT NULL,
+  `flashbackWeight` float NOT NULL,
+  `screamWeight` float NOT NULL,
+  `totyWeight` float NOT NULL,
+  `iconWeight` float NOT NULL,
+  `heroWeight` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
--- Dumping data for table `packweights`
+-- A tábla adatainak kiíratása `packweights`
 --
 
 INSERT INTO `packweights` (`id`, `bronzeWeight`, `silverWeight`, `goldWeight`, `flashbackWeight`, `screamWeight`, `totyWeight`, `iconWeight`, `heroWeight`) VALUES
@@ -222,10 +222,6 @@ INSERT INTO `packweights` (`id`, `bronzeWeight`, `silverWeight`, `goldWeight`, `
 (18, 0, 0, 94, 1.5, 1.5, 1.5, 0.5, 1),
 (19, 0, 0, 0, 0, 0, 100, 0, 0),
 (20, 33, 33, 33, 0, 0, 0, 0, 0);
-
---
--- A tábla adatainak kiíratása `packs`
---
 
 -- --------------------------------------------------------
 
@@ -406,7 +402,7 @@ CREATE TABLE `userclub` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `coinNumber` int(11) NOT NULL DEFAULT 0,
-  `userPlayers` text DEFAULT NULL
+  `userPlayers` JSON
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
@@ -466,7 +462,7 @@ INSERT INTO `userclub` (`id`, `user_id`, `coinNumber`, `userPlayers`) VALUES
 (50, 50, 167890, NULL),
 (51, 51, 223456, NULL),
 (52, 52, 189765, NULL),
-(53, 53, 254321, NULL);
+(53, 53, 16321, NULL);
 
 -- --------------------------------------------------------
 
@@ -479,6 +475,18 @@ CREATE TABLE `userpacks` (
   `user_id` int(11) NOT NULL,
   `pack_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `userpacks`
+--
+
+INSERT INTO `userpacks` (`id`, `user_id`, `pack_id`) VALUES
+(1, 53, 7),
+(2, 53, 8),
+(3, 53, 2),
+(4, 53, 3),
+(5, 53, 15),
+(6, 53, 11);
 
 -- --------------------------------------------------------
 
@@ -644,8 +652,12 @@ ALTER TABLE `packs`
   ADD PRIMARY KEY (`id`),
   ADD KEY `packWeightID` (`packWeightID`);
 
+--
+-- A tábla indexei `packweights`
+--
 ALTER TABLE `packweights`
   ADD PRIMARY KEY (`id`);
+
 --
 -- A tábla indexei `rewards`
 --
@@ -741,7 +753,7 @@ ALTER TABLE `rewards`
 -- AUTO_INCREMENT a táblához `stats`
 --
 ALTER TABLE `stats`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT a táblához `subobjectives`
@@ -753,19 +765,19 @@ ALTER TABLE `subobjectives`
 -- AUTO_INCREMENT a táblához `userclub`
 --
 ALTER TABLE `userclub`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT a táblához `userpacks`
 --
 ALTER TABLE `userpacks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT a táblához `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT a táblához `user_subobjective_progress`
