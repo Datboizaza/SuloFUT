@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2026. Ápr 10. 11:57
--- Kiszolgáló verziója: 10.4.28-MariaDB
--- PHP verzió: 8.0.28
+-- Létrehozás ideje: 2026. Ápr 13. 17:29
+-- Kiszolgáló verziója: 10.4.32-MariaDB
+-- PHP verzió: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -163,7 +163,7 @@ INSERT INTO `packs` (`id`, `packName`, `packPrice`, `packDesign`, `playerCount`,
 (3, 'Gold Pack', 7500, 'gold', 12, 'gold/flashback/scream/toty/icon/hero', 3),
 (4, 'Jumbo Gold Pack', 12000, 'gold', 24, 'gold/flashback/scream/toty/icon/hero', 4),
 (5, 'Mixed Players Pack', 6000, 'special', 12, 'bronze/silver/gold', 5),
-(6, 'Mega Pack', 10000, 'special', 30, 'gold/flashback/scream/toty/icon/hero', 6),
+(6, 'Mega Pack', 35000, 'special', 30, 'gold/flashback/scream/toty/icon/hero', 6),
 (7, '80+x10 Players Pack', 20000, 'special', 10, 'gold/flashback/scream/toty/icon/hero', 7),
 (8, '82+x10 Players Pack', 25000, 'special', 10, 'gold/flashback/scream/toty/icon/hero', 8),
 (9, '85+x4 Players Pack', 30000, 'special', 4, 'gold/flashback/scream/toty/icon/hero', 9),
@@ -218,7 +218,7 @@ INSERT INTO `packweights` (`id`, `bronzeWeight`, `silverWeight`, `goldWeight`, `
 (14, 0, 0, 0, 0, 0, 0, 0, 100),
 (15, 0, 0, 0, 0, 0, 0, 0, 100),
 (16, 0, 0, 0, 33, 33, 33, 0, 0),
-(17, 0, 0, 0, 0, 0, 0, 80, 20),
+(17, 0, 0, 0, 0, 0, 0, 30, 70),
 (18, 0, 0, 94, 1.5, 1.5, 1.5, 0.5, 1),
 (19, 0, 0, 0, 0, 0, 100, 0, 0),
 (20, 33, 33, 33, 0, 0, 0, 0, 0);
@@ -333,7 +333,7 @@ INSERT INTO `stats` (`id`, `user_id`, `best_draft`, `top_squad`, `club_value`, `
 (50, 50, 115, 99, 23000, 240),
 (51, 51, 117, 100, 23750, 379),
 (52, 52, 120, 121, 412780, 245),
-(53, 53, 119, 122, 436720, 493);
+(53, 53, 122, 122, 436720, 493);
 
 -- --------------------------------------------------------
 
@@ -402,7 +402,7 @@ CREATE TABLE `userclub` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `coinNumber` int(11) NOT NULL DEFAULT 0,
-  `userPlayers` JSON
+  `userPlayers` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`userPlayers`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
@@ -462,7 +462,7 @@ INSERT INTO `userclub` (`id`, `user_id`, `coinNumber`, `userPlayers`) VALUES
 (50, 50, 167890, NULL),
 (51, 51, 223456, NULL),
 (52, 52, 189765, NULL),
-(53, 53, 16321, NULL);
+(53, 53, 2001250, NULL);
 
 -- --------------------------------------------------------
 
@@ -486,7 +486,10 @@ INSERT INTO `userpacks` (`id`, `user_id`, `pack_id`) VALUES
 (3, 53, 2),
 (4, 53, 3),
 (5, 53, 15),
-(6, 53, 11);
+(6, 53, 11),
+(7, 53, 8),
+(8, 53, 7),
+(9, 53, 16);
 
 -- --------------------------------------------------------
 
@@ -612,7 +615,12 @@ INSERT INTO `user_subobjective_progress` (`id`, `user_id`, `subobjective_id`, `p
 (4, 1, 21, 2, 0),
 (5, 1, 22, 2, 0),
 (6, 1, 23, 2, 0),
-(7, 1, 24, 2, 0);
+(7, 1, 24, 2, 0),
+(13, 53, 20, 2, 0),
+(14, 53, 21, 2, 0),
+(15, 53, 22, 2, 0),
+(16, 53, 23, 2, 0),
+(17, 53, 24, 2, 0);
 
 --
 -- Indexek a kiírt táblákhoz
@@ -771,7 +779,7 @@ ALTER TABLE `userclub`
 -- AUTO_INCREMENT a táblához `userpacks`
 --
 ALTER TABLE `userpacks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT a táblához `users`
@@ -783,7 +791,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT a táblához `user_subobjective_progress`
 --
 ALTER TABLE `user_subobjective_progress`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- Megkötések a kiírt táblákhoz
