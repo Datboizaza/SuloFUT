@@ -8,7 +8,7 @@ function Reward({ reward }) {
     <div className="reward">
       {reward.coins && (
         <span className="coins">
-          {reward.coins}
+          {reward.coins.toLocaleString("hu-HU")}
           <img src={Coins} className="coinImg" />
         </span>
       )}

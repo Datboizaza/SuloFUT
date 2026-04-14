@@ -16,7 +16,7 @@ function MainPageTiles() {
           <div className="col-12" id="tile1">
             <Carousel />
           </div>
-          <a className="col-12" id="tile1" href="">
+          <Link className="col-12" id="tile1" to="/sbc">
             <div id="tileTexts1" className="col-8">
               <h3>SBC</h3>
               <p>Exchange squads for rewards.</p>
@@ -28,7 +28,7 @@ function MainPageTiles() {
                 id="sbcLogo"
               />
             </div>
-          </a>
+          </Link>
         </div>
         <div className="row" id="tileRow2">
           <Link className="col-12" id="tile2" to="/draft">

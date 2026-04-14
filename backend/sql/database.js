@@ -51,6 +51,96 @@ async function getUserById(id) {
   }
 }
 
+//? Username változtatás
+async function changeUsername(newUsername, userId) {
+  const query = "UPDATE users SET username = ? WHERE id = ?";
+  try {
+    const [rows] = await pool.execute(query, [newUsername, userId]);
+    return rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+
+//? Password változtatás
+async function changePassword(newPassword, userId) {
+  const query = "UPDATE users SET password = ? WHERE id = ?";
+  try {
+    const [rows] = await pool.execute(query, [newPassword, userId]);
+    return rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+
+//? Delete account
+async function deleteUserStats(userId) {
+  const query = `
+  DELETE FROM stats WHERE user_id = ?;
+  `;
+  try {
+    const [rows] = await pool.execute(query, [userId]);
+    return rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+async function deleteUserClub(userId) {
+  const query = `
+  DELETE FROM userclub WHERE user_id = ?;
+  `;
+  try {
+    const [rows] = await pool.execute(query, [userId]);
+    return rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+async function deleteUserPacks(userId) {
+  const query = `
+  DELETE FROM userpacks WHERE user_id = ?;
+  `;
+  try {
+    const [rows] = await pool.execute(query, [userId]);
+    return rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+async function deleteUserObjClaims(userId) {
+  const query = `
+  DELETE FROM user_objective_claims WHERE user_id = ?;
+  `;
+  try {
+    const [rows] = await pool.execute(query, [userId]);
+    return rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+async function deleteUserSubobjProg(userId) {
+  const query = `
+  DELETE FROM user_subobjective_progress WHERE user_id = ?;
+  `;
+  try {
+    const [rows] = await pool.execute(query, [userId]);
+    return rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+async function deleteUser(userId) {
+  const query = `
+  DELETE FROM users WHERE id = ?;
+  `;
+  try {
+    const [rows] = await pool.execute(query, [userId]);
+    return rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+
 //? User Coin száma
 async function getUserCoinsById(id) {
   const query = "SELECT coinNumber FROM userClub WHERE user_id = ?;";
@@ -458,6 +548,52 @@ async function deleteMyPack(userId, packId) {
   }
 }
 
+//! User playerek
+async function currentClub(userId) {
+  const query = `
+  SELECT userPlayers FROM userclub WHERE user_id = ?;`;
+  try {
+    const [rows] = await pool.execute(query, [userId]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function updateClub(userPlayers, userId) {
+  const query = `
+  UPDATE userclub SET userPlayers = ? WHERE user_id = ?;`;
+  try {
+    const [rows] = await pool.execute(query, [
+      JSON.stringify(userPlayers),
+      userId,
+    ]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+//! SBC
+async function getSBC() {
+  const query = `
+  SELECT 
+        sbc.id,
+        sbc.name,
+        sbc.category_id,
+        sbc.reward,
+        sbccategories.name AS category_name
+      FROM sbc
+      JOIN sbccategories ON sbccategories.id = sbc.category_id;
+      `;
+  try {
+    const [rows] = await pool.execute(query);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
 //!Export
 module.exports = {
   selectall,
@@ -488,4 +624,15 @@ module.exports = {
   getPackDetails,
   getStorePacks,
   deleteMyPack,
+  currentClub,
+  updateClub,
+  getSBC,
+  changeUsername,
+  changePassword,
+  deleteUser,
+  deleteUserClub,
+  deleteUserObjClaims,
+  deleteUserPacks,
+  deleteUserStats,
+  deleteUserSubobjProg,
 };

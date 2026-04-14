@@ -11,6 +11,8 @@ import Icon from "../../assets/Icon.png";
 import Toty from "../../assets/toty.png";
 import Scream from "../../assets/Scream.png";
 import Flashback from "../../assets/Flashback.png";
+import ClubLeagueAlt from "../../assets/clubalt.png";
+import NationAlt from "../../assets/nationalt.png";
 
 import "./PlayerCard.css";
 
@@ -105,12 +107,20 @@ function PlayerCard({
         className="cardNationality"
         src={player.nation_url}
         alt="Nationality Image"
+        onError={(e) => {
+          e.currentTarget.onerror = null;
+          e.currentTarget.src = NationAlt;
+        }}
       />
       <img
         loading="lazy"
         className="cardLeague"
         src={player.league_url}
         alt="League Image"
+        onError={(e) => {
+          e.currentTarget.onerror = null;
+          e.currentTarget.src = ClubLeagueAlt;
+        }}
       />
 
       {player.rarity !== "icon" && player.rarity !== "hero" && (
@@ -130,6 +140,8 @@ function PlayerCard({
               e.currentTarget.src = Lazio;
             } else if (player.club_name === "Atalanta") {
               e.currentTarget.src = Atalanta;
+            } else {
+              e.currentTarget.src = ClubLeagueAlt;
             }
           }}
         />

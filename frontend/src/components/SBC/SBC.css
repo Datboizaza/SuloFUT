@@ -1,0 +1,101 @@
+.sbcContainer {
+  padding: 25px;
+  color: white;
+  backdrop-filter: blur(20px);
+  background-color: #003d3f3b;
+  border-radius: 20px;
+  height: 80vh;
+  width: 70vw;
+  overflow-y: scroll;
+  transform: scale(0.8);
+  opacity: 0;
+  animation: scalePopIn 0.4s ease forwards;
+}
+
+.sbcGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sbcCard {
+  background: #0000008c;
+  border-radius: 15px;
+  padding: 40px;
+  transition: 0.2s ease-in-out;
+}
+
+.sbcCard:hover {
+  transform: scale(1.01);
+}
+
+.sbcHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sbcTitle {
+  font-family: bristone;
+}
+
+/* Tabok */
+.tabs {
+  display: flex;
+  margin-bottom: 4%;
+  justify-content: space-between;
+}
+
+.tab {
+  height: 6vh;
+  width: 30%;
+  background: #1111114f;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 8px;
+  font-family: easportsfc;
+}
+
+.tab.active {
+  background: linear-gradient(90deg, #00fff7, #00f078);
+  color: rgb(44, 82, 69);
+}
+
+/* Reward */
+.reward {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.coinImg {
+  height: 30px;
+}
+
+.packImg {
+  height: 60px;
+}
+
+.claimBtn {
+  margin-top: 10px;
+  width: 100%;
+  height: 40px;
+  border-radius: 20px;
+  border: 3px rgba(0, 255, 149, 0.7) solid;
+  background: linear-gradient(90deg, #3da5a7, #00c3ff);
+  color: white;
+}
+
+.claimed {
+  border: none;
+  background: rgb(48, 255, 172);
+  color: rgb(65, 65, 65);
+}
+
+/* Animáciuók */
+@keyframes scalePopIn {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

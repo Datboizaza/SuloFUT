@@ -111,6 +111,68 @@ router.get("/users/me", async (request, response) => {
   }
 });
 
+router.post("/users/changeusername", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const newUsername = request.body.username;
+
+    await database.changeUsername(newUsername, userId);
+
+    response.status(200).json({ message: "Username changed successfully" });
+  } catch (error) {
+    console.log("POST /users/changeusername error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.post("/users/changepassword", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const hashed = await bcrypt.hash(request.body.password, 10);
+
+    await database.changePassword(hashed, userId);
+
+    response.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.log("POST /users/changepassword error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.post("/users/logout", async (request, response) => {
+  try {
+    request.session.destroy(() => {
+      response.clearCookie("connect.sid");
+
+      response.status(200).json({ message: "Logged out" });
+    });
+  } catch (error) {
+    console.log("POST /users/logout error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.post("/users/delete", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+
+    await database.deleteUser(userId);
+    await database.deleteUserPacks(userId);
+    await database.deleteUserObjClaims(userId);
+    await database.deleteUserSubobjProg(userId);
+    await database.deleteUserClub(userId);
+    await database.deleteUserStats(userId);
+
+    request.session.destroy(() => {
+      response.clearCookie("connect.sid");
+      response.status(200).json({ message: "User deleted" });
+    });
+  } catch (error) {
+    console.log("POST /users/delete error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
 //! User cuccai
 router.get("/users/me/coins", async (request, response) => {
   try {
@@ -662,7 +724,7 @@ router.put("/swap", (request, response) => {
     const arrays = {
       starting11: draftselectedPlayers11,
       subs: draftselectedPlayersSubs,
-      res: draftselectedPlayersRes,
+      response: draftselectedPlayersRes,
     };
 
     const findPlayer = (playerId) => {
@@ -1164,6 +1226,83 @@ router.post("/updatecoins", async (request, response) => {
     response.status(200).json({ message: "Coins updated" });
   } catch (error) {
     console.log("POST /api/updatecoins error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//! User club
+router.post("/addPlayersToClub", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const newPlayers = request.body.players;
+
+    const rows = await database.currentClub(userId);
+
+    let currentPlayers = [];
+
+    if (rows[0].userPlayers) {
+      currentPlayers = JSON.parse(rows[0].userPlayers);
+    }
+
+    const updatedPlayers = [...currentPlayers, ...newPlayers];
+
+    await database.updateClub(updatedPlayers, userId);
+
+    response.status(200).json({ success: true });
+  } catch (error) {
+    console.log("POST /api/addplayerstoclub error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.get("/myClub", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+
+    const rows = await database.currentClub(userId);
+
+    if (!rows || rows.length === 0) {
+      return response.json([]);
+    }
+
+    let players = [];
+
+    if (rows[0].userPlayers) {
+      players = JSON.parse(rows[0].userPlayers);
+    }
+
+    response.status(200).json(players);
+  } catch (error) {
+    console.log("GET /api/myClub error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//! SBC
+router.get("/allsbc", async (request, response) => {
+  try {
+    const rows = await database.getSBC();
+
+    const result = {
+      challenges: [],
+      upgrades: [],
+      foundations: [],
+    };
+
+    rows.forEach((row) => {
+      result[row.category_name].push({
+        id: row.id,
+        name: row.name,
+        reward: {
+          coins: row.reward || null,
+          packs: [],
+        },
+      });
+    });
+
+    response.status(200).json({ results: result });
+  } catch (error) {
+    console.log("GET /api/allsbc error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
