@@ -160,6 +160,10 @@
   color: rgb(203, 255, 252);
   font-family: bristone;
   font-size: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: end;
 }
 
 .packOpeningModal .cardDesign {
@@ -192,6 +196,137 @@
 
 .packOpeningModal .scream {
   filter: drop-shadow(0 8px 15px rgba(255, 166, 0, 0.425));
+}
+
+/* Pack dolgok */
+.quickSellBtn {
+  position: relative;
+  top: 70px;
+  right: 10px;
+  background: rgba(255, 0, 0, 0.174);
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: max-content;
+  padding: 8px 10px;
+  border-radius: 10px;
+  transition: transform 100ms ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.quickSellText img {
+  height: 17px;
+}
+
+.quickSellBtn:hover {
+  transform: scale(1.1);
+}
+
+.quickSellText {
+  font-family: normal;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 60%;
+  height: max-content;
+  margin: 0;
+}
+
+.storeBtnPack {
+  width: 40%;
+  height: 55px;
+  border-radius: 20px;
+  border: 1px rgba(0, 187, 255, 0.301) solid;
+  background: linear-gradient(90deg, #1b3b3b, #033b4c56);
+  color: white;
+  transition: all 150ms ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.storeBtnPack p {
+  margin: 0;
+}
+
+.storeBtnPack:hover {
+  transform: scale(1.03);
+  background: linear-gradient(90deg, #53d9db, #6affab);
+  color: rgba(6, 92, 85, 0.842);
+}
+
+.packTop {
+  width: 48%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.packBottom {
+  width: 48%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Pack animáció */
+.packStage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  animation: fadeIn 0.8s ease;
+}
+
+.reveal {
+  position: relative;
+  top: 30%;
+  width: 23%;
+  max-width: 190px;
+  aspect-ratio: 3/3.8;
+  height: 37%;
+  min-height: 225px;
+  transition: all 100ms ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.openingPackImage {
+  width: 220px;
+  animation: zoomIn 0.8s ease;
+}
+
+.confettiPack {
+  animation: none;
+}
+
+.confettiGif {
+  position: absolute;
+  top: 16%;
+  z-index: 9999;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* Scrollbar */

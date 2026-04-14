@@ -2,23 +2,24 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import "./Store.css";
 import Coins from "../../assets/coins.png";
-import Bronze from "../../assets/bronzePack.png";
-import Silver from "../../assets/silverPack.png";
-import Gold from "../../assets/goldPack.png";
-import Special from "../../assets/specialpack.png";
-import Toty from "../../assets/totypack.png";
-import Flashback from "../../assets/promopack.png";
-import Scream from "../../assets/specialpack.png";
+import bronze from "../../assets/bronzePack.png";
+import silver from "../../assets/silverPack.png";
+import gold from "../../assets/goldPack.png";
+import special from "../../assets/specialpack.png";
+import toty from "../../assets/totypack.png";
+import flashback from "../../assets/promopack.png";
+import scream from "../../assets/specialpack.png";
 import PlayerCard from "../PlayerCard/PlayerCard.jsx";
+import Confetti from "../../assets/confetti.gif";
 
 const packImages = {
-  bronze: Bronze,
-  silver: Silver,
-  gold: Gold,
-  special: Special,
-  toty: Toty,
-  flashback: Flashback,
-  scream: Scream,
+  bronze: bronze,
+  silver: silver,
+  gold: gold,
+  special: special,
+  toty: toty,
+  flashback: flashback,
+  scream: scream,
 };
 
 function Store() {
@@ -32,6 +33,10 @@ function Store() {
   const [packOpening, setPackOpening] = useState(false);
   const [packPlayersArr, setPackPlayersArr] = useState([]);
 
+  const [openingStage, setOpeningStage] = useState("idle");
+
+  const [currentPack, setCurrentPack] = useState(null);
+
   //!My Packs fetch
   const fetchMyPacks = async () => {
     try {
@@ -44,7 +49,7 @@ function Store() {
 
       setData((prev) => ({
         ...prev,
-        mypacks: result,
+        mypacks: [...new Map(result.map((p) => [p.id, p])).values()],
       }));
     } catch (error) {
       console.error(error);
@@ -60,14 +65,14 @@ function Store() {
 
       setData((prev) => ({
         ...prev,
-        buypacks: result,
+        buypacks: [...new Map(result.map((p) => [p.id, p])).values()],
       }));
     } catch (error) {
       console.error(error);
     }
   };
 
-  //!Frissítés
+  //!Async-await miatt
   useEffect(() => {
     const init = async () => {
       await fetchMyPacks();
@@ -81,26 +86,35 @@ function Store() {
   //!Pack nyitás
   const handleOpen = async (pack) => {
     try {
-      // await postMethodFetch("http://127.0.0.1:3000/api/deletemypack", {
-      //   packId: pack.id,
-      // });
+      await postMethodFetch("http://127.0.0.1:3000/api/deletemypack", {
+        packId: pack.id,
+      });
 
-      window.dispatchEvent(new Event("packDeleted"));
+      await fetchMyPacks();
 
-      try {
-        const players = [];
-        const packPlayers = await getMethodFetch(
-          `http://127.0.0.1:3000/api/generatePack/${pack.id}`,
-        );
-        packPlayers.randomjatekosok.forEach((element) => {
-          players.push(element);
-        });
+      const packPlayers = await getMethodFetch(
+        `http://127.0.0.1:3000/api/generatePack/${pack.id}`,
+      );
 
-        setPackPlayersArr(players);
-        setPackOpening(true);
-      } catch (error) {
-        console.log(error);
-      }
+      const players = packPlayers.randomjatekosok;
+
+      setCurrentPack(pack);
+      setPackPlayersArr(players);
+
+      setPackOpening(true);
+      setOpeningStage("pack");
+
+      setTimeout(() => {
+        setOpeningStage("confetti");
+      }, 2000);
+
+      setTimeout(() => {
+        setOpeningStage("reveal");
+      }, 2700);
+
+      setTimeout(() => {
+        setOpeningStage("full");
+      }, 9000);
     } catch (error) {
       console.log(error);
     }
@@ -112,6 +126,7 @@ function Store() {
       const coins = await getMethodFetch(
         "http://127.0.0.1:3000/api/users/me/coins",
       );
+
       if (coins.coinNumber < pack.packPrice) {
         console.log("csóró geci");
       } else {
@@ -121,23 +136,85 @@ function Store() {
 
         window.dispatchEvent(new Event("coinsUpdated"));
 
-        try {
-          const players = [];
-          const packPlayers = await getMethodFetch(
-            `http://127.0.0.1:3000/api/generatePack/${pack.id}`,
-          );
-          packPlayers.randomjatekosok.forEach((element) => {
-            players.push(element);
-          });
+        const packPlayers = await getMethodFetch(
+          `http://127.0.0.1:3000/api/generatePack/${pack.id}`,
+        );
 
-          setPackPlayersArr(players);
-          setPackOpening(true);
-        } catch (error) {
-          console.log(error);
-        }
+        const players = packPlayers.randomjatekosok;
+
+        setCurrentPack(pack);
+        setPackPlayersArr(players);
+
+        setPackOpening(true);
+        setOpeningStage("pack");
+
+        setTimeout(() => {
+          setOpeningStage("confetti");
+        }, 2000);
+
+        setTimeout(() => {
+          setOpeningStage("reveal");
+        }, 2700);
+
+        setTimeout(() => {
+          setOpeningStage("full");
+        }, 9000);
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  //! Quick sell 1 játékos
+  const handleQuickSell = async (player) => {
+    try {
+      await postMethodFetch("http://127.0.0.1:3000/api/updatecoins", {
+        coins: player.value,
+      });
+
+      setPackPlayersArr((prev) => {
+        const updated = prev.filter((p) => p.player_id !== player.player_id);
+        if (updated.length === 0) {
+          setPackOpening(false);
+        }
+        return updated;
+      });
+
+      window.dispatchEvent(new Event("coinsUpdated"));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //! Quick sell összes játékos
+  const handleQuickSellAll = async () => {
+    try {
+      const total = packPlayersArr.reduce((sum, p) => sum + p.value, 0);
+
+      await postMethodFetch("http://127.0.0.1:3000/api/updatecoins", {
+        coins: total,
+      });
+
+      setPackPlayersArr([]);
+
+      window.dispatchEvent(new Event("coinsUpdated"));
+      setPackOpening(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //! Játékos hozzáadása a klub-hoz
+  const handleSendAllToClub = async () => {
+    try {
+      await postMethodFetch("http://127.0.0.1:3000/api/addPlayersToClub", {
+        players: packPlayersArr,
+      });
+
+      setPackPlayersArr([]);
+      setPackOpening(false);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -157,12 +234,12 @@ function Store() {
           ))}
         </div>
 
-        <div className="storeGrid">
+        <div key={activeTab} className="storeGrid">
           {current.map((pack) => {
-            const img = packImages[pack.packDesign] || Special;
+            const img = packImages[pack.packDesign] || special;
 
             return (
-              <div key={`${activeTab}-${pack.id}`} className="packCard">
+              <div key={pack.id} className="packCard">
                 <img src={img} alt="pack" className="packImage" />
 
                 <p>{pack.packName}</p>
@@ -198,21 +275,93 @@ function Store() {
       {packOpening &&
         createPortal(
           <div className="packOpeningModal">
-            {packPlayersArr.map((player) => (
-              <div key={player.player_id} className="cardRow">
-                <div key={player.player_id} className="cardWrapper">
-                  <PlayerCard
-                    player={player}
-                    isModal={true}
-                    displayedPosition={(p) => p.player_positions.split(", ")[0]}
-                    slotPos={null}
-                    playerChemMap={{}}
-                    chemImg={() => null}
-                  />
-                </div>
-                <p className="packPlayerName">{player.long_name}</p>
+            {(openingStage === "pack" || openingStage === "idle") && (
+              <div className="packStage">
+                <img
+                  src={packImages[currentPack.packDesign] || special}
+                  className="openingPackImage"
+                />
               </div>
-            ))}
+            )}
+
+            {openingStage === "confetti" && (
+              <div className="packStage confetti">
+                <img
+                  src={packImages[currentPack.packDesign] || special}
+                  className="openingPackImage confettiPack"
+                />
+                <img src={Confetti} className="confettiGif" />
+              </div>
+            )}
+
+            {openingStage === "reveal" && packPlayersArr[0] && (
+              <div className="packStage reveal">
+                <PlayerCard
+                  player={packPlayersArr[0]}
+                  isModal={true}
+                  displayedPosition={(p) => p.player_positions.split(", ")[0]}
+                  slotPos={null}
+                  playerChemMap={{}}
+                  chemImg={() => null}
+                />
+              </div>
+            )}
+
+            {openingStage === "full" && (
+              <>
+                <div className="packTop">
+                  <button
+                    className="storeBtnPack"
+                    onClick={handleSendAllToClub}
+                  >
+                    Send all players to my club
+                  </button>
+                </div>
+
+                {packPlayersArr.map((player) => (
+                  <div key={player.player_id} className="cardRow">
+                    <div className="cardWrapper">
+                      <PlayerCard
+                        player={player}
+                        isModal={true}
+                        displayedPosition={(p) =>
+                          p.player_positions.split(", ")[0]
+                        }
+                        slotPos={null}
+                        playerChemMap={{}}
+                        chemImg={() => null}
+                      />
+                    </div>
+
+                    <p className="packPlayerName">
+                      {player.long_name}
+                      <button
+                        className="quickSellBtn"
+                        onClick={() => handleQuickSell(player)}
+                      >
+                        <p>Quick Sell</p>
+                        <p className="quickSellText">
+                          {player.value.toLocaleString("hu-HU")}
+                          <img src={Coins} alt="coins" />
+                        </p>
+                      </button>
+                    </p>
+                  </div>
+                ))}
+
+                <div className="packBottom">
+                  <button className="storeBtnPack" onClick={handleQuickSellAll}>
+                    <p>Quick sell all players for</p>
+                    <p className="quickSellText">
+                      {packPlayersArr
+                        .reduce((sum, p) => sum + p.value, 0)
+                        .toLocaleString("hu-HU")}
+                      <img src={Coins} alt="coins" />
+                    </p>
+                  </button>
+                </div>
+              </>
+            )}
           </div>,
           document.body,
         )}
