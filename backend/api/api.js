@@ -111,6 +111,68 @@ router.get("/users/me", async (request, response) => {
   }
 });
 
+router.post("/users/changeusername", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const newUsername = request.body.username;
+
+    await database.changeUsername(newUsername, userId);
+
+    response.status(200).json({ message: "Username changed successfully" });
+  } catch (error) {
+    console.log("POST /users/changeusername error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.post("/users/changepassword", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const hashed = await bcrypt.hash(request.body.password, 10);
+
+    await database.changePassword(hashed, userId);
+
+    response.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.log("POST /users/changepassword error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.post("/users/logout", async (request, response) => {
+  try {
+    request.session.destroy(() => {
+      response.clearCookie("connect.sid");
+
+      response.status(200).json({ message: "Logged out" });
+    });
+  } catch (error) {
+    console.log("POST /users/logout error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.post("/users/delete", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+
+    await database.deleteUser(userId);
+    await database.deleteUserPacks(userId);
+    await database.deleteUserObjClaims(userId);
+    await database.deleteUserSubobjProg(userId);
+    await database.deleteUserClub(userId);
+    await database.deleteUserStats(userId);
+
+    request.session.destroy(() => {
+      response.clearCookie("connect.sid");
+      response.status(200).json({ message: "User deleted" });
+    });
+  } catch (error) {
+    console.log("POST /users/delete error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
 //! User cuccai
 router.get("/users/me/coins", async (request, response) => {
   try {
@@ -478,13 +540,6 @@ router.get("/random/:pos", async (request, response) => {
 //! Chemistry kiszámolása
 router.get("/chemistry", async (request, response) => {
   try {
-    function chemFromClubCount(count) {
-      if (count >= 7) return 3;
-      if (count >= 4) return 2;
-      if (count >= 2) return 1;
-      return 0;
-    }
-
     function chemFromCountryCount(count) {
       if (count >= 8) return 3;
       if (count >= 5) return 2;
@@ -495,6 +550,18 @@ router.get("/chemistry", async (request, response) => {
       if (count >= 8) return 3;
       if (count >= 5) return 2;
       if (count >= 3) return 1;
+      return 0;
+    }
+    function chemFromClubCount(count) {
+      if (count >= 7) return 3;
+      if (count >= 4) return 2;
+      if (count >= 2) return 1;
+      return 0;
+    }
+    function chemFromIconCount(count) {
+      if (count >= 6) return 3;
+      if (count >= 4) return 2;
+      if (count >= 2) return 1;
       return 0;
     }
 
@@ -517,7 +584,7 @@ router.get("/chemistry", async (request, response) => {
 
     function calculateChemistry(players) {
       const activePlayers = players.filter((p) => p && inPosition(p));
-
+      let iconCount = 0;
       const nationCount = {};
       const leagueCount = {};
       const clubCount = {};
@@ -529,15 +596,38 @@ router.get("/chemistry", async (request, response) => {
         } else {
           nationCount[p.nationality_name]++;
         }
+        if (p.rarity === "icon") {
+          nationCount[p.nationality_name] += 4;
+        }
+        if (p.rarity === "hero") {
+          nationCount[p.nationality_name] += 2;
+        }
+
         if (!leagueCount[p.league_name]) {
           leagueCount[p.league_name] = 1;
         } else {
           leagueCount[p.league_name]++;
         }
+        if (p.rarity === "icon") {
+          leagueCount[p.league_name] += 1;
+        }
+        if (p.rarity === "hero") {
+          leagueCount[p.league_name] += 2;
+        }
         if (!clubCount[p.club_name]) {
           clubCount[p.club_name] = 1;
         } else {
           clubCount[p.club_name]++;
+        }
+        if (p.rarity === "icon") {
+          clubCount[p.club_name] += 1;
+        }
+        if (p.rarity === "hero") {
+          clubCount[p.club_name] += 1;
+        }
+
+        if (p.rarity === "icon") {
+          iconCount += 1;
         }
       });
 
@@ -550,6 +640,7 @@ router.get("/chemistry", async (request, response) => {
             player_id: player.player_id,
             chemistry: 0,
             inPosition: false,
+            iconCount: iconCount,
           };
         }
 
@@ -559,7 +650,7 @@ router.get("/chemistry", async (request, response) => {
         );
         chemistry += chemFromLeagueCount(leagueCount[player.league_name] || 0);
         chemistry += chemFromClubCount(clubCount[player.club_name] || 0);
-
+        chemistry += chemFromIconCount(iconCount);
         if (chemistry > 3) {
           chemistry = 3;
         }
@@ -633,7 +724,7 @@ router.put("/swap", (request, response) => {
     const arrays = {
       starting11: draftselectedPlayers11,
       subs: draftselectedPlayersSubs,
-      res: draftselectedPlayersRes,
+      response: draftselectedPlayersRes,
     };
 
     const findPlayer = (playerId) => {
@@ -1095,6 +1186,123 @@ router.get("/generatePack/:id", async (request, response) => {
       .json({ randomjatekosok: randompack(data, playerCount, condition) });
   } catch (error) {
     console.log("GET /api/packplayers error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//!Store
+router.get("/storepacks", async (request, response) => {
+  try {
+    const packs = await database.getStorePacks();
+    response.status(200).json(packs);
+  } catch (error) {
+    console.log("GET /storepacks error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.post("/deletemypack", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const packId = request.body.packId;
+
+    await database.deleteMyPack(userId, packId);
+
+    response.status(200).json({ message: "Pack deleted from user" });
+  } catch (error) {
+    console.log("POST /api/deletemypack error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//!Update Coins
+router.post("/updatecoins", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const coins = request.body.coins;
+
+    await database.updateCoins(coins, userId);
+
+    response.status(200).json({ message: "Coins updated" });
+  } catch (error) {
+    console.log("POST /api/updatecoins error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//! User club
+router.post("/addPlayersToClub", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const newPlayers = request.body.players;
+
+    const rows = await database.currentClub(userId);
+
+    let currentPlayers = [];
+
+    if (rows[0].userPlayers) {
+      currentPlayers = JSON.parse(rows[0].userPlayers);
+    }
+
+    const updatedPlayers = [...currentPlayers, ...newPlayers];
+
+    await database.updateClub(updatedPlayers, userId);
+
+    response.status(200).json({ success: true });
+  } catch (error) {
+    console.log("POST /api/addplayerstoclub error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.get("/myClub", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+
+    const rows = await database.currentClub(userId);
+
+    if (!rows || rows.length === 0) {
+      return response.json([]);
+    }
+
+    let players = [];
+
+    if (rows[0].userPlayers) {
+      players = JSON.parse(rows[0].userPlayers);
+    }
+
+    response.status(200).json(players);
+  } catch (error) {
+    console.log("GET /api/myClub error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//! SBC
+router.get("/allsbc", async (request, response) => {
+  try {
+    const rows = await database.getSBC();
+
+    const result = {
+      challenges: [],
+      upgrades: [],
+      foundations: [],
+    };
+
+    rows.forEach((row) => {
+      result[row.category_name].push({
+        id: row.id,
+        name: row.name,
+        reward: {
+          coins: row.reward || null,
+          packs: [],
+        },
+      });
+    });
+
+    response.status(200).json({ results: result });
+  } catch (error) {
+    console.log("GET /api/allsbc error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });

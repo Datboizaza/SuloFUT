@@ -1,0 +1,523 @@
+/* Store */
+.storeContainer {
+  padding: 25px;
+  color: white;
+  backdrop-filter: blur(20px);
+  background-color: #003d3f3b;
+  border-radius: 20px;
+  height: 80vh;
+  width: 70vw;
+  overflow-y: scroll;
+  transform: scale(0.8);
+  opacity: 0;
+  animation: scalePopIn 0.4s ease forwards;
+}
+
+/* Tabok */
+.tabs {
+  display: flex;
+  margin-bottom: 4%;
+  justify-content: space-between;
+}
+
+.tab {
+  height: 6vh;
+  width: 48%;
+  background: #1111114f;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease-in-out;
+}
+
+.tab.active {
+  background: linear-gradient(90deg, #00fff7, #00f078);
+  color: rgb(44, 82, 69);
+}
+
+/* Grid */
+.storeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+/* Pack card */
+.packCard {
+  background: #00000056;
+  border-radius: 15px;
+  padding: 40px;
+  text-align: center;
+  transition: 0.2s ease-in-out;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  transform: scale(0.8);
+  opacity: 0;
+  animation: scalePopIn 0.3s ease forwards !important;
+}
+
+.packCard p {
+  font-weight: bold;
+  font-size: 120%;
+}
+
+.packImage {
+  width: 100px;
+}
+
+/* Price */
+.price {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  color: gold;
+  margin: 10px 0;
+  font-size: 90% !important;
+  font-weight: normal !important;
+}
+
+.price img {
+  height: 20px;
+}
+
+/* Gomb */
+.storeBtn {
+  width: 80%;
+  height: 45px;
+  border-radius: 20px;
+  border: 1px rgba(0, 255, 149, 0.7) solid;
+  background: linear-gradient(90deg, #3da5a7, #00c3ff56);
+  color: white;
+  transition: all 150ms ease-in-out;
+}
+
+.storeBtn:hover {
+  transform: scale(1.03);
+  background: linear-gradient(90deg, #53d9db, #6affab);
+  color: rgba(6, 92, 85, 0.842);
+}
+
+/* Pack Opening */
+.packOpeningModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.39);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  align-items: center;
+  gap: 20px;
+  overflow-y: scroll;
+
+  z-index: 9999;
+}
+
+.cardRow {
+  width: 50%;
+  background-color: rgba(0, 0, 0, 0.479);
+  padding: 20px;
+  border-radius: 18px;
+  transition: transform 100ms ease-in-out;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.cardRow:hover {
+  transform: scale(1.01);
+}
+
+.cardWrapper {
+  position: relative;
+  width: 23%;
+  min-width: 150px;
+  max-width: 190px;
+  aspect-ratio: 3/3.8;
+  height: 100%;
+  transition: all 100ms ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cardWrapper:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+}
+
+.packPlayerName {
+  color: rgb(203, 255, 252);
+  font-family: bristone;
+  font-size: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: end;
+}
+
+.packOpeningModal .cardDesign {
+  filter: drop-shadow(0 8px 15px rgba(255, 208, 0, 0.425));
+}
+
+.packOpeningModal .bronze {
+  filter: drop-shadow(0 8px 15px rgba(82, 46, 0, 0.507));
+}
+
+.packOpeningModal .silver {
+  filter: drop-shadow(0 8px 15px rgba(255, 255, 255, 0.315));
+}
+
+.packOpeningModal .icon {
+  filter: drop-shadow(0 8px 15px rgba(255, 255, 255, 0.425));
+}
+
+.packOpeningModal .hero {
+  filter: drop-shadow(0 8px 15px rgba(231, 68, 68, 0.425));
+}
+
+.packOpeningModal .toty {
+  filter: drop-shadow(0 8px 15px rgba(231, 220, 68, 0.425));
+}
+
+.packOpeningModal .flashback {
+  filter: drop-shadow(0 8px 15px rgba(128, 231, 68, 0.425));
+}
+
+.packOpeningModal .scream {
+  filter: drop-shadow(0 8px 15px rgba(255, 166, 0, 0.425));
+}
+
+/* Pack dolgok */
+.quickSellBtn {
+  position: relative;
+  top: 70px;
+  right: 10px;
+  background: rgba(255, 0, 0, 0.174);
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: max-content;
+  padding: 8px 10px;
+  border-radius: 10px;
+  transition: transform 100ms ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.quickSellText img {
+  height: 17px;
+}
+
+.quickSellBtn:hover {
+  transform: scale(1.1);
+}
+
+.quickSellText {
+  font-family: normal;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 60%;
+  height: max-content;
+  margin: 0;
+}
+
+.storeBtnPack {
+  width: 40%;
+  height: 55px;
+  border-radius: 20px;
+  border: 1px rgba(0, 187, 255, 0.301) solid;
+  background: linear-gradient(90deg, #1b3b3b, #033b4c56);
+  color: white;
+  transition: all 150ms ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.storeBtnPack:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.storeBtnPack p {
+  margin: 0;
+}
+
+.storeBtnPack:hover {
+  transform: scale(1.03);
+  background: linear-gradient(90deg, #53d9db, #6affab);
+  color: rgba(6, 92, 85, 0.842);
+}
+
+.packTop {
+  width: 48%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.packBottom {
+  width: 48%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Pack animáció */
+.packStage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  animation: fadeIn 0.8s ease;
+}
+
+.reveal {
+  position: relative;
+  top: 35%;
+  width: 23%;
+  max-width: 190px;
+  aspect-ratio: 3/3.8;
+  height: 28%;
+  min-height: 240px;
+  transition: all 100ms ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.openingPackImage {
+  width: 220px;
+  animation: zoomIn 0.8s ease;
+}
+
+.confettiPack {
+  animation: none;
+}
+
+.confettiGif {
+  position: absolute;
+  top: 25%;
+  z-index: 9999;
+}
+
+/* Confirm modal-ok */
+.confirmModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.589);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.confirmModal {
+  background: #173635c0;
+  padding: 40px;
+  border-radius: 10px;
+  color: white;
+  text-align: center;
+}
+
+.modalBtns {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 15px;
+  font-family: bristone;
+  font-size: 80%;
+}
+
+.modalBtns button {
+  height: 35px;
+  width: 60px;
+  border-radius: 20px;
+  transition: all 150ms ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalBtns button:hover {
+  transform: scale(1.08);
+}
+
+.noButton {
+  background: linear-gradient(90deg, #3b1b1b, #38090956);
+  border: 1px solid rgba(126, 0, 0, 0.432);
+  color: rgb(129, 28, 28);
+}
+
+.yesButton {
+  background: linear-gradient(90deg, #216363, #04415356);
+  border: 1px solid rgba(0, 126, 94, 0.432);
+  color: rgb(0, 128, 75);
+}
+
+.noButton:hover {
+  background: linear-gradient(90deg, #5e2929, #74191956);
+  color: rgb(161, 0, 0);
+}
+
+.yesButton:hover {
+  background: linear-gradient(90deg, #38a3a3, #08779956);
+  color: rgb(1, 177, 177);
+}
+
+.backIcon {
+  height: 30px;
+}
+
+.backIconBtn {
+  background: transparent;
+  border: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+  color: rgba(255, 255, 255, 0.514);
+}
+
+.backIconBtn p {
+  margin: 0;
+}
+
+.backIconBtn:hover {
+  transform: scale(1.08);
+  color: white;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0000000a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0000001e;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00ffc89d;
+}
+
+/* Animáció */
+@keyframes scalePopIn {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/*------------------Media queries---------------------*/
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  .storeContainer {
+    height: 85vh;
+    width: 80vw;
+  }
+
+  .cardRow {
+    width: 80%;
+  }
+
+  .packTop {
+    width: 78%;
+  }
+
+  .packBottom {
+    width: 78%;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .storeContainer {
+    height: 90vh;
+    width: 95vw;
+  }
+
+  .cardRow {
+    width: 90%;
+    font-size: 80%;
+  }
+
+  .packTop {
+    width: 88%;
+    font-size: 10px;
+  }
+
+  .packBottom {
+    width: 88%;
+    font-size: 10px;
+  }
+
+  .cardWrapper {
+    width: 23%;
+    min-width: 120px;
+    max-width: 190px;
+    aspect-ratio: 3/3.8;
+    height: 100%;
+  }
+
+  .packPlayerName {
+    font-size: 7px;
+  }
+
+  .quickSellBtn {
+    top: 40px;
+  }
+
+  .confirmModal {
+    width: 90vw;
+  }
+
+  .reveal {
+    width: 50%;
+    min-width: 190px;
+    max-width: 200px;
+    aspect-ratio: 3/3.8;
+    height: 52%;
+    min-height: 250px;
+    max-height: 250px;
+  }
+}

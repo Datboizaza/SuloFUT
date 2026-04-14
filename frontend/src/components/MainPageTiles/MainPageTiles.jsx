@@ -16,7 +16,7 @@ function MainPageTiles() {
           <div className="col-12" id="tile1">
             <Carousel />
           </div>
-          <a className="col-12" id="tile1" href="">
+          <Link className="col-12" id="tile1" to="/sbc">
             <div id="tileTexts1" className="col-8">
               <h3>SBC</h3>
               <p>Exchange squads for rewards.</p>
@@ -28,7 +28,7 @@ function MainPageTiles() {
                 id="sbcLogo"
               />
             </div>
-          </a>
+          </Link>
         </div>
         <div className="row" id="tileRow2">
           <Link className="col-12" id="tile2" to="/draft">
@@ -40,7 +40,7 @@ function MainPageTiles() {
               <img src={DraftLogo} alt="Draft Logo" id="draftLogo" />
             </div>
           </Link>
-          <a className="col-12" id="tile2" href="">
+          <Link className="col-12" id="tile2" to="/store">
             <div id="tileTexts2" className="col-12  col-md-8">
               <h3>STORE</h3>
               <p>Open packs to obtain new cards.</p>
@@ -48,7 +48,7 @@ function MainPageTiles() {
             <div id="tileImages2" className="col-12 col-md-4">
               <img src={StoreLogo} alt="Store Logo" id="storeLogo" />
             </div>
-          </a>
+          </Link>
           <Link className="col-12" id="tile2" to="/objectives">
             <div id="tileTexts2" className="col-12  col-md-8">
               <h3>OBJECTIVES</h3>

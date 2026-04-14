@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2026. Már 23. 12:15
+-- Létrehozás ideje: 2026. Ápr 14. 20:10
 -- Kiszolgáló verziója: 10.4.28-MariaDB
 -- PHP verzió: 8.0.28
 
@@ -151,10 +151,10 @@ CREATE TABLE `packs` (
   `playerCount` int(11) NOT NULL,
   `playerQuality` text NOT NULL,
   `packWeightID` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_hungarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
--- Dumping data for table `packs`
+-- A tábla adatainak kiíratása `packs`
 --
 
 INSERT INTO `packs` (`id`, `packName`, `packPrice`, `packDesign`, `playerCount`, `playerQuality`, `packWeightID`) VALUES
@@ -163,7 +163,7 @@ INSERT INTO `packs` (`id`, `packName`, `packPrice`, `packDesign`, `playerCount`,
 (3, 'Gold Pack', 7500, 'gold', 12, 'gold/flashback/scream/toty/icon/hero', 3),
 (4, 'Jumbo Gold Pack', 12000, 'gold', 24, 'gold/flashback/scream/toty/icon/hero', 4),
 (5, 'Mixed Players Pack', 6000, 'special', 12, 'bronze/silver/gold', 5),
-(6, 'Mega Pack', 10000, 'special', 30, 'gold/flashback/scream/toty/icon/hero', 6),
+(6, 'Mega Pack', 35000, 'special', 30, 'gold/flashback/scream/toty/icon/hero', 6),
 (7, '80+x10 Players Pack', 20000, 'special', 10, 'gold/flashback/scream/toty/icon/hero', 7),
 (8, '82+x10 Players Pack', 25000, 'special', 10, 'gold/flashback/scream/toty/icon/hero', 8),
 (9, '85+x4 Players Pack', 30000, 'special', 4, 'gold/flashback/scream/toty/icon/hero', 9),
@@ -182,23 +182,23 @@ INSERT INTO `packs` (`id`, `packName`, `packPrice`, `packDesign`, `playerCount`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `packweights`
+-- Tábla szerkezet ehhez a táblához `packweights`
 --
 
 CREATE TABLE `packweights` (
   `id` int(11) NOT NULL,
-  `bronzeWeight` float(11) NOT NULL,
-  `silverWeight` float(11) NOT NULL,
-  `goldWeight` float(11) NOT NULL,
-  `flashbackWeight` float(11) NOT NULL,
-  `screamWeight` float(11) NOT NULL,
-  `totyWeight` float(11) NOT NULL,
-  `iconWeight` float(11) NOT NULL,
-  `heroWeight` float(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_hungarian_ci;
+  `bronzeWeight` float NOT NULL,
+  `silverWeight` float NOT NULL,
+  `goldWeight` float NOT NULL,
+  `flashbackWeight` float NOT NULL,
+  `screamWeight` float NOT NULL,
+  `totyWeight` float NOT NULL,
+  `iconWeight` float NOT NULL,
+  `heroWeight` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
--- Dumping data for table `packweights`
+-- A tábla adatainak kiíratása `packweights`
 --
 
 INSERT INTO `packweights` (`id`, `bronzeWeight`, `silverWeight`, `goldWeight`, `flashbackWeight`, `screamWeight`, `totyWeight`, `iconWeight`, `heroWeight`) VALUES
@@ -218,14 +218,10 @@ INSERT INTO `packweights` (`id`, `bronzeWeight`, `silverWeight`, `goldWeight`, `
 (14, 0, 0, 0, 0, 0, 0, 0, 100),
 (15, 0, 0, 0, 0, 0, 0, 0, 100),
 (16, 0, 0, 0, 33, 33, 33, 0, 0),
-(17, 0, 0, 0, 0, 0, 0, 80, 20),
+(17, 0, 0, 0, 0, 0, 0, 30, 70),
 (18, 0, 0, 94, 1.5, 1.5, 1.5, 0.5, 1),
 (19, 0, 0, 0, 0, 0, 100, 0, 0),
 (20, 33, 33, 33, 0, 0, 0, 0, 0);
-
---
--- A tábla adatainak kiíratása `packs`
---
 
 -- --------------------------------------------------------
 
@@ -268,6 +264,57 @@ INSERT INTO `rewards` (`id`, `packIds`, `coins`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Tábla szerkezet ehhez a táblához `sbc`
+--
+
+CREATE TABLE `sbc` (
+  `id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `reward` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `sbc`
+--
+
+INSERT INTO `sbc` (`id`, `category_id`, `name`, `reward`) VALUES
+(1, 1, 'SBC1', 6),
+(2, 1, 'SBC2', 6),
+(3, 1, 'SBC3', 6),
+(4, 1, 'SBC4', 6),
+(5, 2, 'SBC5', 6),
+(6, 2, 'SBC6', 6),
+(7, 2, 'SBC7', 6),
+(8, 2, 'SBC8', 6),
+(9, 3, 'SBC9', 6),
+(10, 3, 'SBC10', 6),
+(11, 3, 'SBC11', 6),
+(12, 3, 'SBC12', 6);
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `sbccategories`
+--
+
+CREATE TABLE `sbccategories` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `sbccategories`
+--
+
+INSERT INTO `sbccategories` (`id`, `name`) VALUES
+(1, 'challenges'),
+(2, 'upgrades'),
+(3, 'foundations');
+
+-- --------------------------------------------------------
+
+--
 -- Tábla szerkezet ehhez a táblához `stats`
 --
 
@@ -285,7 +332,6 @@ CREATE TABLE `stats` (
 --
 
 INSERT INTO `stats` (`id`, `user_id`, `best_draft`, `top_squad`, `club_value`, `cards_opened`) VALUES
-(1, 1, 117, 100, 23750, 245),
 (2, 2, 115, 99, 23000, 240),
 (3, 3, 118, 101, 24000, 250),
 (4, 4, 116, 100, 23500, 248),
@@ -337,7 +383,7 @@ INSERT INTO `stats` (`id`, `user_id`, `best_draft`, `top_squad`, `club_value`, `
 (50, 50, 115, 99, 23000, 240),
 (51, 51, 117, 100, 23750, 379),
 (52, 52, 120, 121, 412780, 245),
-(53, 53, 119, 122, 436720, 493);
+(53, 53, 122, 122, 436720, 493);
 
 -- --------------------------------------------------------
 
@@ -406,7 +452,7 @@ CREATE TABLE `userclub` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `coinNumber` int(11) NOT NULL DEFAULT 0,
-  `userPlayers` text DEFAULT NULL
+  `userPlayers` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`userPlayers`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
@@ -414,7 +460,6 @@ CREATE TABLE `userclub` (
 --
 
 INSERT INTO `userclub` (`id`, `user_id`, `coinNumber`, `userPlayers`) VALUES
-(1, 1, 183452, NULL),
 (2, 2, 92734, NULL),
 (3, 3, 245678, NULL),
 (4, 4, 156789, NULL),
@@ -466,7 +511,7 @@ INSERT INTO `userclub` (`id`, `user_id`, `coinNumber`, `userPlayers`) VALUES
 (50, 50, 167890, NULL),
 (51, 51, 223456, NULL),
 (52, 52, 189765, NULL),
-(53, 53, 254321, NULL);
+(53, 53, 14308371, '[{\"player_id\":\"212831\",\"short_name\":\"Alisson\",\"long_name\":\"Alisson Ramsés Becker\",\"player_positions\":\"GK\",\"overall\":\"89\",\"league_id\":\"13\",\"league_name\":\"Premier League\",\"league_level\":\"1\",\"club_team_id\":\"9\",\"club_name\":\"Liverpool\",\"nationality_id\":\"54\",\"nationality_name\":\"Brazil\",\"goalkeeping_diving\":\"86\",\"goalkeeping_handling\":\"85\",\"goalkeeping_kicking\":\"86\",\"goalkeeping_positioning\":\"90\",\"goalkeeping_reflexes\":\"89\",\"goalkeeping_speed\":\"56\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p212831.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l13.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/54.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l9.png?v=11\",\"rarity\":\"gold\",\"value\":628},{\"player_id\":\"200389\",\"short_name\":\"J. Oblak\",\"long_name\":\"Jan Oblak\",\"player_positions\":\"GK\",\"overall\":\"88\",\"league_id\":\"53\",\"league_name\":\"La Liga\",\"league_level\":\"1\",\"club_team_id\":\"240\",\"club_name\":\"Atlético Madrid\",\"nationality_id\":\"44\",\"nationality_name\":\"Slovenia\",\"goalkeeping_diving\":\"85\",\"goalkeeping_handling\":\"90\",\"goalkeeping_kicking\":\"78\",\"goalkeeping_positioning\":\"86\",\"goalkeeping_reflexes\":\"87\",\"goalkeeping_speed\":\"46\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p200389.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l53.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/44.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l240.png?v=11\",\"rarity\":\"gold\",\"value\":628},{\"player_id\":\"247635\",\"short_name\":\"K. Kvaratskhelia\",\"long_name\":\"Khvicha Kvaratskheliaხვიჩა კვარაცხელია\",\"player_positions\":\"LW, RW, LM\",\"overall\":\"87\",\"league_id\":\"16\",\"league_name\":\"Ligue 1\",\"league_level\":\"1\",\"club_team_id\":\"73\",\"club_name\":\"Paris Saint-Germain\",\"nationality_id\":\"20\",\"nationality_name\":\"Georgia\",\"pace\":\"86\",\"shooting\":\"80\",\"passing\":\"83\",\"dribbling\":\"88\",\"defending\":\"58\",\"physic\":\"78\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p247635.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l16.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/20.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l73.png?v=11\",\"rarity\":\"gold\",\"value\":628},{\"player_id\":\"239818\",\"short_name\":\"Rúben Dias\",\"long_name\":\"Rúben dos Santos Gato Alves Dias\",\"player_positions\":\"CB\",\"overall\":\"86\",\"league_id\":\"13\",\"league_name\":\"Premier League\",\"league_level\":\"1\",\"club_team_id\":\"10\",\"club_name\":\"Manchester City\",\"nationality_id\":\"38\",\"nationality_name\":\"Portugal\",\"pace\":\"59\",\"shooting\":\"39\",\"passing\":\"69\",\"dribbling\":\"69\",\"defending\":\"86\",\"physic\":\"84\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p239818.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l13.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/38.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l10.png?v=11\",\"rarity\":\"gold\",\"value\":628},{\"player_id\":\"210257\",\"short_name\":\"Ederson\",\"long_name\":\"Ederson Santana de Moraes\",\"player_positions\":\"GK\",\"overall\":\"85\",\"league_id\":\"68\",\"league_name\":\"Süper Lig\",\"league_level\":\"1\",\"club_team_id\":\"326\",\"club_name\":\"Fenerbahçe SK\",\"nationality_id\":\"54\",\"nationality_name\":\"Brazil\",\"goalkeeping_diving\":\"83\",\"goalkeeping_handling\":\"82\",\"goalkeeping_kicking\":\"91\",\"goalkeeping_positioning\":\"83\",\"goalkeeping_reflexes\":\"83\",\"goalkeeping_speed\":\"64\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p210257.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l68.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/54.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l326.png?v=11\",\"rarity\":\"gold\",\"value\":628},{\"player_id\":\"256675\",\"short_name\":\"O. Marmoush\",\"long_name\":\"Omar Khaled Mohamed Marmoush\",\"player_positions\":\"ST, CAM, LW\",\"overall\":\"84\",\"league_id\":\"13\",\"league_name\":\"Premier League\",\"league_level\":\"1\",\"club_team_id\":\"10\",\"club_name\":\"Manchester City\",\"nationality_id\":\"111\",\"nationality_name\":\"Egypt\",\"pace\":\"89\",\"shooting\":\"85\",\"passing\":\"76\",\"dribbling\":\"86\",\"defending\":\"34\",\"physic\":\"71\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p256675.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l13.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/111.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l10.png?v=11\",\"rarity\":\"gold\",\"value\":596},{\"player_id\":\"204638\",\"short_name\":\"W. Orban\",\"long_name\":\"Vilmos Tamás Orbán\",\"player_positions\":\"CB\",\"overall\":\"84\",\"league_id\":\"19\",\"league_name\":\"Bundesliga\",\"league_level\":\"1\",\"club_team_id\":\"112172\",\"club_name\":\"RB Leipzig\",\"nationality_id\":\"23\",\"nationality_name\":\"Hungary\",\"pace\":\"57\",\"shooting\":\"40\",\"passing\":\"56\",\"dribbling\":\"56\",\"defending\":\"86\",\"physic\":\"83\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p204638.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l19.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/23.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l112172.png?v=11\",\"rarity\":\"gold\",\"value\":596},{\"player_id\":\"222077\",\"short_name\":\"M. Locatelli\",\"long_name\":\"Manuel Locatelli\",\"player_positions\":\"CDM, CM\",\"overall\":\"84\",\"league_id\":\"31\",\"league_name\":\"Serie A\",\"league_level\":\"1\",\"club_team_id\":\"45\",\"club_name\":\"Juventus\",\"nationality_id\":\"27\",\"nationality_name\":\"Italy\",\"pace\":\"63\",\"shooting\":\"69\",\"passing\":\"80\",\"dribbling\":\"76\",\"defending\":\"81\",\"physic\":\"78\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p222077.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l31.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/27.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l45.png?v=11\",\"rarity\":\"gold\",\"value\":596},{\"player_id\":\"199845\",\"short_name\":\"F. Acerbi\",\"long_name\":\"Francesco Acerbi\",\"player_positions\":\"CB\",\"overall\":\"84\",\"league_id\":\"31\",\"league_name\":\"Serie A\",\"league_level\":\"1\",\"club_team_id\":\"44\",\"club_name\":\"Inter\",\"nationality_id\":\"27\",\"nationality_name\":\"Italy\",\"pace\":\"57\",\"shooting\":\"50\",\"passing\":\"65\",\"dribbling\":\"65\",\"defending\":\"87\",\"physic\":\"81\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p199845.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l31.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/27.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l44.png?v=11\",\"rarity\":\"gold\",\"value\":596},{\"player_id\":\"243245\",\"short_name\":\"O. Kökçü\",\"long_name\":\"Orkun Kökçü\",\"player_positions\":\"CM, CAM, CDM\",\"overall\":\"82\",\"league_id\":\"68\",\"league_name\":\"Süper Lig\",\"league_level\":\"1\",\"club_team_id\":\"327\",\"club_name\":\"Beşiktaş JK\",\"nationality_id\":\"48\",\"nationality_name\":\"Türkiye\",\"pace\":\"72\",\"shooting\":\"80\",\"passing\":\"84\",\"dribbling\":\"80\",\"defending\":\"70\",\"physic\":\"79\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p243245.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l68.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/48.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l327.png?v=11\",\"rarity\":\"gold\",\"value\":596},{\"player_id\":\"207865\",\"short_name\":\"Marquinhos\",\"long_name\":\"Marcos Aoás Corrêa\",\"player_positions\":\"CB\",\"overall\":\"88\",\"league_id\":\"16\",\"league_name\":\"Ligue 1\",\"league_level\":\"1\",\"club_team_id\":\"73\",\"club_name\":\"Paris Saint-Germain\",\"nationality_id\":\"54\",\"nationality_name\":\"Brazil\",\"pace\":\"83\",\"shooting\":\"56\",\"passing\":\"81\",\"dribbling\":\"79\",\"defending\":\"92\",\"physic\":\"88\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p207865.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l16.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/54.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l73.png?v=11\",\"rarity\":\"flashback\",\"value\":15480},{\"player_id\":\"252145\",\"short_name\":\"Nuno Mendes\",\"long_name\":\"Nuno Alexandre Tavares Mendes\",\"player_positions\":\"LB, LM\",\"overall\":\"86\",\"league_id\":\"16\",\"league_name\":\"Ligue 1\",\"league_level\":\"1\",\"club_team_id\":\"73\",\"club_name\":\"Paris Saint-Germain\",\"nationality_id\":\"38\",\"nationality_name\":\"Portugal\",\"pace\":\"95\",\"shooting\":\"65\",\"passing\":\"76\",\"dribbling\":\"82\",\"defending\":\"80\",\"physic\":\"77\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p252145.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l16.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/38.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l73.png?v=11\",\"rarity\":\"gold\",\"value\":628},{\"player_id\":\"230869\",\"short_name\":\"Unai Simón\",\"long_name\":\"Unai Simón Mendibil\",\"player_positions\":\"GK\",\"overall\":\"85\",\"league_id\":\"53\",\"league_name\":\"La Liga\",\"league_level\":\"1\",\"club_team_id\":\"448\",\"club_name\":\"Athletic Club\",\"nationality_id\":\"45\",\"nationality_name\":\"Spain\",\"goalkeeping_diving\":\"84\",\"goalkeeping_handling\":\"80\",\"goalkeeping_kicking\":\"76\",\"goalkeeping_positioning\":\"84\",\"goalkeeping_reflexes\":\"85\",\"goalkeeping_speed\":\"49\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p230869.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l53.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/45.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l448.png?v=11\",\"rarity\":\"gold\",\"value\":628},{\"player_id\":\"247090\",\"short_name\":\"E. Fernández\",\"long_name\":\"Enzo Jeremías Fernández\",\"player_positions\":\"CM, CDM, CAM\",\"overall\":\"84\",\"league_id\":\"13\",\"league_name\":\"Premier League\",\"league_level\":\"1\",\"club_team_id\":\"5\",\"club_name\":\"Chelsea\",\"nationality_id\":\"52\",\"nationality_name\":\"Argentina\",\"pace\":\"68\",\"shooting\":\"75\",\"passing\":\"85\",\"dribbling\":\"81\",\"defending\":\"73\",\"physic\":\"75\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p247090.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l13.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/52.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l5.png?v=11\",\"rarity\":\"gold\",\"value\":596},{\"player_id\":\"210514\",\"short_name\":\"João Cancelo\",\"long_name\":\"João Pedro Cavaco Cancelo\",\"player_positions\":\"RB, LB, RM\",\"overall\":\"84\",\"league_id\":\"350\",\"league_name\":\"Pro League\",\"league_level\":\"1\",\"club_team_id\":\"605\",\"club_name\":\"Al Hilal\",\"nationality_id\":\"38\",\"nationality_name\":\"Portugal\",\"pace\":\"83\",\"shooting\":\"73\",\"passing\":\"84\",\"dribbling\":\"84\",\"defending\":\"78\",\"physic\":\"74\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p210514.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l350.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/38.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l605.png?v=11\",\"rarity\":\"gold\",\"value\":596},{\"player_id\":\"186153\",\"short_name\":\"W. Szczęsny\",\"long_name\":\"Wojciech Tomasz Szczęsny\",\"player_positions\":\"GK\",\"overall\":\"84\",\"league_id\":\"53\",\"league_name\":\"La Liga\",\"league_level\":\"1\",\"club_team_id\":\"241\",\"club_name\":\"FC Barcelona\",\"nationality_id\":\"37\",\"nationality_name\":\"Poland\",\"goalkeeping_diving\":\"82\",\"goalkeeping_handling\":\"83\",\"goalkeeping_kicking\":\"75\",\"goalkeeping_positioning\":\"84\",\"goalkeeping_reflexes\":\"84\",\"goalkeeping_speed\":\"48\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p186153.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l53.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/37.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l241.png?v=11\",\"rarity\":\"gold\",\"value\":596},{\"player_id\":\"229582\",\"short_name\":\"G. Mancini\",\"long_name\":\"Gianluca Mancini\",\"player_positions\":\"CB\",\"overall\":\"83\",\"league_id\":\"31\",\"league_name\":\"Serie A\",\"league_level\":\"1\",\"club_team_id\":\"52\",\"club_name\":\"Roma\",\"nationality_id\":\"27\",\"nationality_name\":\"Italy\",\"pace\":\"70\",\"shooting\":\"50\",\"passing\":\"57\",\"dribbling\":\"64\",\"defending\":\"85\",\"physic\":\"82\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p229582.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l31.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/27.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l52.png?v=11\",\"rarity\":\"gold\",\"value\":596},{\"player_id\":\"225375\",\"short_name\":\"K. Laimer\",\"long_name\":\"Konrad Laimer\",\"player_positions\":\"RB, CDM, CM, RM\",\"overall\":\"82\",\"league_id\":\"19\",\"league_name\":\"Bundesliga\",\"league_level\":\"1\",\"club_team_id\":\"21\",\"club_name\":\"FC Bayern München\",\"nationality_id\":\"4\",\"nationality_name\":\"Austria\",\"pace\":\"82\",\"shooting\":\"69\",\"passing\":\"76\",\"dribbling\":\"75\",\"defending\":\"81\",\"physic\":\"76\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p225375.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l19.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/4.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l21.png?v=11\",\"rarity\":\"gold\",\"value\":596},{\"player_id\":\"278046\",\"short_name\":\"Pau Cubarsí\",\"long_name\":\"Pau Cubarsí Paredes\",\"player_positions\":\"CB\",\"overall\":\"82\",\"league_id\":\"53\",\"league_name\":\"La Liga\",\"league_level\":\"1\",\"club_team_id\":\"241\",\"club_name\":\"FC Barcelona\",\"nationality_id\":\"45\",\"nationality_name\":\"Spain\",\"pace\":\"70\",\"shooting\":\"42\",\"passing\":\"66\",\"dribbling\":\"77\",\"defending\":\"84\",\"physic\":\"76\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p278046.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l53.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/45.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l241.png?v=11\",\"rarity\":\"gold\",\"value\":596},{\"player_id\":\"231352\",\"short_name\":\"T. Abraham\",\"long_name\":\"Kevin Oghenetega Tamaraebi Bakumo-Abraham\",\"player_positions\":\"ST\",\"overall\":\"85\",\"league_id\":\"68\",\"league_name\":\"Süper Lig\",\"league_level\":\"1\",\"club_team_id\":\"327\",\"club_name\":\"Beşiktaş JK\",\"nationality_id\":\"14\",\"nationality_name\":\"England\",\"pace\":\"83\",\"shooting\":\"87\",\"passing\":\"68\",\"dribbling\":\"82\",\"defending\":\"39\",\"physic\":\"83\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p231352.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l68.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/14.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l327.png?v=11\",\"rarity\":\"scream\",\"value\":15480},{\"player_id\":\"238388\",\"short_name\":\"Bergkamp\",\"long_name\":\"Dennis Bergkamp\",\"player_positions\":\"ST, CAM\",\"overall\":\"90\",\"league_id\":\"2118\",\"league_name\":\"Icon\",\"league_level\":\"1\",\"club_team_id\":\"2118\",\"club_name\":\"Icon\",\"nationality_id\":\"34\",\"nationality_name\":\"Netherlands\",\"pace\":83,\"shooting\":89,\"passing\":84,\"dribbling\":88,\"defending\":35,\"physic\":76,\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p238388.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l2118.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/34.png?v=11\",\"club_team_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l2118.png\",\"rarity\":\"icon\",\"value\":68250},{\"player_id\":\"232083\",\"short_name\":\"J. Yaro\",\"long_name\":\"Joshua Yaro\",\"player_positions\":\"CB\",\"overall\":\"64\",\"league_id\":\"39\",\"league_name\":\"Major League Soccer\",\"league_level\":\"1\",\"club_team_id\":\"113018\",\"club_name\":\"St. Louis CITY SC\",\"nationality_id\":\"117\",\"nationality_name\":\"Ghana\",\"pace\":\"78\",\"shooting\":\"26\",\"passing\":\"46\",\"dribbling\":\"55\",\"defending\":\"65\",\"physic\":\"67\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p232083.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l39.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/117.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l113018.png?v=11\",\"rarity\":\"bronze\",\"value\":46},{\"player_id\":\"275062\",\"short_name\":\"D. Guðjohnsen\",\"long_name\":\"Daníel Tristan Guðjohnsen\",\"player_positions\":\"ST\",\"overall\":\"63\",\"league_id\":\"56\",\"league_name\":\"Allsvenskan\",\"league_level\":\"1\",\"club_team_id\":\"320\",\"club_name\":\"Malmö FF\",\"nationality_id\":\"24\",\"nationality_name\":\"Iceland\",\"pace\":\"69\",\"shooting\":\"62\",\"passing\":\"51\",\"dribbling\":\"63\",\"defending\":\"19\",\"physic\":\"66\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p275062.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l56.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/24.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l320.png?v=11\",\"rarity\":\"bronze\",\"value\":46},{\"player_id\":\"179543\",\"short_name\":\"A. Nouri\",\"long_name\":\"Amin Mimoun Nouri\",\"player_positions\":\"RB, LB, RM\",\"overall\":\"63\",\"league_id\":\"41\",\"league_name\":\"Eliteserien\",\"league_level\":\"1\",\"club_team_id\":\"131491\",\"club_name\":\"KFUM-Kameratene Oslo\",\"nationality_id\":\"36\",\"nationality_name\":\"Norway\",\"pace\":\"43\",\"shooting\":\"48\",\"passing\":\"59\",\"dribbling\":\"62\",\"defending\":\"63\",\"physic\":\"68\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p179543.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l41.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/36.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l131491.png?v=11\",\"rarity\":\"bronze\",\"value\":46},{\"player_id\":\"279686\",\"short_name\":\"E. Vaca\",\"long_name\":\"Ervin Vaca Moreno\",\"player_positions\":\"LB, CM, LM\",\"overall\":\"62\",\"league_id\":\"2017\",\"league_name\":\"División de Fútbol Profesional\",\"league_level\":\"1\",\"club_team_id\":\"110968\",\"club_name\":\"Bolívar\",\"nationality_id\":\"53\",\"nationality_name\":\"Bolivia\",\"pace\":\"65\",\"shooting\":\"49\",\"passing\":\"59\",\"dribbling\":\"56\",\"defending\":\"58\",\"physic\":\"59\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p279686.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l2017.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/53.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l110968.png?v=11\",\"rarity\":\"bronze\",\"value\":46},{\"player_id\":\"75843\",\"short_name\":\"J. Mbalanda\",\"long_name\":\"Jay-David Mbalanda Nziang\",\"player_positions\":\"ST\",\"overall\":\"59\",\"league_id\":\"4\",\"league_name\":\"Pro League\",\"league_level\":\"1\",\"club_team_id\":\"680\",\"club_name\":\"Sint-Truidense VV\",\"nationality_id\":\"7\",\"nationality_name\":\"Belgium\",\"pace\":\"71\",\"shooting\":\"61\",\"passing\":\"45\",\"dribbling\":\"54\",\"defending\":\"33\",\"physic\":\"59\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p75843.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l4.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/7.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l680.png?v=11\",\"rarity\":\"bronze\",\"value\":44},{\"player_id\":\"78646\",\"short_name\":\"L. Bausenwein\",\"long_name\":\"Lauris Bausenwein\",\"player_positions\":\"RM, RB, RW\",\"overall\":\"58\",\"league_id\":\"2076\",\"league_name\":\"3. Liga\",\"league_level\":\"3\",\"club_team_id\":\"583\",\"club_name\":\"1. FC Schweinfurt 05\",\"nationality_id\":\"21\",\"nationality_name\":\"Germany\",\"pace\":\"81\",\"shooting\":\"48\",\"passing\":\"53\",\"dribbling\":\"57\",\"defending\":\"42\",\"physic\":\"47\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p78646.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l2076.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/21.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l583.png?v=11\",\"rarity\":\"bronze\",\"value\":44},{\"player_id\":\"74005\",\"short_name\":\"K. Morgan\",\"long_name\":\"Kevin Mario Morgan Michelena\",\"player_positions\":\"GK\",\"overall\":\"58\",\"league_id\":\"338\",\"league_name\":\"Primera División\",\"league_level\":\"1\",\"club_team_id\":\"101110\",\"club_name\":\"Peñarol\",\"nationality_id\":\"60\",\"nationality_name\":\"Uruguay\",\"goalkeeping_diving\":\"63\",\"goalkeeping_handling\":\"60\",\"goalkeeping_kicking\":\"51\",\"goalkeeping_positioning\":\"47\",\"goalkeeping_reflexes\":\"63\",\"goalkeeping_speed\":\"37\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p74005.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l338.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/60.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l101110.png?v=11\",\"rarity\":\"bronze\",\"value\":44},{\"player_id\":\"253015\",\"short_name\":\"M. Al Shanqeeti\",\"long_name\":\"Mohammed Ali Al Shanqitiمحمد الشنقيطي\",\"player_positions\":\"LB, LM\",\"overall\":\"57\",\"league_id\":\"350\",\"league_name\":\"Pro League\",\"league_level\":\"1\",\"club_team_id\":\"112391\",\"club_name\":\"Al Qadsiah FC\",\"nationality_id\":\"183\",\"nationality_name\":\"Saudi Arabia\",\"pace\":\"66\",\"shooting\":\"30\",\"passing\":\"44\",\"dribbling\":\"52\",\"defending\":\"54\",\"physic\":\"56\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p253015.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l350.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/183.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l112391.png?v=11\",\"rarity\":\"bronze\",\"value\":44},{\"player_id\":\"78665\",\"short_name\":\"M. Persson\",\"long_name\":\"Malte Persson\",\"player_positions\":\"ST\",\"overall\":\"56\",\"league_id\":\"56\",\"league_name\":\"Allsvenskan\",\"league_level\":\"1\",\"club_team_id\":\"321\",\"club_name\":\"Halmstads BK\",\"nationality_id\":\"46\",\"nationality_name\":\"Sweden\",\"pace\":\"74\",\"shooting\":\"53\",\"passing\":\"47\",\"dribbling\":\"54\",\"defending\":\"18\",\"physic\":\"54\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p78665.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l56.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/46.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l321.png?v=11\",\"rarity\":\"bronze\",\"value\":44},{\"player_id\":\"75170\",\"short_name\":\"D. Lordkipanidze\",\"long_name\":\"Dachi Lordkipanidzeდაჩი ლორთქიფანიძე\",\"player_positions\":\"CM\",\"overall\":\"56\",\"league_id\":\"31\",\"league_name\":\"Serie A\",\"league_level\":\"1\",\"club_team_id\":\"111434\",\"club_name\":\"Cremonese\",\"nationality_id\":\"20\",\"nationality_name\":\"Georgia\",\"pace\":\"58\",\"shooting\":\"45\",\"passing\":\"52\",\"dribbling\":\"56\",\"defending\":\"48\",\"physic\":\"53\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p75170.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l31.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/20.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l111434.png?v=11\",\"rarity\":\"bronze\",\"value\":44},{\"player_id\":\"257475\",\"short_name\":\"Shi Chenglong\",\"long_name\":\"Shi Chenglong史成龙\",\"player_positions\":\"GK\",\"overall\":\"51\",\"league_id\":\"2012\",\"league_name\":\"Super League\",\"league_level\":\"1\",\"club_team_id\":\"111779\",\"club_name\":\"Henan FC\",\"nationality_id\":\"155\",\"nationality_name\":\"China PR\",\"goalkeeping_diving\":\"50\",\"goalkeeping_handling\":\"50\",\"goalkeeping_kicking\":\"51\",\"goalkeeping_positioning\":\"52\",\"goalkeeping_reflexes\":\"52\",\"goalkeeping_speed\":\"24\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p257475.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l2012.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/155.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l111779.png?v=11\",\"rarity\":\"bronze\",\"value\":44},{\"player_id\":\"72003\",\"short_name\":\"Yu Tianxiang\",\"long_name\":\"Yu Tianxiang余天翔\",\"player_positions\":\"RB, RM\",\"overall\":\"49\",\"league_id\":\"2012\",\"league_name\":\"Super League\",\"league_level\":\"1\",\"club_team_id\":\"116361\",\"club_name\":\"Wuhan Three Towns\",\"nationality_id\":\"155\",\"nationality_name\":\"China PR\",\"pace\":\"60\",\"shooting\":\"28\",\"passing\":\"31\",\"dribbling\":\"46\",\"defending\":\"44\",\"physic\":\"57\",\"player_face_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/players/p72003.png?v=26\",\"league_url\":\"https://www.fifacm.com/content/media/imgs/fc26/leagues/l2012.png\",\"nation_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/nations/155.png?v=11\",\"club_team_url\":\"https://cdn.fifacm.com/content/media/imgs/fc26/teams/52/l116361.png?v=11\",\"rarity\":\"bronze\",\"value\":42}]');
 
 -- --------------------------------------------------------
 
@@ -497,7 +542,6 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`) VALUES
-(1, 'TestUser', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
 (2, 'AlphaWolf', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
 (3, 'NeonFalcon', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
 (4, 'ShadowByte', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
@@ -549,7 +593,7 @@ INSERT INTO `users` (`id`, `username`, `password`) VALUES
 (50, 'BlazePhantom', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
 (51, 'CyberTitan', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
 (52, 'datboizaza', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge'),
-(53, 'bobberito', '$2b$10$1dtV5ww2JIl0pu4I1EQC3uEKvaTM4ADETEpeU03UE.e48Oe0.wPge');
+(53, 'bobberito', '$2b$10$1JX4rdM.zfDUhMH2ejR9xeE327df26SQa24QF4V/qxQsK47mIT6Wu');
 
 --
 -- Eseményindítók `users`
@@ -600,11 +644,11 @@ CREATE TABLE `user_subobjective_progress` (
 --
 
 INSERT INTO `user_subobjective_progress` (`id`, `user_id`, `subobjective_id`, `progress_int`, `claimed`) VALUES
-(3, 1, 20, 2, 0),
-(4, 1, 21, 2, 0),
-(5, 1, 22, 2, 0),
-(6, 1, 23, 2, 0),
-(7, 1, 24, 2, 0);
+(13, 53, 20, 2, 0),
+(14, 53, 21, 2, 0),
+(15, 53, 22, 2, 0),
+(16, 53, 23, 2, 0),
+(17, 53, 24, 2, 0);
 
 --
 -- Indexek a kiírt táblákhoz
@@ -644,12 +688,29 @@ ALTER TABLE `packs`
   ADD PRIMARY KEY (`id`),
   ADD KEY `packWeightID` (`packWeightID`);
 
+--
+-- A tábla indexei `packweights`
+--
 ALTER TABLE `packweights`
   ADD PRIMARY KEY (`id`);
+
 --
 -- A tábla indexei `rewards`
 --
 ALTER TABLE `rewards`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- A tábla indexei `sbc`
+--
+ALTER TABLE `sbc`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `category_id` (`category_id`);
+
+--
+-- A tábla indexei `sbccategories`
+--
+ALTER TABLE `sbccategories`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -738,10 +799,22 @@ ALTER TABLE `rewards`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
+-- AUTO_INCREMENT a táblához `sbc`
+--
+ALTER TABLE `sbc`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT a táblához `sbccategories`
+--
+ALTER TABLE `sbccategories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT a táblához `stats`
 --
 ALTER TABLE `stats`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT a táblához `subobjectives`
@@ -753,25 +826,25 @@ ALTER TABLE `subobjectives`
 -- AUTO_INCREMENT a táblához `userclub`
 --
 ALTER TABLE `userclub`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT a táblához `userpacks`
 --
 ALTER TABLE `userpacks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT a táblához `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT a táblához `user_subobjective_progress`
 --
 ALTER TABLE `user_subobjective_progress`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- Megkötések a kiírt táblákhoz
@@ -789,6 +862,12 @@ ALTER TABLE `draftreward_packs`
 --
 ALTER TABLE `objectives`
   ADD CONSTRAINT `objectives_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `objcategories` (`id`);
+
+--
+-- Megkötések a táblához `sbc`
+--
+ALTER TABLE `sbc`
+  ADD CONSTRAINT `sbc_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `sbccategories` (`id`);
 
 --
 -- Megkötések a táblához `stats`

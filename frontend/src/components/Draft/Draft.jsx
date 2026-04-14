@@ -2,40 +2,20 @@ import { useEffect, useState } from "react";
 import { useCallback } from "react";
 import { createPortal } from "react-dom";
 import "./Draft.css";
-import Gold from "../../assets/goldRare.png";
-import Hero from "../../assets/Hero.png";
-import Icon from "../../assets/Icon.png";
-import Toty from "../../assets/toty.png";
-import Scream from "../../assets/Scream.png";
-import Flashback from "../../assets/Flashback.png";
-import AltPlayerImg from "../../assets/altPlayerImg.png";
-import ZeroChem from "../../assets/zeroChem.png";
-import OneChem from "../../assets/oneChem.png";
-import TwoChem from "../../assets/twoChem.png";
-import ThreeChem from "../../assets/threeChem.png";
-import InterMilan from "../../assets/intermilan.png";
-import ACMilan from "../../assets/acmilan.png";
-import Atalanta from "../../assets/atalanta.png";
-import Lazio from "../../assets/lazio.png";
-import Coins from "../../assets/coins.png";
-import SpecialPack from "../../assets/specialpack.png";
-
-//! Kispad layout
-const benchLayout = [
-  { id: "SUBGK", pos: "GK" },
-  { id: "SUBDEF1", pos: "DEF" },
-  { id: "SUBDEF2", pos: "DEF" },
-  { id: "SUBMID1", pos: "MID" },
-  { id: "SUBMID2", pos: "MID" },
-  { id: "SUBATT1", pos: "ATT" },
-  { id: "SUBATT2", pos: "ATT" },
-
-  { id: "RES1", pos: "ANY" },
-  { id: "RES2", pos: "ANY" },
-  { id: "RES3", pos: "ANY" },
-  { id: "RES4", pos: "ANY" },
-  { id: "RES5", pos: "ANY" },
-];
+import Gamelayout from "../Gamelayout/Gamelayout.jsx";
+import Subbar from "../Subbar/Subbar.jsx";
+import RatingChemDisplay from "../RatingChemDisplay/RatingChemDisplay.jsx";
+import Reward from "../Reward/Reward.jsx";
+import Grab from "../Grab/Grab.jsx";
+import {
+  benchLayout,
+  chemImg,
+  ratingStars,
+  displayedPosition,
+  fetchChemistry,
+  fetchRating,
+} from "../../utilities/utilities.js";
+import { useDrag } from "../../utilities/useDrag.js";
 
 function Draft() {
   const [formations, setFormations] = useState([]);
@@ -61,10 +41,6 @@ function Draft() {
 
   const [draftComplete, setDraftComplete] = useState(false);
   const [showDraftSummary, setShowDraftSummary] = useState(false);
-
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragKey, setDragKey] = useState(null);
-  const [dragPos, setDragPos] = useState({ x: 0, y: 0 });
 
   const [rewardData, setRewardData] = useState(null);
   const [showReward, setShowReward] = useState(false);
@@ -147,8 +123,12 @@ function Draft() {
       setShowPlayerSelectionModal(false);
       assignCaptain();
 
-      await fetchChemistry();
-      await fetchRating();
+      const { teamChemistry, playerChemMap } = await fetchChemistry();
+      setTeamChemistry(teamChemistry);
+      setPlayerChemMap(playerChemMap);
+
+      const rating = await fetchRating();
+      setTeamRating(rating);
     } catch (error) {
       console.log(error);
     }
@@ -258,8 +238,12 @@ function Draft() {
         slotPos,
       });
 
-      await fetchChemistry();
-      await fetchRating();
+      const { teamChemistry, playerChemMap } = await fetchChemistry();
+      setTeamChemistry(teamChemistry);
+      setPlayerChemMap(playerChemMap);
+
+      const rating = await fetchRating();
+      setTeamRating(rating);
 
       setAssignedPlayers((prev) => ({
         ...prev,
@@ -273,83 +257,6 @@ function Draft() {
     }
   };
 
-  //! Card design-ok
-  const rarityImgs = {
-    gold: Gold,
-    icon: Icon,
-    hero: Hero,
-    toty: Toty,
-    scream: Scream,
-    flashback: Flashback,
-  };
-
-  //! Card szövegek
-  const getText = (rarity) => {
-    switch (rarity) {
-      case "gold":
-        return "text-gold";
-      case "icon":
-        return "text-icon";
-      case "toty":
-        return "text-toty";
-      case "hero":
-        return "text-hero";
-      case "scream":
-        return "text-scream";
-      case "flashback":
-        return "text-flashback";
-      default:
-        return "text-gold";
-    }
-  };
-
-  //! Chemistry fetch-elése
-  const fetchChemistry = async () => {
-    try {
-      const result = await getMethodFetch(
-        "http://127.0.0.1:3000/api/chemistry",
-      );
-      setTeamChemistry(result.teamChemistry);
-
-      const map = {};
-      for (let i = 0; i < result.players.length; i++) {
-        const p = result.players[i];
-        map[p.player_id] = p.chemistry;
-      }
-      setPlayerChemMap(map);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  //! Rating fetch-elése
-  const fetchRating = async () => {
-    try {
-      const result = await getMethodFetch("http://127.0.0.1:3000/api/rating");
-      setTeamRating(result.rating);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  //! Chemistry Star-ok visszaadása
-  const chemImg = (chem) => {
-    if (chem === 3) return ThreeChem;
-    if (chem === 2) return TwoChem;
-    if (chem === 1) return OneChem;
-    return ZeroChem;
-  };
-
-  //! Rating csillagok
-  const ratingStars = (rating) => {
-    if (rating >= 83) return "★★★★★";
-    if (rating >= 75) return "★★★★☆";
-    if (rating >= 69) return "★★★☆☆";
-    if (rating >= 65) return "★★☆☆☆";
-    if (rating >= 2) return "★☆☆☆☆";
-    return "☆☆☆☆☆";
-  };
-
   //! RewardValue-k
   const getRewardValue = (score) => {
     if (score > 122) return "excellent";
@@ -357,15 +264,6 @@ function Draft() {
     if (score > 112) return "good";
     if (score > 105) return "mid";
     return "bad";
-  };
-
-  //! Pozíció átírása az aktuális pozícióra amin szerepel (ha van)
-  const displayedPosition = (player, slotPos) => {
-    const positions = player.player_positions.split(", ");
-    const primary = positions[0];
-    if (!slotPos || slotPos === "ANY") return primary;
-    if (positions.includes(slotPos)) return slotPos;
-    return primary;
   };
 
   //! Játékosok swap-olása
@@ -394,8 +292,12 @@ function Draft() {
           bSlotPos: getSlotPosByKey(to),
         });
 
-        await fetchChemistry();
-        await fetchRating();
+        const { teamChemistry, playerChemMap } = await fetchChemistry();
+        setTeamChemistry(teamChemistry);
+        setPlayerChemMap(playerChemMap);
+
+        const rating = await fetchRating();
+        setTeamRating(rating);
       } catch (error) {
         console.log(error);
       }
@@ -403,55 +305,11 @@ function Draft() {
     [assignedPlayers, gameLayout],
   );
 
-  //! Drag elkezdése
-  const startDrag = (e, key) => {
-    if (e.button !== 0) return;
-    e.preventDefault();
-
-    setDragKey(key);
-    setIsDragging(true);
-    setDragPos({ x: e.clientX, y: e.clientY });
-  };
-
-  //! Drag kezelése
-  useEffect(() => {
-    if (!isDragging) return;
-
-    const handleMouseMove = (e) => {
-      setDragPos({ x: e.clientX, y: e.clientY });
-    };
-
-    const handleMouseUp = async (e) => {
-      const from = dragKey;
-
-      setIsDragging(false);
-      setDragKey(null);
-
-      if (from === null || from === undefined) return;
-
-      const element = document.elementFromPoint(e.clientX, e.clientY);
-      const slotElement = element ? element.closest("[data-slotkey]") : null;
-
-      if (!slotElement) return;
-
-      const toKey = slotElement.getAttribute("data-slotkey");
-      const to = /^\d+$/.test(toKey) ? Number(toKey) : toKey;
-
-      if (from === to) return;
-      if (!assignedPlayers[from]) return;
-      if (!assignedPlayers[to]) return;
-
-      await handleSwapPlayers(from, to);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [isDragging, dragKey, assignedPlayers, handleSwapPlayers]);
+  //! Drag meghívása
+  const { isDragging, dragKey, dragPos, startDrag } = useDrag(
+    assignedPlayers,
+    handleSwapPlayers,
+  );
 
   //! Draft vége
   useEffect(() => {
@@ -619,197 +477,49 @@ function Draft() {
 
       {/* Layout */}
       {draftStarted && gameLayout && (
-        <div className="gameFormationLayout">
-          {gameLayout.map((p, i) => (
-            <div
-              key={i}
-              className="pos"
-              data-slotkey={i}
-              style={{ left: p.x + "%", top: p.y + "%" }}
-              id={p.pos}
-              onClick={() => {
-                if (assignedPlayers[i]) return;
-                handlePosClick(i, p.pos);
-              }}
-            >
-              {assignedPlayers[i] && (
-                <div
-                  key={i}
-                  onMouseDown={(e) => startDrag(e, i)}
-                  className={`cardSlot ${isDragging && dragKey === i ? "dragSource" : ""}`}
-                >
-                  <PlayerCard
-                    player={assignedPlayers[i]}
-                    isDragging={isDragging}
-                    isSource={dragKey === i}
-                    getText={getText}
-                    rarityImgs={rarityImgs}
-                    chemImg={chemImg}
-                    playerChemMap={playerChemMap}
-                    displayedPosition={displayedPosition}
-                    slotPos={gameLayout[i].pos}
-                    isModal={false}
-                  />
-                </div>
-              )}
-            </div>
-          ))}
-          {gameLayout.map((p, i) => (
-            <p
-              key={i}
-              className="posText"
-              style={{ left: p.x + "%", top: `calc(${p.y}% + 6%)` }}
-            >
-              {p.pos}
-            </p>
-          ))}
-          {showPlayerSelectionModal &&
-            createPortal(
-              <div className="modalOverlay">
-                <div className="playerSelectionModal">
-                  {playerOptons.map((player, i) => {
-                    return (
-                      <div
-                        className="cardSlot"
-                        key={i}
-                        onClick={() =>
-                          captainPick
-                            ? handleCaptainSelect(player)
-                            : handlePlayerSelect(player)
-                        }
-                      >
-                        <PlayerCard
-                          player={player}
-                          getText={getText}
-                          rarityImgs={rarityImgs}
-                          chemImg={chemImg}
-                          playerChemMap={playerChemMap}
-                          displayedPosition={displayedPosition}
-                          slotPos={null}
-                          isModal={true}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>,
-              document.body,
-            )}
-        </div>
+        <Gamelayout
+          gameLayout={gameLayout}
+          assignedPlayers={assignedPlayers}
+          isDragging={isDragging}
+          dragKey={dragKey}
+          handlePosClick={handlePosClick}
+          startDrag={startDrag}
+          chemImg={chemImg}
+          playerChemMap={playerChemMap}
+          displayedPosition={displayedPosition}
+          showPlayerSelectionModal={showPlayerSelectionModal}
+          playerOptons={playerOptons}
+          captainPick={captainPick}
+          handleCaptainSelect={handleCaptainSelect}
+          handlePlayerSelect={handlePlayerSelect}
+        />
       )}
 
       {/* Kispad */}
-      {draftStarted &&
-        gameLayout &&
-        createPortal(
-          <div
-            className={`subBar ${openSubs ? "open" : ""}`}
-            id="subBar"
-            onMouseEnter={() => setOpenSubs(true)}
-            onMouseLeave={() => setOpenSubs(false)}
-          >
-            <button
-              className="subBarTab"
-              onClick={() => setOpenSubs((prev) => !prev)}
-              aria-expanded={open}
-            >
-              sub / res
-            </button>
-
-            <div className="subBarContent">
-              <h4 className="subresText">SUB</h4>
-              {benchLayout.slice(0, 7).map((slot) => (
-                <div
-                  key={slot.id}
-                  className="pos"
-                  data-slotkey={slot.id}
-                  id={slot.pos}
-                  onClick={() => {
-                    if (assignedPlayers[slot.id]) return;
-                    handlePosClick(slot.id, slot.pos);
-                  }}
-                >
-                  {assignedPlayers[slot.id] && (
-                    <div
-                      onMouseDown={(e) => startDrag(e, slot.id)}
-                      className={`cardSlot ${isDragging && dragKey === slot.id ? "dragSource" : ""}`}
-                    >
-                      <PlayerCard
-                        player={assignedPlayers[slot.id]}
-                        isDragging={isDragging}
-                        isSource={dragKey === slot.id}
-                        getText={getText}
-                        rarityImgs={rarityImgs}
-                        chemImg={chemImg}
-                        playerChemMap={playerChemMap}
-                        displayedPosition={displayedPosition}
-                        slotPos={slot.id.pos}
-                        isModal={true}
-                      />
-                    </div>
-                  )}
-                </div>
-              ))}
-              <h4 className="subresText">RES</h4>
-              {benchLayout.slice(7).map((slot) => (
-                <div
-                  key={slot.id}
-                  className="pos"
-                  data-slotkey={slot.id}
-                  id={slot.pos}
-                  onClick={() => {
-                    if (assignedPlayers[slot.id]) return;
-                    handlePosClick(slot.id, slot.pos);
-                  }}
-                >
-                  {assignedPlayers[slot.id] && (
-                    <div
-                      onMouseDown={(e) => startDrag(e, slot.id)}
-                      className={`cardSlot ${isDragging && dragKey === slot.id ? "dragSource" : ""}`}
-                    >
-                      <PlayerCard
-                        player={assignedPlayers[slot.id]}
-                        isDragging={isDragging}
-                        isSource={dragKey === slot.id}
-                        getText={getText}
-                        rarityImgs={rarityImgs}
-                        chemImg={chemImg}
-                        playerChemMap={playerChemMap}
-                        displayedPosition={displayedPosition}
-                        slotPos={slot.id.pos}
-                        isModal={true}
-                      />
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>,
-          document.querySelector(".draftBody"),
-        )}
+      {draftStarted && gameLayout && (
+        <Subbar
+          openSubs={openSubs}
+          setOpenSubs={setOpenSubs}
+          benchLayout={benchLayout}
+          assignedPlayers={assignedPlayers}
+          handlePosClick={handlePosClick}
+          startDrag={startDrag}
+          isDragging={isDragging}
+          dragKey={dragKey}
+          chemImg={chemImg}
+          playerChemMap={playerChemMap}
+          displayedPosition={displayedPosition}
+        />
+      )}
 
       {/* Rating & Chemistry Display */}
-      {draftStarted &&
-        gameLayout &&
-        createPortal(
-          <div className="chemRatingDisplay">
-            <h4 className="draftSquadText">draft squad</h4>
-            <div className="ratingStars">{ratingStars(teamRating)}</div>
-            <h5 className="ratingText">
-              Rating{" "}
-              <span id="ratingNum" className="ratingNum">
-                {teamRating}
-              </span>
-            </h5>
-            <h5 className="chemText">
-              Chemistry{" "}
-              <span id="chemNum" className="chemNum">
-                {teamChemistry}
-              </span>
-            </h5>
-          </div>,
-          document.body,
-        )}
+      {draftStarted && gameLayout && (
+        <RatingChemDisplay
+          teamRating={teamRating}
+          teamChemistry={teamChemistry}
+          ratingStars={ratingStars}
+        />
+      )}
 
       {/* Draft vége */}
       {draftComplete &&
@@ -878,253 +588,19 @@ function Draft() {
         )}
 
       {/* Grab */}
-      {isDragging &&
-        dragKey !== null &&
-        assignedPlayers[dragKey] &&
-        createPortal(
-          <div
-            className="dragOverlay pos"
-            style={{
-              left: dragPos.x,
-              top: dragPos.y,
-            }}
-          >
-            <PlayerCard
-              player={assignedPlayers[dragKey]}
-              isDragging={isDragging}
-              isSource={dragKey === dragKey}
-              getText={getText}
-              rarityImgs={rarityImgs}
-              chemImg={chemImg}
-              playerChemMap={playerChemMap}
-              displayedPosition={displayedPosition}
-              slotPos={gameLayout[dragKey]}
-              isModal={true}
-            />
-          </div>,
-          document.body,
-        )}
-    </>
-  );
-}
-
-function PlayerCard({
-  player,
-  getText,
-  rarityImgs,
-  chemImg,
-  playerChemMap,
-  displayedPosition,
-  slotPos,
-  isModal,
-}) {
-  if (!player) return null;
-
-  const isGK = player.player_positions === "GK";
-  const textClass = getText(player.rarity);
-  const altPositions = [];
-  player.player_positions.split(", ").forEach((element) => {
-    if (element !== displayedPosition(player, slotPos)) {
-      altPositions.push(element);
-    }
-  });
-
-  return (
-    <>
-      <img
-        src={rarityImgs[player.rarity]}
-        className={"cardDesign " + player.rarity}
-        alt="Card"
-      />
-
-      <p className={`cardOverall ${textClass}`}>{player.overall}</p>
-      <p className={`cardPosition ${textClass}`}>
-        {displayedPosition(player, slotPos)}
-      </p>
-      <p className={`cardAltPosition ${textClass}`}>
-        {altPositions.map((pos, index) => (
-          <span key={index}>{pos}</span>
-        ))}
-      </p>
-
-      <img
-        className="cardImg"
-        src={player.player_face_url}
-        alt="Player Image"
-        onError={(e) => {
-          e.currentTarget.onerror = null;
-          e.currentTarget.src = AltPlayerImg;
-        }}
-      />
-      <img
-        className="cardNationality"
-        src={player.nation_url}
-        alt="Nationality Image"
-      />
-      <img className="cardLeague" src={player.league_url} alt="League Image" />
-      <img
-        className="cardClub"
-        src={player.club_team_url}
-        alt="Club Image"
-        onError={(e) => {
-          e.currentTarget.onerror = null;
-
-          if (player.club_name === "Inter") {
-            e.currentTarget.src = InterMilan;
-          } else if (player.club_name === "AC Milan") {
-            e.currentTarget.src = ACMilan;
-          } else if (player.club_name === "Lazio") {
-            e.currentTarget.src = Lazio;
-          } else if (player.club_name === "Atalanta") {
-            e.currentTarget.src = Atalanta;
-          }
-        }}
-      />
-
-      <p className={`cardName ${textClass}`}>{player.short_name}</p>
-
-      {!isModal && (
-        <img
-          src={chemImg(playerChemMap[player.player_id])}
-          className="chemStars"
+      {isDragging && dragKey !== null && assignedPlayers[dragKey] && (
+        <Grab
+          dragPos={dragPos}
+          assignedPlayers={assignedPlayers}
+          dragKey={dragKey}
+          isDragging={isDragging}
+          chemImg={chemImg}
+          playerChemMap={playerChemMap}
+          displayedPosition={displayedPosition}
+          gameLayout={gameLayout}
         />
       )}
-
-      {isGK ? (
-        <div>
-          {" "}
-          <div className="cardPlayerDiving">
-            <p className={`cardPlayerDivingNumber ${getText(player.rarity)}`}>
-              {player.goalkeeping_diving}
-            </p>
-            <p className={`cardPlayerDivingText ${getText(player.rarity)}`}>
-              DIV
-            </p>
-          </div>
-          <div className="cardPlayerHandling">
-            <p className={`cardPlayerHandlingNumber ${getText(player.rarity)}`}>
-              {player.goalkeeping_handling}
-            </p>
-            <p className={`cardPlayerHandlingText ${getText(player.rarity)}`}>
-              HAN
-            </p>
-          </div>
-          <div className="cardPlayerKicking">
-            <p className={`cardPlayerKickingNumber ${getText(player.rarity)}`}>
-              {player.goalkeeping_kicking}
-            </p>
-            <p className={`cardPlayerKickingText ${getText(player.rarity)}`}>
-              KIC
-            </p>
-          </div>
-          <div className="cardPlayerReflexes">
-            <p className={`cardPlayerReflexesNumber ${getText(player.rarity)}`}>
-              {player.goalkeeping_reflexes}
-            </p>
-            <p className={`cardPlayerReflexesText ${getText(player.rarity)}`}>
-              REF
-            </p>
-          </div>
-          <div className="cardPlayerSpeed">
-            <p className={`cardPlayerSpeedNumber ${getText(player.rarity)}`}>
-              {player.goalkeeping_speed}
-            </p>
-            <p className={`cardPlayerSpeedText ${getText(player.rarity)}`}>
-              SPD
-            </p>
-          </div>
-          <div className="cardPlayerPositioning">
-            <p
-              className={`cardPlayerPositioningNumber ${getText(player.rarity)}`}
-            >
-              {player.goalkeeping_positioning}
-            </p>
-            <p
-              className={`cardPlayerPositioningText ${getText(player.rarity)}`}
-            >
-              POS
-            </p>
-          </div>
-        </div>
-      ) : (
-        <div>
-          <div className="cardPlayerPace">
-            <p className={`cardPlayerPaceNumber ${getText(player.rarity)}`}>
-              {player.pace}
-            </p>
-            <p className={`cardPlayerPaceText ${getText(player.rarity)}`}>
-              PAC
-            </p>
-          </div>
-          <div className="cardPlayerShooting">
-            <p className={`cardPlayerShootingNumber ${getText(player.rarity)}`}>
-              {player.shooting}
-            </p>
-            <p className={`cardPlayerShootingText ${getText(player.rarity)}`}>
-              SHO
-            </p>
-          </div>
-          <div className="cardPlayerDribbling">
-            <p
-              className={`cardPlayerDribblingNumber ${getText(player.rarity)}`}
-            >
-              {player.dribbling}
-            </p>
-            <p className={`cardPlayerDribblingText ${getText(player.rarity)}`}>
-              DRI
-            </p>
-          </div>
-          <div className="cardPlayerPassing">
-            <p className={`cardPlayerPassingNumber ${getText(player.rarity)}`}>
-              {player.passing}
-            </p>
-            <p className={`cardPlayerPassingText ${getText(player.rarity)}`}>
-              PAS
-            </p>
-          </div>
-          <div className="cardPlayerDefending">
-            <p
-              className={`cardPlayerDefendingNumber ${getText(player.rarity)}`}
-            >
-              {player.defending}
-            </p>
-            <p className={`cardPlayerDefendingText ${getText(player.rarity)}`}>
-              DEF
-            </p>
-          </div>
-          <div className="cardPlayerPhysic">
-            <p className={`cardPlayerPhysicNumber ${getText(player.rarity)}`}>
-              {player.physic}
-            </p>
-            <p className={`cardPlayerPhysicText ${getText(player.rarity)}`}>
-              PHY
-            </p>
-          </div>
-        </div>
-      )}
     </>
-  );
-}
-
-function Reward({ reward }) {
-  if (!reward) return null;
-
-  return (
-    <div className="reward">
-      {reward.coins && (
-        <span className="coins">
-          {reward.coins}
-          <img src={Coins} className="coinImg" />
-        </span>
-      )}
-
-      {reward.packs?.map((p) => (
-        <span key={p.id} className="pack">
-          <img src={SpecialPack} className="packImg" />
-          {p.name}
-        </span>
-      ))}
-    </div>
   );
 }
 

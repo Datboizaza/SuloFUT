@@ -1,0 +1,166 @@
+.settingsContainer {
+  padding: 40px;
+  color: white;
+  backdrop-filter: blur(20px);
+  background-color: #003d3f3b;
+  border-radius: 20px;
+  height: 80vh;
+  width: 50vw;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: scalePopIn 0.4s ease forwards;
+  overflow-y: scroll;
+}
+
+.settingsTitle {
+  font-family: bristone;
+  text-align: center;
+}
+
+.settingsCard {
+  background: #00000069;
+  padding: 30px;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: bristone;
+  font-size: 80%;
+}
+
+.settingsInput {
+  height: 40px;
+  border: 1px rgba(0, 165, 121, 0.616) solid;
+  background-color: rgba(0, 255, 229, 0.093);
+  color: white;
+  border-radius: 10px;
+  text-align: left;
+  padding: 20px 30px;
+  font-family: "Franklin Gothic Medium";
+  font-size: 130%;
+}
+
+.settingsBtn {
+  width: 70%;
+  height: 45px;
+  align-self: center;
+  border: 3px rgba(0, 255, 251, 0.114) solid;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.173);
+  border-radius: 30px;
+  background-color: rgba(0, 165, 121, 0.241);
+  color: white;
+  transition: all 150ms ease-in-out;
+}
+
+.settingsBtn:hover {
+  transform: scale(1.02);
+  background: linear-gradient(90deg, #53d9db, #6affab);
+  color: rgb(42, 119, 109);
+}
+
+.logout {
+  background: linear-gradient(90deg, #da9b43, #b1880e);
+}
+
+.delete {
+  background: linear-gradient(90deg, #792a2a, #5f1c1c);
+}
+
+.logout:hover {
+  background: linear-gradient(90deg, #ffb753, #d6a512);
+  color: rgb(99, 76, 0);
+}
+
+.delete:hover {
+  background: linear-gradient(90deg, #a13333, #8d2525);
+  color: rgb(255, 1, 1);
+}
+
+/* MODAL */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.589);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.modalModal {
+  background: #173635c0;
+  padding: 40px;
+  border-radius: 10px;
+  color: white;
+  text-align: center;
+  z-index: 9999;
+}
+
+.modalBtns {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.modal button {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.errorModalText {
+  color: red;
+}
+
+.successModalText {
+  color: rgb(0, 201, 151);
+}
+
+/* Animációk */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scalePopIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/*------------------Media queries---------------------*/
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  .settingsContainer {
+    width: 80vw;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .settingsContainer {
+    width: 90vw;
+    height: 90vh;
+    padding: 20px;
+    gap: 10px;
+  }
+
+  .settingsBtn {
+    font-size: 80%;
+  }
+}
