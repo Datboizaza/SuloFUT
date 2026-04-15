@@ -263,34 +263,7 @@ INSERT INTO `rewards` (`id`, `packIds`, `coins`) VALUES
 
 -- --------------------------------------------------------
 
---
--- Tábla szerkezet ehhez a táblához `sbc`
---
 
-CREATE TABLE `sbc` (
-  `id` int(11) NOT NULL,
-  `category_id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `reward` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
-
---
--- A tábla adatainak kiíratása `sbc`
---
-
-INSERT INTO `sbc` (`id`, `category_id`, `name`, `reward`) VALUES
-(1, 1, 'SBC1', 6),
-(2, 1, 'SBC2', 6),
-(3, 1, 'SBC3', 6),
-(4, 1, 'SBC4', 6),
-(5, 2, 'SBC5', 6),
-(6, 2, 'SBC6', 6),
-(7, 2, 'SBC7', 6),
-(8, 2, 'SBC8', 6),
-(9, 3, 'SBC9', 6),
-(10, 3, 'SBC10', 6),
-(11, 3, 'SBC11', 6),
-(12, 3, 'SBC12', 6);
 
 -- --------------------------------------------------------
 
@@ -653,7 +626,55 @@ INSERT INTO `user_subobjective_progress` (`id`, `user_id`, `subobjective_id`, `p
 --
 -- Indexek a kiírt táblákhoz
 --
+-- Tábla szerkezet ehhez a táblához `packs`
+--
 
+CREATE TABLE `sbc` (
+  `id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `sbcName` text NOT NULL,
+  `repeat` int(11) NOT NULL,
+  `rewardPack` text NOT NULL,
+  `rarity` text,
+  `rating` text,
+  `chemistry` text,
+  `leagues` text,
+  `sameLeague` text,
+  `nations` text,
+  `sameNation` text,
+  `sameClub` text,
+  `chemPP` text,
+  `special` text,
+  `design` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `sbc`
+--
+
+INSERT INTO `sbc` (`id`, `category_id`, `sbcName`, `repeat`, `rewardPack`, `rarity`, `rating`, `chemistry`, `leagues`, `sameLeague` `nations`, `sameNation`, `sameClub`, `chemPP`, `special`, `design`) VALUES
+(1, 1, 'Spooky Scary Skeletons', 0, 'Sulofut Scream Pack', NULL, NULL, 'min 24', 'min 3', NULL, 'max 3', NULL, NULL, NULL, NULL, 'scream'),
+(2, 1, 'Old But Still Money', 0, 'Sulofut Flashback Pack', NULL, 'min 84', 'min 20', NULL, 'max 3', NULL, 'max 3', NULL, NULL, NULL, 'flashback'),
+(3, 1, 'Man Of The Year', 0, 'Toty Grind Pack', NULL, 'min 84', 'min 28', NULL, 'max 3', NULL, 'max 3', NULL, NULL, NULL, 'flashback'),
+(4, 'Jumbo Gold Pack', 12000, 'gold', 24, 'gold/flashback/scream/toty/icon/hero', 4),
+(5, 'Mixed Players Pack', 6000, 'special', 12, 'bronze/silver/gold', 5),
+(6, 'Mega Pack', 35000, 'special', 30, 'gold/flashback/scream/toty/icon/hero', 6),
+(7, '80+x10 Players Pack', 20000, 'special', 10, 'gold/flashback/scream/toty/icon/hero', 7),
+(8, '82+x10 Players Pack', 25000, 'special', 10, 'gold/flashback/scream/toty/icon/hero', 8),
+(9, '85+x4 Players Pack', 30000, 'special', 4, 'gold/flashback/scream/toty/icon/hero', 9),
+(10, 'Icon Pack', 100000, 'special', 1, 'icon', 10),
+(11, '90+ Icon Pack', 200000, 'special', 1, 'icon', 11),
+(12, 'SuloFUT Flashback Pack', 70000, 'flashback', 12, 'gold/flashback/scream/toty/icon/hero', 12),
+(13, 'SuloFUT Scream Pack', 50000, 'scream', 12, 'gold/flashback/scream/toty/icon/hero', 13),
+(14, 'Hero Pack', 60000, 'special', 1, 'hero', 14),
+(15, '87+ Hero Pack', 20000, 'special', 1, 'hero', 15),
+(16, 'Campaign Mix Pack', 80000, 'special', 1, 'flashback/scream/toty/icon/hero', 16),
+(17, '88+ Hero or Icon Pack', 80000, 'special', 1, 'icon/hero', 17),
+(18, 'TOTY Grind Pack', 50000, 'toty', 12, 'gold/flashback/scream/toty/icon/hero', 18),
+(19, 'TOTY Pack', 200000, 'toty', 1, 'toty', 19),
+(20, 'Welcome Pack', 0, 'special', 24, 'bronze/silver/gold', 20);
+
+-- --------------------------------------------------------
 --
 -- A tábla indexei `draftrewards`
 --
@@ -797,12 +818,6 @@ ALTER TABLE `objectives`
 --
 ALTER TABLE `rewards`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
-
---
--- AUTO_INCREMENT a táblához `sbc`
---
-ALTER TABLE `sbc`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT a táblához `sbccategories`
