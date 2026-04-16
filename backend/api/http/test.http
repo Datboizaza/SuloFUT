@@ -18,3 +18,7 @@ GET http://127.0.0.1:3000/api/random/DEF HTTP/1.1
 
 GET http://127.0.0.1:3000/api/generatePack/1 HTTP/1.1
 
+###
+
+GET http://127.0.0.1:3000/api/allsbc HTTP/1.1
+

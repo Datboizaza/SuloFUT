@@ -1289,14 +1289,18 @@ router.get("/allsbc", async (request, response) => {
       foundations: [],
     };
 
+    const sbcData = [];
     rows.forEach((row) => {
-      result[row.category_name].push({
-        id: row.id,
-        name: row.name,
-        reward: {
-          coins: row.reward || null,
-          packs: [],
-        },
+      for (let i = 0; i < row.length; i++) {
+        // if (row[i] !== null) {
+        // sbcData.push(`${Object.keys(row)}: ${Object.values(row[i])}`);
+        console.log(Object.values(row)[i]);
+        // }
+
+        // console.log(sbcData);
+      }
+      result[row.name].push({
+        // sbcData,
       });
     });
 

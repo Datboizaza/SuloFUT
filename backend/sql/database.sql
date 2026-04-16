@@ -633,7 +633,7 @@ CREATE TABLE `sbc` (
   `id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
   `sbcName` text NOT NULL,
-  `repeat` int(11) NOT NULL,
+  `repeat` int(11),
   `rewardPack` text NOT NULL,
   `rarity` text,
   `rating` text,
@@ -652,27 +652,27 @@ CREATE TABLE `sbc` (
 -- A tábla adatainak kiíratása `sbc`
 --
 
-INSERT INTO `sbc` (`id`, `category_id`, `sbcName`, `repeat`, `rewardPack`, `rarity`, `rating`, `chemistry`, `leagues`, `sameLeague` `nations`, `sameNation`, `sameClub`, `chemPP`, `special`, `design`) VALUES
-(1, 1, 'Spooky Scary Skeletons', 0, 'Sulofut Scream Pack', NULL, NULL, 'min 24', 'min 3', NULL, 'max 3', NULL, NULL, NULL, NULL, 'scream'),
-(2, 1, 'Old But Still Money', 0, 'Sulofut Flashback Pack', NULL, 'min 84', 'min 20', NULL, 'max 3', NULL, 'max 3', NULL, NULL, NULL, 'flashback'),
-(3, 1, 'Man Of The Year', 0, 'Toty Grind Pack', NULL, 'min 84', 'min 28', NULL, 'max 3', NULL, 'max 3', NULL, NULL, NULL, 'flashback'),
-(4, 'Jumbo Gold Pack', 12000, 'gold', 24, 'gold/flashback/scream/toty/icon/hero', 4),
-(5, 'Mixed Players Pack', 6000, 'special', 12, 'bronze/silver/gold', 5),
-(6, 'Mega Pack', 35000, 'special', 30, 'gold/flashback/scream/toty/icon/hero', 6),
-(7, '80+x10 Players Pack', 20000, 'special', 10, 'gold/flashback/scream/toty/icon/hero', 7),
-(8, '82+x10 Players Pack', 25000, 'special', 10, 'gold/flashback/scream/toty/icon/hero', 8),
-(9, '85+x4 Players Pack', 30000, 'special', 4, 'gold/flashback/scream/toty/icon/hero', 9),
-(10, 'Icon Pack', 100000, 'special', 1, 'icon', 10),
-(11, '90+ Icon Pack', 200000, 'special', 1, 'icon', 11),
-(12, 'SuloFUT Flashback Pack', 70000, 'flashback', 12, 'gold/flashback/scream/toty/icon/hero', 12),
-(13, 'SuloFUT Scream Pack', 50000, 'scream', 12, 'gold/flashback/scream/toty/icon/hero', 13),
-(14, 'Hero Pack', 60000, 'special', 1, 'hero', 14),
-(15, '87+ Hero Pack', 20000, 'special', 1, 'hero', 15),
-(16, 'Campaign Mix Pack', 80000, 'special', 1, 'flashback/scream/toty/icon/hero', 16),
-(17, '88+ Hero or Icon Pack', 80000, 'special', 1, 'icon/hero', 17),
-(18, 'TOTY Grind Pack', 50000, 'toty', 12, 'gold/flashback/scream/toty/icon/hero', 18),
-(19, 'TOTY Pack', 200000, 'toty', 1, 'toty', 19),
-(20, 'Welcome Pack', 0, 'special', 24, 'bronze/silver/gold', 20);
+INSERT INTO `sbc` (`id`, `category_id`, `sbcName`, `repeat`, `rewardPack`, `rarity`, `rating`, `chemistry`, `leagues`, `sameLeague`, `nations`, `sameNation`, `sameClub`, `chemPP`, `special`, `design`) VALUES
+(1, 1, 'Spooky Scary Skeletons', 0, 'SuloFUT Scream Pack', NULL, NULL, 'min 24', 'min 3', NULL, 'max 3', NULL, NULL, NULL, NULL, 'scream'),
+(2, 1, 'Old But Still Money', 0, 'SuloFUT Flashback Pack', NULL, 'min 84', 'min 20', NULL, 'max 3', NULL, 'max 3', NULL, NULL, NULL, 'flashback'),
+(3, 1, 'Man Of The Year', 0, 'TOTY Grind Pack', NULL, 'min 84', 'min 28', NULL, 'max 3', 'min 2', NULL, 'max 2', 'min 1', 'min 1', 'toty'),
+(4, 1, 'The Special One', 0, 'Campaign Mix Pack', NULL, 'min 83', 'min 22', NULL, 'max 3', NULL, 'max 3', 'max 2', NULL, NULL, 'special'),
+(5, 2, 'Bronze Upgrade', NULL, 'Silver Pack', 'bronze', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'bronze'),
+(6, 2, 'Silver Upgrade', NULL, 'Gold Pack', 'silver', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'silver'),
+(7, 2, 'Gold Upgrade', NULL, 'Jumbo Gold Pack', 'gold', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'gold'),
+(8, 2, 'TOTY Upgrade', '0', 'TOTY Pack', NULL, 'min 90', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'toty'),
+(9, 2, '80+ x10 Upgrade', '10', '80+x10 Players Pack', NULL, 'min 83', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'special'),
+(10, 2, '82+ x10 Upgrade', '10', '82+x10 Players Pack', NULL, 'min 85', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'special'),
+(11, 2, '85+ x4 Upgrade', '10', '85+x4 Players Pack', NULL, 'min 86', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'special'),
+(12, 2, '87+ Hero Upgrade', '5', '87+ Hero Pack', NULL, 'min 87', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'hero'),
+(13, 2, '88+ Icon or Hero Upgrade', '5', '88+ Hero or Icon Pack', NULL, 'min 88', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'icon-hero'),
+(14, 2, '90+ Icon Upgrade', '5', '90+ Icon Pack', NULL, 'min 90', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'icon'),
+(15, 3, 'Getting Started', '0', 'Mixed Players Pack', NULL, 'min 62', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'start'),
+(16, 3, 'Learning Chemistry', '0', 'Gold Pack', NULL, 'min 64', NULL, NULL, NULL, NULL, NULL, 'min 1', NULL, NULL, 'learn'),
+(17, 3, 'League Links', '0', 'Jumbo Gold Pack', NULL, 'min 68', 'min 15', 'max 3', NULL, NULL, NULL, NULL, NULL, NULL, 'league'),
+(18, 3, 'Nation Links', '0', 'Jumbo Gold Pack', NULL, 'min 68', 'min 15', NULL, NULL, 'max 3', NULL, NULL, NULL, NULL, 'nation'),
+(19, 3, 'League and Nation Hybrid', '0', 'Mega Pack', NULL, 'min 80', 'min 20', 'min 3', NULL, 'min 2', NULL, NULL, NULL, NULL, 'hybrid');
+
 
 -- --------------------------------------------------------
 --

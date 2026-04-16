@@ -577,12 +577,7 @@ async function updateClub(userPlayers, userId) {
 //! SBC
 async function getSBC() {
   const query = `
-  SELECT 
-        sbc.id,
-        sbc.name,
-        sbc.category_id,
-        sbc.reward,
-        sbccategories.name AS category_name
+  SELECT *
       FROM sbc
       JOIN sbccategories ON sbccategories.id = sbc.category_id;
       `;
