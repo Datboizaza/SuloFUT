@@ -1248,9 +1248,23 @@ router.post("/addPlayersToClub", async (request, response) => {
 
     await database.updateClub(updatedPlayers, userId);
 
-    response.status(200).json({ success: true });
+    response.status(200).json({ message: "success" });
   } catch (error) {
-    console.log("POST /api/addplayerstoclub error:", error);
+    console.log("POST /api/addPlayersToClub error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.post("/setClubPlayers", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const players = request.body.players;
+
+    await database.updateClub(players, userId);
+
+    response.status(200).json({ message: "success" });
+  } catch (error) {
+    console.log("POST /api/setClubPlayers error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -1258,7 +1272,6 @@ router.post("/addPlayersToClub", async (request, response) => {
 router.get("/myClub", async (request, response) => {
   try {
     const userId = request.session.userId;
-
     const rows = await database.currentClub(userId);
 
     if (!rows || rows.length === 0) {
@@ -1270,6 +1283,8 @@ router.get("/myClub", async (request, response) => {
     if (rows[0].userPlayers) {
       players = JSON.parse(rows[0].userPlayers);
     }
+
+    players.sort((a, b) => Number(b.overall) - Number(a.overall));
 
     response.status(200).json(players);
   } catch (error) {

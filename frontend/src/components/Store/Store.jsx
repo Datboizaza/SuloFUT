@@ -8,7 +8,7 @@ import gold from "../../assets/goldPack.png";
 import special from "../../assets/specialpack.png";
 import toty from "../../assets/totypack.png";
 import flashback from "../../assets/promopack.png";
-import scream from "../../assets/specialpack.png";
+import scream from "../../assets/screamPack.png";
 import PlayerCard from "../PlayerCard/PlayerCard.jsx";
 import Confetti from "../../assets/confetti.gif";
 import BackIcon from "../../assets/back-icon.png";
