@@ -577,14 +577,27 @@ async function updateClub(userPlayers, userId) {
 //! SBC
 async function getSBC() {
   const query = `
-  SELECT 
-        sbc.id,
-        sbc.name,
-        sbc.category_id,
-        sbc.reward,
-        sbccategories.name AS category_name
-      FROM sbc
-      JOIN sbccategories ON sbccategories.id = sbc.category_id;
+  SELECT
+    sbc.id,
+    sbc.category_id,
+    sbc.sbcName,
+    sbc.repeat,
+    sbc.rewardPack,
+    sbc.rarity,
+    sbc.rating,
+    sbc.chemistry,
+    sbc.leagues,
+    sbc.sameLeague,
+    sbc.nations,
+    sbc.sameNation,
+    sbc.sameClub,
+    sbc.chemPP,
+    sbc.special,
+    sbc.formation,
+    sbc.design,
+    sbccategories.name AS name
+  FROM sbc
+  JOIN sbccategories ON sbccategories.id = sbc.category_id;
       `;
   try {
     const [rows] = await pool.execute(query);

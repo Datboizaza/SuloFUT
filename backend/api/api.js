@@ -1305,14 +1305,20 @@ router.get("/allsbc", async (request, response) => {
     };
 
     rows.forEach((row) => {
-      result[row.category_name].push({
-        id: row.id,
-        name: row.name,
-        reward: {
-          coins: row.reward || null,
-          packs: [],
-        },
+      const sbcData = {};
+      Object.keys(row).forEach((key) => {
+        const value = row[key];
+        if (value !== null && key !== "name") {
+          sbcData[key] = value;
+        }
       });
+
+      const category = row.name.toLowerCase();
+      if (result[category]) {
+        result[category].push({
+          sbcData,
+        });
+      }
     });
 
     response.status(200).json({ results: result });
