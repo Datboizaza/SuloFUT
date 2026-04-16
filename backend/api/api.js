@@ -1291,16 +1291,24 @@ router.get("/allsbc", async (request, response) => {
 
     const sbcData = [];
     rows.forEach((row) => {
-      for (let i = 0; i < row.length; i++) {
-        // if (row[i] !== null) {
-        // sbcData.push(`${Object.keys(row)}: ${Object.values(row[i])}`);
-        console.log(Object.values(row)[i]);
-        // }
+      Object.keys(row).forEach((key) => {
+        const value = row[key];
+        if (value !== null) {
+          sbcData.push(`${key}: ${value}`);
+        }
+      });
 
-        // console.log(sbcData);
-      }
+      // row.forEach((element) => {
+      //   if (element !== null) {
+      //     // sbcData.push(`${Object.keys(row)}: ${Object.values(row[i])}`);
+
+      //   }
+      // });
+
+      // console.log(sbcData);
+
       result[row.name].push({
-        // sbcData,
+        sbcData,
       });
     });
 
