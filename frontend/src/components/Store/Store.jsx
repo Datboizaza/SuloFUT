@@ -45,7 +45,7 @@ function Store() {
 
   //! Club fetch
   const fetchClub = async () => {
-    const result = await getMethodFetch("http://127.0.0.1:3000/api/myClub");
+    const result = await getMethodFetch("http://127.0.0.1:3000/api/myclub");
 
     setClubPlayers(result || []);
   };
@@ -70,7 +70,7 @@ function Store() {
   const fetchStorePacks = async () => {
     try {
       const result = await getMethodFetch(
-        "http://127.0.0.1:3000/api/storepacks",
+        "http://127.0.0.1:3000/api/store/storepacks",
       );
 
       setData((prev) => ({
@@ -98,14 +98,14 @@ function Store() {
     try {
       await fetchClub();
 
-      await postMethodFetch("http://127.0.0.1:3000/api/deletemypack", {
+      await postMethodFetch("http://127.0.0.1:3000/api/store/deletemypack", {
         packId: pack.id,
       });
 
       await fetchMyPacks();
 
       const packPlayers = await getMethodFetch(
-        `http://127.0.0.1:3000/api/generatePack/${pack.id}`,
+        `http://127.0.0.1:3000/api/store/generatePack/${pack.id}`,
       );
 
       const players = packPlayers.randomjatekosok;
@@ -145,7 +145,7 @@ function Store() {
       window.dispatchEvent(new Event("coinsUpdated"));
 
       const packPlayers = await getMethodFetch(
-        `http://127.0.0.1:3000/api/generatePack/${pack.id}`,
+        `http://127.0.0.1:3000/api/store/generatePack/${pack.id}`,
       );
 
       const players = packPlayers.randomjatekosok;
@@ -215,9 +215,12 @@ function Store() {
   //! Játékos hozzáadása a klub-hoz
   const handleSendAllToClub = async () => {
     try {
-      await postMethodFetch("http://127.0.0.1:3000/api/addPlayersToClub", {
-        players: nonDuplicates,
-      });
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/myclub/addPlayersToClub",
+        {
+          players: nonDuplicates,
+        },
+      );
 
       await fetchClub();
 

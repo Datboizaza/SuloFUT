@@ -51,7 +51,7 @@ export const displayedPosition = (player, slotPos) => {
 
 //! Chemistry fetchelése
 export const fetchChemistry = async () => {
-  const response = await fetch("http://127.0.0.1:3000/api/chemistry", {
+  const response = await fetch("http://127.0.0.1:3000/api/draft/chemistry", {
     credentials: "include",
   });
 
@@ -70,7 +70,7 @@ export const fetchChemistry = async () => {
 
 //!Rating fetchelése
 export const fetchRating = async () => {
-  const response = await fetch("http://127.0.0.1:3000/api/rating", {
+  const response = await fetch("http://127.0.0.1:3000/api/draft/rating", {
     credentials: "include",
   });
 

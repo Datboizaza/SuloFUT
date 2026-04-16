@@ -50,7 +50,7 @@ function Draft() {
     const fetchData = async () => {
       try {
         const result = await getMethodFetch(
-          "http://127.0.0.1:3000/api/randomformations",
+          "http://127.0.0.1:3000/api/draft/randomformations",
         );
 
         const formationsData = result.randomformations;
@@ -76,7 +76,7 @@ function Draft() {
   //! Játék elkezdése
   const startDraft = async (formation) => {
     try {
-      await fetch("http://127.0.0.1:3000/api/draftselectedplayers", {
+      await fetch("http://127.0.0.1:3000/api/draft/draftselectedplayers", {
         method: "DELETE",
       });
 
@@ -103,7 +103,7 @@ function Draft() {
     try {
       setCaptainPick(true);
       const result = await getMethodFetch(
-        "http://127.0.0.1:3000/api/randomplayers",
+        "http://127.0.0.1:3000/api/draft/randomplayers",
       );
       setPlayerOptions(result.randomjatekosok);
     } catch (error) {
@@ -114,11 +114,14 @@ function Draft() {
   //! Csapatkapitány kiválasztása + kiválasztott játékos elküldése a backend-re
   const handleCaptainSelect = async (player) => {
     try {
-      await postMethodFetch("http://127.0.0.1:3000/api/draftselectedplayers", {
-        ...player,
-        starting11: true,
-        resIndex: false,
-      });
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/draft/draftselectedplayers",
+        {
+          ...player,
+          starting11: true,
+          resIndex: false,
+        },
+      );
 
       setShowPlayerSelectionModal(false);
       assignCaptain();
@@ -138,7 +141,7 @@ function Draft() {
   const assignCaptain = async () => {
     try {
       const result = await getMethodFetch(
-        "http://127.0.0.1:3000/api/draftselectedplayers",
+        "http://127.0.0.1:3000/api/draft/draftselectedplayers",
       );
 
       const player = result.draftselectedplayers[0];
@@ -164,16 +167,19 @@ function Draft() {
             return next;
           });
 
-          await fetch("http://127.0.0.1:3000/api/draftselectedplayers11", {
-            method: "DELETE",
-          });
+          await fetch(
+            "http://127.0.0.1:3000/api/draft/draftselectedplayers11",
+            {
+              method: "DELETE",
+            },
+          );
 
-          await fetch("http://127.0.0.1:3000/api/draftselectedplayers", {
+          await fetch("http://127.0.0.1:3000/api/draft/draftselectedplayers", {
             method: "DELETE",
           });
 
           await postMethodFetch(
-            "http://127.0.0.1:3000/api/draftselectedplayers",
+            "http://127.0.0.1:3000/api/draft/draftselectedplayers",
             {
               ...player,
               starting11: false,
@@ -205,7 +211,7 @@ function Draft() {
       setSelectedIndex(index);
 
       const result = await getMethodFetch(
-        `http://127.0.0.1:3000/api/random/${pos}`,
+        `http://127.0.0.1:3000/api/draft/random/${pos}`,
       );
       setPlayerOptions(result.randomPlayers);
 
@@ -231,12 +237,15 @@ function Draft() {
         ? gameLayout[selectedIndex].pos
         : benchLayout.find((s) => s.id === selectedIndex)?.pos;
 
-      await postMethodFetch("http://127.0.0.1:3000/api/draftselectedplayers", {
-        ...player,
-        starting11,
-        resIndex,
-        slotPos,
-      });
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/draft/draftselectedplayers",
+        {
+          ...player,
+          starting11,
+          resIndex,
+          slotPos,
+        },
+      );
 
       const { teamChemistry, playerChemMap } = await fetchChemistry();
       setTeamChemistry(teamChemistry);
@@ -285,7 +294,7 @@ function Draft() {
           return benchLayout.find((s) => s.id === key)?.pos;
         };
 
-        await putMethodFetch("http://127.0.0.1:3000/api/swap", {
+        await putMethodFetch("http://127.0.0.1:3000/api/draft/swap", {
           aId: a.player_id,
           bId: b.player_id,
           aSlotPos: getSlotPosByKey(from),
@@ -337,7 +346,7 @@ function Draft() {
 
       const rewValue = getRewardValue(actualDraft);
       const rewardResult = await getMethodFetch(
-        `http://127.0.0.1:3000/api/draftrewards/${rewValue}`,
+        `http://127.0.0.1:3000/api/rewards/draftrewards/${rewValue}`,
       );
       setRewardData(rewardResult.results[0]);
 
@@ -392,9 +401,12 @@ function Draft() {
   const handleExitToMenu = async () => {
     try {
       if (rewardData) {
-        await postMethodFetch("http://127.0.0.1:3000/api/draftrewards/claim", {
-          rewardId: rewardData.id,
-        });
+        await postMethodFetch(
+          "http://127.0.0.1:3000/api/rewards/draftrewards/claim",
+          {
+            rewardId: rewardData.id,
+          },
+        );
       }
 
       window.location.href = "/";

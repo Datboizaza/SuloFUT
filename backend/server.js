@@ -37,13 +37,29 @@ app.use(
 //!Routing
 //?Főoldal:
 router.get("/", (request, response) => {
-  response.sendFile(path.join(__dirname, "../my-react-app/szerver.html"));
+  response.sendFile(path.join(__dirname, "../frontend/szerver.html"));
 });
 
 //!API endpoints
 app.use("/", router);
 const endpoints = require("./api/api.js");
 app.use("/api", endpoints);
+const userEndpoints = require("./api/usersapi.js");
+app.use("/api/users", userEndpoints);
+const draftEndpoints = require("./api/draftapi.js");
+app.use("/api/draft", draftEndpoints);
+const rewardEndpoints = require("./api/rewardsapi.js");
+app.use("/api/rewards", rewardEndpoints);
+const objectiveEndpoints = require("./api/objectivesapi.js");
+app.use("/api/objectives", objectiveEndpoints);
+const leaderboardEndpoints = require("./api/leaderboardapi.js");
+app.use("/api/leaderboard", leaderboardEndpoints);
+const storeEndpoints = require("./api/storeapi.js");
+app.use("/api/store", storeEndpoints);
+const sbcEndpoints = require("./api/sbcapi.js");
+app.use("/api/sbc", sbcEndpoints);
+const myClubEndpoints = require("./api/myclubapi.js");
+app.use("/api/myclub", myClubEndpoints);
 
 //!Szerver futtatása
 app.use(express.static(path.join(__dirname, "../frontend"))); //?frontend mappa tartalmának betöltése az oldal működéséhez

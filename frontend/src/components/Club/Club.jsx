@@ -40,7 +40,7 @@ function Club() {
         coins: player.value,
       });
 
-      await postMethodFetch("http://127.0.0.1:3000/api/setClubPlayers", {
+      await postMethodFetch("http://127.0.0.1:3000/api/myclub/setClubPlayers", {
         players: updated,
       });
 

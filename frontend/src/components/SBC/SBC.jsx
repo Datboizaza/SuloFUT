@@ -16,7 +16,9 @@ function SBC() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await getMethodFetch("http://127.0.0.1:3000/api/allsbc");
+        const result = await getMethodFetch(
+          "http://127.0.0.1:3000/api/sbc/allsbc",
+        );
         setData(result.results);
       } catch (error) {
         console.log(error);
