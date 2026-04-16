@@ -1231,7 +1231,7 @@ router.post("/updatecoins", async (request, response) => {
 });
 
 //! User club
-router.post("/addPlayersToClub", async (request, response) => {
+router.post("/updateClub", async (request, response) => {
   try {
     const userId = request.session.userId;
     const newPlayers = request.body.players;

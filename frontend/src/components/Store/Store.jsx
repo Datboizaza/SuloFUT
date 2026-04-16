@@ -215,7 +215,7 @@ function Store() {
   //! Játékos hozzáadása a klub-hoz
   const handleSendAllToClub = async () => {
     try {
-      await postMethodFetch("http://127.0.0.1:3000/api/addPlayersToClub", {
+      await postMethodFetch("http://127.0.0.1:3000/api/updateClub", {
         players: nonDuplicates,
       });
 

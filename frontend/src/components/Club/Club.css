@@ -1,0 +1,61 @@
+/* Club */
+.clubContainer {
+  padding: 25px;
+  color: white;
+  backdrop-filter: blur(20px);
+  background-color: #003d3f3b;
+  border-radius: 20px;
+  height: 80vh;
+  width: 70vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  overflow-y: scroll;
+  transform: scale(0.8);
+  opacity: 0;
+  animation: scalePopIn 0.4s ease forwards;
+}
+
+.cardRow {
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.479);
+  padding: 20px;
+  border-radius: 18px;
+  transition: transform 100ms ease-in-out;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.cardRow:hover {
+  transform: scale(1.01);
+}
+
+.cardWrapper {
+  position: relative;
+  width: 23%;
+  min-width: 150px;
+  max-width: 190px;
+  aspect-ratio: 3/3.8;
+  height: 100%;
+  transition: all 100ms ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cardWrapper:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+}
+
+.packPlayerName {
+  color: rgb(203, 255, 252);
+  font-family: bristone;
+  font-size: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: end;
+}
