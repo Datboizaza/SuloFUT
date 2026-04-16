@@ -32,18 +32,19 @@ function Club() {
   //! Quick sell 1 játékos
   const handleQuickSell = async (player) => {
     try {
+      const updated = myClubPlayers.filter(
+        (p) => p.player_id !== player.player_id,
+      );
+
       await postMethodFetch("http://127.0.0.1:3000/api/updatecoins", {
         coins: player.value,
       });
 
-      setMyClubPlayers((prev) => {
-        const updated = prev.filter((p) => p.player_id !== player.player_id);
-        return updated;
+      await postMethodFetch("http://127.0.0.1:3000/api/setClubPlayers", {
+        players: updated,
       });
 
-      await postMethodFetch("http://127.0.0.1:3000/api/updateClub", {
-        players: myClubPlayers,
-      });
+      setMyClubPlayers(updated);
 
       window.dispatchEvent(new Event("coinsUpdated"));
     } catch (error) {
@@ -55,7 +56,7 @@ function Club() {
     <>
       <div className="clubContainer">
         {myClubPlayers.map((player) => (
-          <div key={player.player_id} className="cardRow">
+          <div key={player.player_id} className="cardRowClub">
             <div className="cardWrapper">
               <PlayerCard
                 player={player}

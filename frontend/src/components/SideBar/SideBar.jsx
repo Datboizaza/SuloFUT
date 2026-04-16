@@ -1,6 +1,14 @@
 import "./SideBar.css";
 import NavbarIcon from "../../assets/navbarIcon.png";
 import HubLogo from "../../assets/logoWhite.png";
+import Home from "../../assets/homeMiniIcon.png";
+import Squads from "../../assets/squadMiniIcon.png";
+import Sbc from "../../assets/sbcMiniIcon.png";
+import Draft from "../../assets/draftMiniIcon.png";
+import Store from "../../assets/storeMiniIcon.png";
+import Club from "../../assets/myclubMiniIcon.png";
+import Leaderboards from "../../assets/leaderboardMiniIcon.png";
+import Settings from "../../assets/settingsMiniIcon.png";
 import { Link } from "react-router-dom";
 
 function SideBar() {
@@ -40,41 +48,49 @@ function SideBar() {
             <ul className="navbar-nav">
               <li className="nav-item">
                 <Link className="nav-link" id="navbarItem" to="/">
+                  <img src={Home} className="miniIcon" alt="Home" />
                   Home
                 </Link>
               </li>
               <li className="nav-item">
                 <a className="nav-link" id="navbarItem" href="">
+                  <img src={Squads} className="miniIcon" alt="Home" />
                   Squads
                 </a>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" id="navbarItem" to="/sbc">
+                  <img src={Sbc} className="miniIcon" alt="Home" />
                   SBC
                 </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" id="navbarItem" to="/draft">
+                  <img src={Draft} className="miniIcon" alt="Home" />
                   Draft
                 </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" id="navbarItem" to="/store">
+                  <img src={Store} className="miniIcon" alt="Home" />
                   Store
                 </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" id="navbarItem" to="/club">
+                  <img src={Club} className="miniIcon" alt="Home" />
                   Club
                 </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" id="navbarItem" to="/leaderboard">
+                  <img src={Leaderboards} className="miniIcon" alt="Home" />
                   Leaderboards
                 </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" id="navbarItem" to="/settings">
+                  <img src={Settings} className="miniIcon" alt="Home" />
                   Settings
                 </Link>
               </li>

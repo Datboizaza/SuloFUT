@@ -18,7 +18,7 @@
   animation: scalePopIn 0.4s ease forwards;
 }
 
-.cardRow {
+.cardRowClub {
   width: 100%;
   background-color: rgba(0, 0, 0, 0.479);
   padding: 20px;
@@ -29,7 +29,7 @@
   align-items: center;
   justify-content: space-between;
 }
-.cardRow:hover {
+.cardRowClub:hover {
   transform: scale(1.01);
 }
 
