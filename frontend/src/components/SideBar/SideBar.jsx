@@ -64,9 +64,9 @@ function SideBar() {
                 </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" id="navbarItem" href="">
+                <Link className="nav-link" id="navbarItem" to="/club">
                   Club
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" id="navbarItem" to="/leaderboard">

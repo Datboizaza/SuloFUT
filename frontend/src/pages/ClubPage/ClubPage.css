@@ -1,0 +1,34 @@
+/* Háttér */
+.clubPage {
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* StatBar */
+.clubHeader {
+  height: 8vh;
+}
+
+/* Tartalom */
+.clubBody {
+  height: 92vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/*------------------Media queries---------------------*/
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  .clubHeader {
+    height: 7vh;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .clubHeader {
+    height: 7vh;
+  }
+}
