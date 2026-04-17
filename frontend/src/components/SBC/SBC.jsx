@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import "./SBC.css";
-import Coins from "../../assets/coins.png";
 import SpecialPack from "../../assets/specialpack.png";
 
 function SBC() {
@@ -11,6 +10,8 @@ function SBC() {
   });
 
   const [activeTab, setActiveTab] = useState("challenges");
+
+  const [sbcGameStarted, setSbcGameStarted] = useState(false);
 
   //! Adatok lekérése
   useEffect(() => {
@@ -31,82 +32,77 @@ function SBC() {
   //! Aktuális tab
   const current = data[activeTab] || [];
 
-  //! SBC claim (ha később lesz)
-  const handleClaim = async (sbcId) => {
-    try {
-      await postMethodFetch("http://127.0.0.1:3000/api/sbc/claim", { sbcId });
-
-      window.dispatchEvent(new Event("coinsUpdated"));
-
-      const result = await getMethodFetch("http://127.0.0.1:3000/api/sbc");
-
-      setData(result.results);
-    } catch (error) {
-      console.error(error);
-    }
+  //! Start Challenge
+  const handleStart = (id) => {
+    console.log("Start SBC:", id);
+    setSbcGameStarted(true);
   };
 
   return (
-    <div className="sbcContainer">
-      {/* Tabs */}
-      <div className="tabs">
-        {["challenges", "upgrades", "foundations"].map((tab) => (
-          <button
-            key={tab}
-            className={`tab ${activeTab === tab ? "active" : ""}`}
-            onClick={() => setActiveTab(tab)}
-          >
-            {tab.toUpperCase()}
-          </button>
-        ))}
-      </div>
-
-      {/* Grid */}
-      <div className="sbcGrid">
-        {current.map((sbc) => (
-          <div key={sbc.id} className="sbcCard">
-            <div className="sbcHeader">
-              <p className="sbcTitle">{sbc.name}</p>
-              <Reward reward={sbc.reward} />
-            </div>
-
-            {!sbc.completed && (
-              <button className="claimBtn" onClick={() => handleClaim(sbc.id)}>
-                Complete SBC
+    <>
+      {!sbcGameStarted && (
+        <div className="sbcContainer">
+          {/* Tabs */}
+          <div className="tabs">
+            {["challenges", "upgrades", "foundations"].map((tab) => (
+              <button
+                key={tab}
+                className={`tab ${activeTab === tab ? "active" : ""}`}
+                onClick={() => setActiveTab(tab)}
+              >
+                {tab.toUpperCase()}
               </button>
-            )}
-
-            {sbc.completed && (
-              <button className="claimBtn claimed" disabled>
-                Completed &#x1F5F8;
-              </button>
-            )}
+            ))}
           </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
-function Reward({ reward, small }) {
-  if (!reward) return null;
+          {/* Grid */}
+          <div className="sbcGrid">
+            {current.map((element) => {
+              const sbc = element.sbcData;
 
-  return (
-    <div className={`reward ${small ? "small" : ""}`}>
-      {reward.coins && (
-        <span className="coins">
-          {reward.coins}
-          <img src={Coins} alt="coin" className="coinImg" />
-        </span>
+              return (
+                <div key={sbc.id} className="sbcCard">
+                  <div className="sbcHeader">
+                    <p className="sbcTitle">{sbc.sbcName}</p>
+                  </div>
+
+                  <div className="sbcInfo">
+                    <div className="rewardDiv">
+                      <p>
+                        <strong>Reward:</strong>
+                      </p>
+                      <div className="packDiv">
+                        <img
+                          src={SpecialPack}
+                          alt="Reward Pack Image"
+                          className="rewardPack"
+                        />
+                        <p>x1 {sbc.rewardPack}</p>
+                      </div>
+                    </div>
+                    <p>
+                      <strong>Repeatable:</strong>{" "}
+                      {sbc.repeat === null || sbc.repeat === undefined
+                        ? "Infinite"
+                        : sbc.repeat}
+                    </p>
+                  </div>
+
+                  <button
+                    className="startBtn"
+                    onClick={() => handleStart(sbc.id)}
+                  >
+                    Start Challenge
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       )}
 
-      {reward.packs?.map((p) => (
-        <span key={p.id} className="pack">
-          <img src={SpecialPack} alt="pack" className="packImg" />
-          {p.name}
-        </span>
-      ))}
-    </div>
+      {sbcGameStarted && <div className="sbcGameContainer"></div>}
+    </>
   );
 }
 
@@ -115,23 +111,6 @@ const getMethodFetch = async (url) => {
     const response = await fetch(url, { credentials: "include" });
     if (!response.ok) {
       throw new Error(`GET hiba: ${response.status} ${response.statusText}`);
-    }
-    return await response.json();
-  } catch (error) {
-    throw new Error(`Hiba történt: ${error.message}`);
-  }
-};
-
-const postMethodFetch = async (url, data) => {
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(data),
-    });
-    if (!response.ok) {
-      throw new Error(`POST Hiba: ${response.status} ${response.statusText}`);
     }
     return await response.json();
   } catch (error) {

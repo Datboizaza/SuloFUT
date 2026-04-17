@@ -39,7 +39,6 @@ function Draft() {
 
   const [playerChemMap, setPlayerChemMap] = useState({});
 
-  const [draftComplete, setDraftComplete] = useState(false);
   const [showDraftSummary, setShowDraftSummary] = useState(false);
 
   const [rewardData, setRewardData] = useState(null);
@@ -321,21 +320,11 @@ function Draft() {
   );
 
   //! Draft vége
-  useEffect(() => {
-    if (!draftStarted || !gameLayout) {
-      setDraftComplete(false);
-      return;
-    }
-
-    const starting11Full = gameLayout.every((_, i) =>
-      Boolean(assignedPlayers[i]),
-    );
-    const benchFull = benchLayout.every((slot) =>
-      Boolean(assignedPlayers[slot.id]),
-    );
-
-    setDraftComplete(starting11Full && benchFull);
-  }, [draftStarted, gameLayout, assignedPlayers]);
+  const draftComplete =
+    draftStarted &&
+    gameLayout &&
+    gameLayout.every((_, i) => Boolean(assignedPlayers[i])) &&
+    benchLayout.every((slot) => Boolean(assignedPlayers[slot.id]));
 
   //! Draft befejezése
   const handleSubmitDraft = async () => {

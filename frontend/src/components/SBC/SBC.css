@@ -21,8 +21,12 @@
 .sbcCard {
   background: #0000008c;
   border-radius: 15px;
-  padding: 40px;
+  padding: 60px;
   transition: 0.2s ease-in-out;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .sbcCard:hover {
@@ -35,7 +39,64 @@
 }
 
 .sbcTitle {
-  font-family: bristone;
+  font-weight: bolder;
+  font-size: 23px;
+}
+
+.sbcInfo {
+  margin-top: 4%;
+  margin-bottom: 15px;
+  font-size: 14px;
+  opacity: 0.9;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 45%;
+}
+
+.startBtn {
+  margin-top: 10px;
+  width: 100%;
+  height: 40px;
+  border-radius: 20px;
+  box-shadow: 1px 1px 100px 10px rgba(0, 0, 0, 0.76);
+  border: 3px rgba(0, 255, 149, 0.727) solid;
+  background: linear-gradient(90deg, #3da5a7, #00c3ff);
+  color: white;
+  transition: all 150ms ease-in-out;
+}
+
+.startBtn:hover {
+  transform: scale(1.01);
+  background: linear-gradient(90deg, #53d9db, #6affab);
+  border: 1px rgb(0, 254, 156) solid;
+  color: rgba(6, 92, 85, 0.856);
+}
+
+.rewardPack {
+  height: 70px;
+  margin-right: 10px;
+}
+
+.rewardDiv {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 28%;
+}
+
+.rewardDiv p {
+  margin: 0;
+}
+
+.packDiv {
+  display: flex;
+  align-items: center;
+}
+
+.packDiv p {
+  margin: 0;
 }
 
 /* Tabok */
@@ -59,37 +120,6 @@
 .tab.active {
   background: linear-gradient(90deg, #00fff7, #00f078);
   color: rgb(44, 82, 69);
-}
-
-/* Reward */
-.reward {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.coinImg {
-  height: 30px;
-}
-
-.packImg {
-  height: 60px;
-}
-
-.claimBtn {
-  margin-top: 10px;
-  width: 100%;
-  height: 40px;
-  border-radius: 20px;
-  border: 3px rgba(0, 255, 149, 0.7) solid;
-  background: linear-gradient(90deg, #3da5a7, #00c3ff);
-  color: white;
-}
-
-.claimed {
-  border: none;
-  background: rgb(48, 255, 172);
-  color: rgb(65, 65, 65);
 }
 
 /* Animáciuók */
