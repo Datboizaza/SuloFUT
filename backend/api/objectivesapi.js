@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const database = require("../sql/database.js");
+const objectivesQueries = require("../sql/objectivesQueries.js");
+const storeQueries = require("../sql/storeQueries.js");
 const fs = require("fs/promises");
 const bcrypt = require("bcrypt");
 
@@ -25,7 +27,7 @@ const upload = multer({ storage });
 router.get("/", async (request, response) => {
   try {
     const userId = request.session.userId;
-    const rows = await database.getObjectives(userId);
+    const rows = await objectivesQueries.getObjectives(userId);
 
     const result = {
       foundations: [],
@@ -135,10 +137,10 @@ router.post("/claimsubobj", async (request, response) => {
     const userId = request.session.userId;
     const { subId } = request.body;
 
-    const subRows = await database.getSubobjAndRew(subId);
+    const subRows = await objectivesQueries.getSubobjAndRew(subId);
     const sub = subRows[0];
 
-    const progressRows = await database.isSubobjClaimed(userId, subId);
+    const progressRows = await objectivesQueries.isSubobjClaimed(userId, subId);
     const progress = progressRows[0];
 
     if (!progress || progress.progress_int < progress.requirement_int) {
@@ -154,10 +156,10 @@ router.post("/claimsubobj", async (request, response) => {
     }
 
     if (sub.packIds) {
-      await database.addPack(userId, sub.packIds);
+      await storeQueries.addPack(userId, sub.packIds);
     }
 
-    await database.setClaimed(userId, subId);
+    await objectivesQueries.setClaimed(userId, subId);
 
     response.status(200).json({ message: "Reward claimed" });
   } catch (error) {
@@ -172,7 +174,10 @@ router.post("/claimobjgroup", async (request, response) => {
     const userId = request.session.userId;
     const { objectiveId } = request.body;
 
-    const sub = await database.getSubobjectivesByObjective(userId, objectiveId);
+    const sub = await objectivesQueries.getSubobjectivesByObjective(
+      userId,
+      objectiveId,
+    );
 
     const completed = sub.every(
       (e) => e.progress_int >= e.requirement_int && e.claimed,
@@ -182,14 +187,17 @@ router.post("/claimobjgroup", async (request, response) => {
       return response.status(400).json({ message: "Not completed yet" });
     }
 
-    const groupclaimed = await database.isGroupClaimed(userId, objectiveId);
+    const groupclaimed = await objectivesQueries.isGroupClaimed(
+      userId,
+      objectiveId,
+    );
     if (groupclaimed?.claimed) {
       return response
         .status(400)
         .json({ message: "Group reward already claimed" });
     }
 
-    const groupRewardRows = await database.getGroupReward(objectiveId);
+    const groupRewardRows = await objectivesQueries.getGroupReward(objectiveId);
     const reward = groupRewardRows[0];
 
     if (reward.coins) {
@@ -197,10 +205,10 @@ router.post("/claimobjgroup", async (request, response) => {
     }
 
     if (reward.packIds) {
-      await database.addPack(userId, reward.packIds);
+      await storeQueries.addPack(userId, reward.packIds);
     }
 
-    await database.setGroupClaimed(userId, objectiveId);
+    await objectivesQueries.setGroupClaimed(userId, objectiveId);
 
     response.status(200).json({ message: "Group reward claimed" });
   } catch (error) {

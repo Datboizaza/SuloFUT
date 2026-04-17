@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const database = require("../sql/database.js");
+const storeQueries = require("../sql/storeQueries.js");
 const fs = require("fs/promises");
 const bcrypt = require("bcrypt");
 
@@ -35,8 +35,8 @@ const readJsonFile = async (filePath) => {
 router.get("/generatePack/:id", async (request, response) => {
   try {
     const id = request.params.id;
-    const packWeights = await database.getallWeightData(id);
-    const packData = await database.getPackDetails(id);
+    const packWeights = await storeQueries.getallWeightData(id);
+    const packData = await storeQueries.getPackDetails(id);
     const playerCount = packData.playerCount;
     const data = await readJsonFile(
       path.join(__dirname, "./files/players.json"),
@@ -146,7 +146,7 @@ router.get("/generatePack/:id", async (request, response) => {
 //!Store pack-ek
 router.get("/storepacks", async (request, response) => {
   try {
-    const packs = await database.getStorePacks();
+    const packs = await storeQueries.getStorePacks();
     response.status(200).json(packs);
   } catch (error) {
     console.log("GET /storepacks error:", error);
@@ -160,7 +160,7 @@ router.post("/deletemypack", async (request, response) => {
     const userId = request.session.userId;
     const packId = request.body.packId;
 
-    await database.deleteMyPack(userId, packId);
+    await storeQueries.deleteMyPack(userId, packId);
 
     response.status(200).json({ message: "Pack deleted from user" });
   } catch (error) {

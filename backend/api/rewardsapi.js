@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const database = require("../sql/database.js");
+const rewardQueries = require("../sql/rewardQueries.js");
+const storeQueries = require("../sql/storeQueries.js");
 const fs = require("fs/promises");
 const bcrypt = require("bcrypt");
 
@@ -25,7 +27,7 @@ const upload = multer({ storage });
 router.get("/:id", async (request, response) => {
   try {
     const id = request.params.id;
-    const reward = await database.getRewardById(id);
+    const reward = await rewardQueries.getRewardById(id);
     response.status(200).json({
       message: "Ez a végpont működik.",
       results: reward,
@@ -42,7 +44,7 @@ router.get("/:id", async (request, response) => {
 router.get("/draftrewards/:rewardValue", async (request, response) => {
   const rewardValue = request.params.rewardValue;
   try {
-    const rows = await database.getDraftRewards(rewardValue);
+    const rows = await rewardQueries.getDraftRewards(rewardValue);
 
     const rewardsMap = {};
 
@@ -85,7 +87,7 @@ router.post("/draftrewards/claim", async (request, response) => {
   const { rewardId } = request.body;
   const userId = request.session.userId;
   try {
-    const rows = await database.getDraftRewardById(rewardId);
+    const rows = await rewardQueries.getDraftRewardById(rewardId);
     const reward = {
       id: rows[0].draftRewardId,
       coins: rows[0].coins,
@@ -108,7 +110,7 @@ router.post("/draftrewards/claim", async (request, response) => {
     }
 
     for (const pack of reward.packs) {
-      await database.addPack(userId, pack.id);
+      await storeQueries.addPack(userId, pack.id);
     }
 
     response.status(200).json({ message: "Draft reward claimed!" });
