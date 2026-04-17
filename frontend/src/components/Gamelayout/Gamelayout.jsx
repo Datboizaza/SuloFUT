@@ -1,4 +1,3 @@
-import { createPortal } from "react-dom";
 import PlayerCard from "../PlayerCard/PlayerCard.jsx";
 
 function Gamelayout({
@@ -11,11 +10,6 @@ function Gamelayout({
   chemImg,
   playerChemMap,
   displayedPosition,
-  showPlayerSelectionModal,
-  playerOptons,
-  captainPick,
-  handleCaptainSelect,
-  handlePlayerSelect,
 }) {
   return (
     <div className="gameFormationLayout">
@@ -63,35 +57,6 @@ function Gamelayout({
           {p.pos}
         </p>
       ))}
-
-      {showPlayerSelectionModal &&
-        createPortal(
-          <div className="modalOverlay">
-            <div className="playerSelectionModal">
-              {playerOptons.map((player, i) => (
-                <div
-                  className="cardSlot"
-                  key={i}
-                  onClick={() =>
-                    captainPick
-                      ? handleCaptainSelect(player)
-                      : handlePlayerSelect(player)
-                  }
-                >
-                  <PlayerCard
-                    player={player}
-                    chemImg={chemImg}
-                    playerChemMap={playerChemMap}
-                    displayedPosition={displayedPosition}
-                    slotPos={null}
-                    isModal={true}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>,
-          document.body,
-        )}
     </div>
   );
 }

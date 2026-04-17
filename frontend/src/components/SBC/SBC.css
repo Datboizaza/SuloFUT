@@ -122,6 +122,23 @@
   color: rgb(44, 82, 69);
 }
 
+/* Háttér */
+.sbcBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  height: 100vh;
+  width: 100vw;
+  background-image: url("../../assets/stadium.jpg");
+  background-repeat: no-repeat;
+  background-size: 3000px 2400px;
+  background-position-x: center;
+  background-position-y: 80%;
+}
+
+/* Requirements */
+
 /* Animáciuók */
 @keyframes scalePopIn {
   to {

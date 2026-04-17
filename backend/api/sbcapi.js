@@ -56,4 +56,16 @@ router.get("/allsbc", async (request, response) => {
   }
 });
 
+//! SBC id alapján
+router.get("/:id", async (request, response) => {
+  try {
+    const sbc = await sbcQueries.getSBCbyId(request.params.id);
+
+    response.status(200).json({ sbc });
+  } catch (error) {
+    console.log("GET /api/sbc/:id error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
 module.exports = router;

@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 import "./Draft.css";
 import Gamelayout from "../Gamelayout/Gamelayout.jsx";
 import Subbar from "../Subbar/Subbar.jsx";
+import PlayerCard from "../PlayerCard/PlayerCard.jsx";
 import RatingChemDisplay from "../RatingChemDisplay/RatingChemDisplay.jsx";
 import Reward from "../Reward/Reward.jsx";
 import Grab from "../Grab/Grab.jsx";
@@ -488,13 +489,38 @@ function Draft() {
           chemImg={chemImg}
           playerChemMap={playerChemMap}
           displayedPosition={displayedPosition}
-          showPlayerSelectionModal={showPlayerSelectionModal}
-          playerOptons={playerOptons}
-          captainPick={captainPick}
-          handleCaptainSelect={handleCaptainSelect}
-          handlePlayerSelect={handlePlayerSelect}
         />
       )}
+
+      {/* Player selection modal */}
+      {showPlayerSelectionModal &&
+        createPortal(
+          <div className="modalOverlay">
+            <div className="playerSelectionModal">
+              {playerOptons.map((player, i) => (
+                <div
+                  className="cardSlot"
+                  key={i}
+                  onClick={() =>
+                    captainPick
+                      ? handleCaptainSelect(player)
+                      : handlePlayerSelect(player)
+                  }
+                >
+                  <PlayerCard
+                    player={player}
+                    chemImg={chemImg}
+                    playerChemMap={playerChemMap}
+                    displayedPosition={displayedPosition}
+                    slotPos={null}
+                    isModal={true}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>,
+          document.body,
+        )}
 
       {/* Kispad */}
       {draftStarted && gameLayout && (
