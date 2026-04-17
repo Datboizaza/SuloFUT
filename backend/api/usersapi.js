@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const database = require("../sql/database.js");
+const usersQueries = require("../sql/usersQueries.js");
+const objectivesQueries = require("../sql/objectivesQueries.js");
 const fs = require("fs/promises");
 const bcrypt = require("bcrypt");
 
@@ -24,7 +25,7 @@ const upload = multer({ storage });
 //! User-ek
 router.get("/", async (request, response) => {
   try {
-    const users = await database.selectall();
+    const users = await usersQueries.selectall();
     response.status(200).json({
       message: "Ez a végpont működik.",
       results: users,
@@ -41,7 +42,10 @@ router.get("/", async (request, response) => {
 router.post("/", async (request, response) => {
   try {
     const hashed = await bcrypt.hash(request.body.password, 10);
-    const insertinto = await database.insertinto(request.body.username, hashed);
+    const insertinto = await usersQueries.insertinto(
+      request.body.username,
+      hashed,
+    );
     response.status(200).json({
       message: "User created",
       insertId: insertinto,
@@ -62,7 +66,7 @@ router.post("/", async (request, response) => {
 //! Login
 router.post("/login", async (request, response) => {
   try {
-    const user = await database.login(request.body.username);
+    const user = await usersQueries.login(request.body.username);
 
     if (!user)
       return response.status(400).json({ message: "Invalid username" });
@@ -85,7 +89,7 @@ router.get("/me", async (request, response) => {
   try {
     if (!request.session.userId)
       return response.status(400).json({ message: "Hiba történt." });
-    const user = await database.getUserById(request.session.userId);
+    const user = await usersQueries.getUserById(request.session.userId);
     response.status(200).json(user);
   } catch (error) {
     console.log("GET /users/me error:", error);
@@ -98,7 +102,7 @@ router.get("/me/coins", async (request, response) => {
   try {
     if (!request.session.userId)
       return response.status(400).json({ message: "Hiba történt." });
-    const coins = await database.getUserCoinsById(request.session.userId);
+    const coins = await usersQueries.getUserCoinsById(request.session.userId);
     response.status(200).json(coins);
   } catch (error) {
     console.log("GET /users/me/coins error:", error);
@@ -111,7 +115,7 @@ router.get("/me/packs", async (request, response) => {
   try {
     if (!request.session.userId)
       return response.status(400).json({ message: "Hiba történt." });
-    const packs = await database.getUserPacksById(request.session.userId);
+    const packs = await usersQueries.getUserPacksById(request.session.userId);
     response.status(200).json(packs);
   } catch (error) {
     console.log("GET /users/me/packs error:", error);
@@ -123,7 +127,7 @@ router.get("/me/packs", async (request, response) => {
 router.post("/me/bestdraft", async (request, response) => {
   try {
     const rating = request.body.rating;
-    const result = await database.updateBestDraftById(
+    const result = await usersQueries.updateBestDraftById(
       rating,
       request.session.userId,
     );
@@ -147,7 +151,7 @@ router.post("/me/objectiveprogress", async (request, response) => {
       return response.status(401).json({ message: "Not logged in" });
     }
 
-    await database.updateSubobjectiveProgress(userId, subId);
+    await objectivesQueries.updateSubobjectiveProgress(userId, subId);
 
     return response.status(200).json({
       message: "Progress updated",
@@ -166,7 +170,7 @@ router.post("/changeusername", async (request, response) => {
     const userId = request.session.userId;
     const newUsername = request.body.username;
 
-    await database.changeUsername(newUsername, userId);
+    await usersQueries.changeUsername(newUsername, userId);
 
     response.status(200).json({ message: "Username changed successfully" });
   } catch (error) {
@@ -181,7 +185,7 @@ router.post("/changepassword", async (request, response) => {
     const userId = request.session.userId;
     const hashed = await bcrypt.hash(request.body.password, 10);
 
-    await database.changePassword(hashed, userId);
+    await usersQueries.changePassword(hashed, userId);
 
     response.status(200).json({ message: "Password changed successfully" });
   } catch (error) {
@@ -209,12 +213,12 @@ router.post("/delete", async (request, response) => {
   try {
     const userId = request.session.userId;
 
-    await database.deleteUser(userId);
-    await database.deleteUserPacks(userId);
-    await database.deleteUserObjClaims(userId);
-    await database.deleteUserSubobjProg(userId);
-    await database.deleteUserClub(userId);
-    await database.deleteUserStats(userId);
+    await usersQueries.deleteUser(userId);
+    await usersQueries.deleteUserPacks(userId);
+    await usersQueries.deleteUserObjClaims(userId);
+    await usersQueries.deleteUserSubobjProg(userId);
+    await usersQueries.deleteUserClub(userId);
+    await usersQueries.deleteUserStats(userId);
 
     request.session.destroy(() => {
       response.clearCookie("connect.sid");

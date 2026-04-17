@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const database = require("../sql/database.js");
 const fs = require("fs/promises");
 const bcrypt = require("bcrypt");
 

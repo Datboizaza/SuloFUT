@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const database = require("../sql/database.js");
+const myClubQueries = require("../sql/myClubQueries.js");
 const fs = require("fs/promises");
 const bcrypt = require("bcrypt");
 
@@ -27,7 +27,7 @@ router.post("/addPlayersToClub", async (request, response) => {
     const userId = request.session.userId;
     const newPlayers = request.body.players;
 
-    const rows = await database.currentClub(userId);
+    const rows = await myClubQueries.currentClub(userId);
 
     let currentPlayers = [];
 
@@ -37,7 +37,7 @@ router.post("/addPlayersToClub", async (request, response) => {
 
     const updatedPlayers = [...currentPlayers, ...newPlayers];
 
-    await database.updateClub(updatedPlayers, userId);
+    await myClubQueries.updateClub(updatedPlayers, userId);
 
     response.status(200).json({ message: "success" });
   } catch (error) {
@@ -52,7 +52,7 @@ router.post("/setClubPlayers", async (request, response) => {
     const userId = request.session.userId;
     const players = request.body.players;
 
-    await database.updateClub(players, userId);
+    await myClubQueries.updateClub(players, userId);
 
     response.status(200).json({ message: "success" });
   } catch (error) {
@@ -65,7 +65,7 @@ router.post("/setClubPlayers", async (request, response) => {
 router.get("/", async (request, response) => {
   try {
     const userId = request.session.userId;
-    const rows = await database.currentClub(userId);
+    const rows = await myClubQueries.currentClub(userId);
 
     if (!rows || rows.length === 0) {
       return response.json([]);

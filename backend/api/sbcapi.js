@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const database = require("../sql/database.js");
+const sbcQueries = require("../sql/sbcQueries.js");
 const fs = require("fs/promises");
 const bcrypt = require("bcrypt");
 
@@ -24,7 +24,7 @@ const upload = multer({ storage });
 //! SBC-k
 router.get("/allsbc", async (request, response) => {
   try {
-    const rows = await database.getSBC();
+    const rows = await sbcQueries.getSBC();
 
     const result = {
       challenges: [],
