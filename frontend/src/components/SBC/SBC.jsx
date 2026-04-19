@@ -224,6 +224,10 @@ function SBC() {
 
   //! Min/max requirement
   const parseRequirement = (value) => {
+    if (!value || typeof value !== "string") {
+      return { type: null, value: 0 };
+    }
+
     const [type, num] = value.split(" ");
     return {
       type,
@@ -399,6 +403,9 @@ function SBC() {
           sbc={currentSBC}
           assignedPlayers={assignedPlayers}
           stats={stats}
+          getRequirements={getRequirements}
+          parseRequirement={parseRequirement}
+          checkRequirement={checkRequirement}
         />
       )}
 

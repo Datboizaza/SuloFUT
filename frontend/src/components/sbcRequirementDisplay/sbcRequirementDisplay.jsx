@@ -1,6 +1,12 @@
 import "./sbcRequirementDisplay.css";
 
-function SBCRequirements({ sbc, assignedPlayers, stats }) {
+function SBCRequirements({
+  sbc,
+  stats,
+  getRequirements,
+  parseRequirement,
+  checkRequirement,
+}) {
   const requirements = getRequirements(sbc);
 
   return (
