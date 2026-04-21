@@ -1,9 +1,9 @@
 import { createPortal } from "react-dom";
 
-function RatingChemDisplay({ teamRating, teamChemistry, ratingStars }) {
+function RatingChemDisplay({ teamRating, teamChemistry, ratingStars, title }) {
   return createPortal(
     <div className="chemRatingDisplay">
-      <h4 className="draftSquadText">draft squad</h4>
+      <h4 className="draftSquadText">{title.toLowerCase()}</h4>
 
       <div className="ratingStars">{ratingStars(teamRating)}</div>
 

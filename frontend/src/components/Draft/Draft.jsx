@@ -489,6 +489,7 @@ function Draft() {
           chemImg={chemImg}
           playerChemMap={playerChemMap}
           displayedPosition={displayedPosition}
+          allowReplace={false}
         />
       )}
 
@@ -545,6 +546,7 @@ function Draft() {
           teamRating={teamRating}
           teamChemistry={teamChemistry}
           ratingStars={ratingStars}
+          title={"draft squad"}
         />
       )}
 

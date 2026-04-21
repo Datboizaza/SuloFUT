@@ -78,3 +78,17 @@ export const fetchRating = async () => {
 
   return data.rating;
 };
+
+//!Rating fetchelése (sub nélkül)
+export const fetchRatingWOSub = async () => {
+  const response = await fetch(
+    "http://127.0.0.1:3000/api/draft/ratingwithoutsub",
+    {
+      credentials: "include",
+    },
+  );
+
+  const data = await response.json();
+
+  return data.rating;
+};

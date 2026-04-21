@@ -12,7 +12,7 @@ import {
   chemImg,
   ratingStars,
   fetchChemistry,
-  fetchRating,
+  fetchRatingWOSub,
   displayedPosition,
   benchLayout,
 } from "../../utilities/utilities.js";
@@ -40,6 +40,10 @@ function SBC() {
 
   const [currentSBC, setCurrentSBC] = useState(null);
 
+  const [showSbcReward, setShowSbcReward] = useState(false);
+
+  const [userSbcProgress, setUserSbcProgress] = useState({});
+
   //! Sbc adatok lekérése
   useEffect(() => {
     const fetchData = async () => {
@@ -53,6 +57,24 @@ function SBC() {
       }
     };
 
+    const fetchProgress = async () => {
+      try {
+        const result = await getMethodFetch(
+          "http://127.0.0.1:3000/api/sbc/userprogress",
+        );
+
+        const map = {};
+        result.results.forEach((row) => {
+          map[Number(row.sbc_id)] = Number(row.completions);
+        });
+
+        setUserSbcProgress(map);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchProgress();
     fetchData();
   }, []);
 
@@ -125,7 +147,7 @@ function SBC() {
   //! Player hozzáadása a layout-hoz
   const handlePlayerSelect = async (player) => {
     try {
-      if (assignedPlayers[selectedIndex]) return;
+      const existingPlayer = assignedPlayers[selectedIndex];
 
       const starting11 = typeof selectedIndex === "number";
       const resIndex = null;
@@ -133,21 +155,33 @@ function SBC() {
         ? gameLayout[selectedIndex].pos
         : benchLayout.find((s) => s.id === selectedIndex)?.pos;
 
-      await postMethodFetch(
-        "http://127.0.0.1:3000/api/draft/draftselectedplayers",
-        {
-          ...player,
-          starting11,
-          resIndex,
-          slotPos,
-        },
-      );
+      if (existingPlayer) {
+        await putMethodFetch("http://127.0.0.1:3000/api/draft/replace", {
+          oldPlayerId: existingPlayer.player_id,
+          newPlayer: {
+            ...player,
+            starting11,
+            resIndex,
+            slotPos,
+          },
+        });
+      } else {
+        await postMethodFetch(
+          "http://127.0.0.1:3000/api/draft/draftselectedplayers",
+          {
+            ...player,
+            starting11,
+            resIndex,
+            slotPos,
+          },
+        );
+      }
 
       const { teamChemistry, playerChemMap } = await fetchChemistry();
       setTeamChemistry(teamChemistry);
       setPlayerChemMap(playerChemMap);
 
-      const rating = await fetchRating();
+      const rating = await fetchRatingWOSub();
       setTeamRating(rating);
 
       setAssignedPlayers((prev) => ({
@@ -192,7 +226,7 @@ function SBC() {
         setTeamChemistry(teamChemistry);
         setPlayerChemMap(playerChemMap);
 
-        const rating = await fetchRating();
+        const rating = await fetchRatingWOSub();
         setTeamRating(rating);
       } catch (error) {
         console.log(error);
@@ -209,17 +243,20 @@ function SBC() {
 
   //! SBC requirement-ek
   const getRequirements = (sbc) => {
-    const exclude = [
-      "id",
-      "category_id",
-      "sbcName",
-      "rewardPack",
-      "repeat",
-      "formation",
-      "design",
-    ];
+    return Object.entries(sbc).filter(([key, value]) => {
+      if (!value) return false;
 
-    return Object.entries(sbc).filter(([key]) => !exclude.includes(key));
+      if (
+        typeof value === "string" &&
+        (value.startsWith("min") || value.startsWith("max"))
+      ) {
+        return true;
+      }
+
+      if (key === "rarity") return true;
+
+      return false;
+    });
   };
 
   //! Min/max requirement
@@ -238,16 +275,23 @@ function SBC() {
   //! Aktuális sbc állás
   const getSquadStats = (players) => {
     const playerList = Object.values(players);
+
     return {
       rating: teamRating,
       chemistry: teamChemistry,
-      leagues: new Set(playerList.map((p) => p.league)).size,
-      nations: new Set(playerList.map((p) => p.nation)).size,
+      leagues: new Set(playerList.map((p) => p.league_id)).size,
+      nations: new Set(playerList.map((p) => p.nationality_id)).size,
       sameLeague: getMaxSame(playerList, "league_id"),
       sameNation: getMaxSame(playerList, "nationality_id"),
       sameClub: getMaxSame(playerList, "club_team_id"),
       special: playerList.filter((p) => p.is_special).length,
       chemPP: playerList.filter((p) => playerChemMap[p.player_id] >= 1).length,
+      rarity:
+        playerList.length > 0
+          ? playerList.every((p) => p.rarity === playerList[0].rarity)
+            ? playerList[0].rarity
+            : "mixed"
+          : null,
     };
   };
 
@@ -262,6 +306,21 @@ function SBC() {
 
   //! Requirement-ek ellenőrzése
   const checkRequirement = (requirementKey, requirementValue, stats) => {
+    if (!requirementValue) return true;
+
+    if (
+      !requirementValue.startsWith("min") &&
+      !requirementValue.startsWith("max")
+    ) {
+      const current = stats[requirementKey];
+
+      if (requirementKey === "rarity") {
+        return stats.rarity === requirementValue;
+      }
+
+      return current === requirementValue;
+    }
+
     const { type, value } = parseRequirement(requirementValue);
     const current = stats[requirementKey] || 0;
 
@@ -271,14 +330,53 @@ function SBC() {
     return false;
   };
 
-  //! Aktuális csapat statjai és aktuális sbc requirementjei
+  //! Aktuális csapat statjai és aktuális sbc requirementjei és játékosainak megszámolása
   const stats = getSquadStats(assignedPlayers);
   const requirements = currentSBC ? getRequirements(currentSBC) : [];
+  const playerCount = Object.keys(assignedPlayers).length;
 
   //! Minden requirement teljesitve van e
-  const allCompleted = requirements.every(([key, value]) =>
-    checkRequirement(key, value, stats),
-  );
+  const allCompleted =
+    playerCount === 11 &&
+    requirements.every(([key, value]) => checkRequirement(key, value, stats));
+
+  //! SBC befejezése
+  const handleSubmitSbc = async () => {
+    try {
+      const playersRemove = Object.values(assignedPlayers).map(
+        (player) => player.player_id,
+      );
+
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/myclub/deleteClubPlayers",
+        {
+          players: playersRemove,
+        },
+      );
+
+      setShowSbcReward(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //! Reward claim-elése
+  const handleClaimReward = async () => {
+    try {
+      await postMethodFetch("http://127.0.0.1:3000/api/rewards/sbc/claim", {
+        sbcId: currentSBC.id,
+      });
+
+      setUserSbcProgress((prev) => ({
+        ...prev,
+        [currentSBC.id]: (prev[currentSBC.id] || 0) + 1,
+      }));
+
+      window.location.href = "/sbc";
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -302,6 +400,19 @@ function SBC() {
             {current.map((element) => {
               const sbc = element.sbcData;
 
+              const completions = userSbcProgress[Number(sbc.id)] || 0;
+              const repeat =
+                sbc.repeat === null ||
+                sbc.repeat === undefined ||
+                sbc.repeat === 0
+                  ? Infinity
+                  : sbc.repeat;
+              const remaining =
+                repeat === Infinity
+                  ? Infinity
+                  : Math.max(repeat - completions, 0);
+              const isDisabled = completions >= repeat;
+
               return (
                 <div key={sbc.id} className="sbcCard">
                   <div className="sbcHeader">
@@ -324,17 +435,16 @@ function SBC() {
                     </div>
                     <p>
                       <strong>Repeatable:</strong>{" "}
-                      {sbc.repeat === null || sbc.repeat === undefined
-                        ? "Infinite"
-                        : sbc.repeat}
+                      {repeat === Infinity ? "Infinite" : `${remaining}`}
                     </p>
                   </div>
 
                   <button
                     className="startBtn"
                     onClick={() => handleStart(sbc.id)}
+                    disabled={isDisabled}
                   >
-                    Start Challenge
+                    {isDisabled ? "SBC already completed" : "Start Challenge"}
                   </button>
                 </div>
               );
@@ -357,6 +467,7 @@ function SBC() {
             chemImg={chemImg}
             playerChemMap={playerChemMap}
             displayedPosition={displayedPosition}
+            allowReplace={true}
           />
         </>
       )}
@@ -394,6 +505,7 @@ function SBC() {
           teamRating={teamRating}
           teamChemistry={teamChemistry}
           ratingStars={ratingStars}
+          title={"sbc squad"}
         />
       )}
 
@@ -425,8 +537,30 @@ function SBC() {
 
       {/* Complete gomb */}
       {sbcGameStarted && allCompleted && (
-        <button className="completeBtn">Complete SBC</button>
+        <button className="completeBtn" onClick={handleSubmitSbc}>
+          Complete SBC
+        </button>
       )}
+
+      {/* SBC reward modal */}
+      {showSbcReward &&
+        createPortal(
+          <div className="sbcRewardOverlay">
+            <div className="sbcReward">
+              <h2 className="sbcRewardTitle">SBC completed</h2>
+
+              <div className="sbcRewardBox">
+                <img src={SpecialPack} alt="Reward" className="sbcRewardImg" />
+                <p className="sbcRewardText">{currentSBC.rewardPack}</p>
+              </div>
+
+              <button className="exitButton" onClick={handleClaimReward}>
+                Exit and Claim
+              </button>
+            </div>
+          </div>,
+          document.body,
+        )}
     </>
   );
 }

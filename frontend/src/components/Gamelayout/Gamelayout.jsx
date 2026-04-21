@@ -10,6 +10,7 @@ function Gamelayout({
   chemImg,
   playerChemMap,
   displayedPosition,
+  allowReplace,
 }) {
   return (
     <div className="gameFormationLayout">
@@ -21,7 +22,7 @@ function Gamelayout({
           style={{ left: p.x + "%", top: p.y + "%" }}
           id={p.pos}
           onClick={() => {
-            if (assignedPlayers[i]) return;
+            if (!allowReplace && assignedPlayers[i]) return;
             handlePosClick(i, p.pos);
           }}
         >
@@ -42,6 +43,10 @@ function Gamelayout({
                 displayedPosition={displayedPosition}
                 slotPos={p.pos}
                 isModal={false}
+                onClick={() => {
+                  if (!allowReplace && assignedPlayers[i]) return;
+                  handlePosClick(i, p.pos);
+                }}
               />
             </div>
           )}

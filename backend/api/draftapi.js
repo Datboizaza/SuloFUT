@@ -500,6 +500,35 @@ router.get("/rating", async (request, response) => {
   }
 });
 
+//! Rating kiszámolása (sub nélkül)
+router.get("/ratingwithoutsub", async (request, response) => {
+  try {
+    const starting11players = await draftselectedPlayers11;
+
+    if (starting11players.length === 0) {
+      return response.json({ rating: 0 });
+    }
+
+    const starting11ratings = starting11players.map((p) => Number(p.overall));
+
+    let starting11ratingsSum = 0;
+    for (let i = 0; i < starting11ratings.length; i++) {
+      starting11ratingsSum += starting11ratings[i];
+    }
+
+    const correctedSumAvg = starting11ratingsSum / 11;
+
+    const finalRating = Math.round(correctedSumAvg);
+
+    response.status(200).json({
+      rating: finalRating,
+    });
+  } catch (error) {
+    console.log("GET /api/rating error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
 //! Játékosok Swap-olása
 router.put("/swap", (request, response) => {
   try {
@@ -534,6 +563,28 @@ router.put("/swap", (request, response) => {
     return response.json({ message: "success" });
   } catch (error) {
     console.log("PUT /api/swap error:", error);
+    return response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//! Játékos cseréje
+router.put("/replace", (request, response) => {
+  try {
+    const { oldPlayerId, newPlayer } = request.body;
+
+    const replaceInArray = (arr) =>
+      arr.map((player) =>
+        String(player.player_id) === String(oldPlayerId) ? newPlayer : player,
+      );
+
+    draftselectedPlayers11 = replaceInArray(draftselectedPlayers11);
+    draftselectedPlayersSubs = replaceInArray(draftselectedPlayersSubs);
+    draftselectedPlayersRes = replaceInArray(draftselectedPlayersRes);
+    draftselectedPlayers = replaceInArray(draftselectedPlayers);
+
+    return response.json({ message: "success" });
+  } catch (error) {
+    console.log("PUT /api/replace error:", error);
     return response.status(500).json({ message: "Internal server error" });
   }
 });

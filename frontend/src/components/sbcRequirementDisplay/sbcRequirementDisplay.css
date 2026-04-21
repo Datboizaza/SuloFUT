@@ -1,0 +1,200 @@
+/* SBC Requirement Display */
+.sbcRequirements {
+  position: absolute;
+  top: 10%;
+  left: 1%;
+  width: 300px;
+  background-color: #ffffff0a;
+  backdrop-filter: blur(6px);
+  border-radius: 20px;
+  box-shadow: 0px 0px 40px 10px rgba(46, 46, 46, 0.315);
+  color: white;
+  padding: 15px;
+  transition: 0.3s ease;
+  z-index: 5;
+}
+
+/* Cím */
+.reqHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.reqTitle {
+  color: rgb(113, 255, 212);
+  font-size: 95%;
+  letter-spacing: 0.5px;
+  font-weight: bolder;
+}
+
+.reqArrow {
+  font-size: 80%;
+  transition: transform 0.3s ease;
+}
+
+/* Requirementek */
+.reqContent {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(-20px);
+  transition: all 0.3s ease;
+}
+
+.sbcRequirements:hover .reqContent {
+  max-height: 80vh;
+  opacity: 1;
+  margin-top: 12px;
+  transform: translateY(0);
+}
+
+.sbcRequirements:hover .reqArrow {
+  transform: rotate(180deg);
+}
+
+.reqRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: bristone;
+  font-size: 75%;
+  padding: 10px;
+  border-radius: 10px;
+  transition: 0.2s ease;
+  margin: 6px 0px;
+}
+
+/* Kész */
+.reqRow.done {
+  background: rgba(0, 255, 179, 0.15);
+  color: rgb(0, 255, 179);
+}
+
+/* Nem kész */
+.reqRow.fail {
+  background: rgba(255, 80, 80, 0.15);
+  color: rgb(255, 120, 120);
+}
+
+/* Left text */
+.reqRow span:first-child {
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+/* Right text */
+.reqValue {
+  font-family: monospace;
+  font-size: 110%;
+}
+
+/* min / max */
+.reqType {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 80%;
+}
+
+/* current value */
+.reqCurrent {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: bold;
+}
+
+.reqIcon {
+  display: none;
+}
+
+/*------------------Media queries---------------------*/
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  .sbcRequirements {
+    top: 13%;
+    left: 3%;
+    width: 55px;
+    padding: 0;
+    background: rgba(0, 0, 0, 0.021);
+    box-shadow: none;
+  }
+
+  .reqHeader {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .reqIcon {
+    display: block;
+    font-size: 110%;
+  }
+
+  .reqTitle {
+    display: none;
+  }
+
+  .reqArrow {
+    font-size: 70%;
+  }
+
+  .reqContent {
+    position: absolute;
+    top: 65px;
+    left: 0;
+    width: 260px;
+    padding: 15px;
+    background-color: rgba(56, 56, 56, 0.719);
+    border-radius: 20px;
+    box-shadow: 0px 0px 40px 10px rgba(46, 46, 46, 0.315);
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .sbcRequirements {
+    top: 13%;
+    left: 3%;
+    width: 55px;
+    padding: 0;
+    background: rgba(0, 0, 0, 0.021);
+    box-shadow: none;
+  }
+
+  .reqHeader {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .reqIcon {
+    display: block;
+    font-size: 110%;
+  }
+
+  .reqTitle {
+    display: none;
+  }
+
+  .reqArrow {
+    font-size: 70%;
+  }
+
+  .reqContent {
+    position: absolute;
+    top: 65px;
+    left: 0;
+    width: 260px;
+    padding: 15px;
+    background-color: rgba(56, 56, 56, 0.719);
+    border-radius: 20px;
+    box-shadow: 0px 0px 40px 10px rgba(46, 46, 46, 0.315);
+  }
+}

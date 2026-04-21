@@ -77,8 +77,38 @@ async function getSBCbyId(id) {
   }
 }
 
+//? SBC completion
+async function updateSBCCompletion(userId, sbcId) {
+  const query = `
+  INSERT INTO user_sbc (user_id, sbc_id, completions)
+    VALUES (?, ?, 1)
+    ON DUPLICATE KEY UPDATE
+      completions = completions + 1;
+      `;
+  try {
+    const [rows] = await pool.execute(query, [userId, sbcId]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+//? SBC completion
+async function getSBCCompletion(userId) {
+  const query = `
+  SELECT sbc_id, completions FROM user_sbc WHERE user_id = ?;`;
+  try {
+    const [rows] = await pool.execute(query, [userId]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
 //!Export
 module.exports = {
   getSBC,
   getSBCbyId,
+  updateSBCCompletion,
+  getSBCCompletion,
 };
