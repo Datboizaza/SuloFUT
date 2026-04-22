@@ -13,6 +13,7 @@ function Subbar({
   chemImg,
   playerChemMap,
   displayedPosition,
+  allowReplace,
 }) {
   return createPortal(
     <div
@@ -39,7 +40,7 @@ function Subbar({
             data-slotkey={slot.id}
             id={slot.pos}
             onClick={() => {
-              if (assignedPlayers[slot.id]) return;
+              if (!allowReplace && assignedPlayers[slot.id]) return;
               handlePosClick(slot.id, slot.pos);
             }}
           >
@@ -75,7 +76,7 @@ function Subbar({
             data-slotkey={slot.id}
             id={slot.pos}
             onClick={() => {
-              if (assignedPlayers[slot.id]) return;
+              if (!allowReplace && assignedPlayers[slot.id]) return;
               handlePosClick(slot.id, slot.pos);
             }}
           >

@@ -537,6 +537,7 @@ function Draft() {
           chemImg={chemImg}
           playerChemMap={playerChemMap}
           displayedPosition={displayedPosition}
+          allowReplace={false}
         />
       )}
 

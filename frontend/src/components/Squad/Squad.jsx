@@ -32,6 +32,27 @@ function Squad() {
   const [isEditingName, setIsEditingName] = useState(false);
   const [openFormationSelect, setOpenFormationSelect] = useState(false);
 
+  //! Játékosok betöltése és backendre küldése
+  const loadPlayersToDraft = async (playersObj) => {
+    const players = Object.entries(playersObj);
+    for (const [key, player] of players) {
+      const starting11 = typeof key === "number";
+      const slotPos = starting11
+        ? gameLayout[Number(key)]?.pos
+        : benchLayout.find((s) => s.id === key)?.pos;
+      const resIndex = null;
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/draft/draftselectedplayers",
+        {
+          ...player,
+          starting11,
+          resIndex,
+          slotPos,
+        },
+      );
+    }
+  };
+
   //! Betöltés squad és formations
   useEffect(() => {
     const fetchData = async () => {
@@ -44,24 +65,35 @@ function Squad() {
         "http://127.0.0.1:3000/api/myclub/squad",
       );
       const squad = squadRes.squad;
-
       setSquadName(squad.squadName);
-
       const foundFormation = formationRes.formations.find(
-        (formation) => formation.formation === squad.squadFormation,
+        (f) => f.formation === squad.squadFormation,
       );
       if (foundFormation) {
         setSelectedFormation(foundFormation);
         setGameLayout(foundFormation.layout);
-      }
+        if (squad.squadPlayers) {
+          const parsed = JSON.parse(squad.squadPlayers);
+          setAssignedPlayers(parsed);
 
-      if (squad.squadPlayers) {
-        setAssignedPlayers(JSON.parse(squad.squadPlayers));
+          await fetch("http://127.0.0.1:3000/api/draft/draftselectedplayers", {
+            method: "DELETE",
+          });
+
+          await loadPlayersToDraft(parsed);
+
+          const { teamChemistry, playerChemMap } = await fetchChemistry();
+          setTeamChemistry(teamChemistry);
+          setPlayerChemMap(playerChemMap);
+
+          const rating = await fetchRatingWOSub();
+          setTeamRating(rating);
+        }
       }
     };
 
     fetchData();
-  }, []);
+  });
 
   //! Squad name mentés
   const handleSaveName = async () => {
@@ -103,53 +135,36 @@ function Squad() {
 
   //! Player select
   const handlePlayerSelect = async (player) => {
-    const starting11 = typeof selectedIndex === "number";
+    try {
+      const existingPlayer = assignedPlayers[selectedIndex];
 
-    const slotPos = starting11
-      ? gameLayout[selectedIndex].pos
-      : benchLayout.find((s) => s.id === selectedIndex)?.pos;
-    const newPlayer = {
-      ...player,
-      starting11,
-      slotPos,
-    };
+      const starting11 = typeof selectedIndex === "number";
+      const resIndex = null;
+      const slotPos = starting11
+        ? gameLayout[selectedIndex].pos
+        : benchLayout.find((s) => s.id === selectedIndex)?.pos;
 
-    setAssignedPlayers((prev) => ({
-      ...prev,
-      [selectedIndex]: newPlayer,
-    }));
-
-    const { teamChemistry, playerChemMap } = await fetchChemistry();
-    setTeamChemistry(teamChemistry);
-    setPlayerChemMap(playerChemMap);
-    const rating = await fetchRatingWOSub();
-    setTeamRating(rating);
-    setShowModal(false);
-    setSelectedIndex(null);
-  };
-
-  //! Swap
-  const handleSwapPlayers = useCallback(
-    async (from, to) => {
-      const a = assignedPlayers[from];
-      const b = assignedPlayers[to];
-
-      const getSlotData = (key) => {
-        const starting11 = typeof key === "number";
-        const slotPos = starting11
-          ? gameLayout[key]?.pos
-          : benchLayout.find((s) => s.id === key)?.pos;
-        return { starting11, slotPos };
-      };
-
-      setAssignedPlayers((prev) => {
-        const next = { ...prev };
-        const aData = getSlotData(to);
-        const bData = getSlotData(from);
-        next[from] = { ...b, ...bData };
-        next[to] = { ...a, ...aData };
-        return next;
-      });
+      if (existingPlayer) {
+        await putMethodFetch("http://127.0.0.1:3000/api/draft/replace", {
+          oldPlayerId: existingPlayer.player_id,
+          newPlayer: {
+            ...player,
+            starting11,
+            resIndex,
+            slotPos,
+          },
+        });
+      } else {
+        await postMethodFetch(
+          "http://127.0.0.1:3000/api/draft/draftselectedplayers",
+          {
+            ...player,
+            starting11,
+            resIndex,
+            slotPos,
+          },
+        );
+      }
 
       const { teamChemistry, playerChemMap } = await fetchChemistry();
       setTeamChemistry(teamChemistry);
@@ -157,6 +172,54 @@ function Squad() {
 
       const rating = await fetchRatingWOSub();
       setTeamRating(rating);
+
+      setAssignedPlayers((prev) => ({
+        ...prev,
+        [selectedIndex]: player,
+      }));
+
+      setShowModal(false);
+      setSelectedIndex(null);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //! Swap
+  const handleSwapPlayers = useCallback(
+    async (from, to) => {
+      try {
+        const a = assignedPlayers[from];
+        const b = assignedPlayers[to];
+
+        setAssignedPlayers((prev) => {
+          const next = { ...prev };
+          next[from] = b;
+          next[to] = a;
+          return next;
+        });
+
+        const getSlotPosByKey = (key) => {
+          if (typeof key === "number") return gameLayout[key]?.pos;
+          return benchLayout.find((s) => s.id === key)?.pos;
+        };
+
+        await putMethodFetch("http://127.0.0.1:3000/api/draft/swap", {
+          aId: a.player_id,
+          bId: b.player_id,
+          aSlotPos: getSlotPosByKey(from),
+          bSlotPos: getSlotPosByKey(to),
+        });
+
+        const { teamChemistry, playerChemMap } = await fetchChemistry();
+        setTeamChemistry(teamChemistry);
+        setPlayerChemMap(playerChemMap);
+
+        const rating = await fetchRatingWOSub();
+        setTeamRating(rating);
+      } catch (error) {
+        console.log(error);
+      }
     },
     [assignedPlayers, gameLayout],
   );
@@ -192,6 +255,7 @@ function Squad() {
               onChange={(e) => setSquadName(e.target.value)}
               onBlur={handleSaveName}
               autoFocus
+              maxLength={15}
             />
           ) : (
             <h2 onClick={() => setIsEditingName(true)}>
@@ -261,6 +325,7 @@ function Squad() {
             chemImg={chemImg}
             playerChemMap={playerChemMap}
             displayedPosition={displayedPosition}
+            allowReplace={true}
           />
         )}
 
@@ -277,7 +342,7 @@ function Squad() {
         {/* Save button */}
         {gameLayout &&
           createPortal(
-            <button className="completeBtn" onClick={handleSave}>
+            <button className="saveBtn" onClick={handleSave}>
               Save Squad
             </button>,
             document.body,
@@ -350,6 +415,22 @@ const postMethodFetch = async (url, data) => {
     });
     if (!response.ok) {
       throw new Error(`POST Hiba: ${response.status} ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    throw new Error(`Hiba történt: ${error.message}`);
+  }
+};
+
+const putMethodFetch = async (url, data) => {
+  try {
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error(`PUT Hiba: ${response.status} ${response.statusText}`);
     }
     return await response.json();
   } catch (error) {
