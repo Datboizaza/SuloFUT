@@ -11,6 +11,7 @@ import StorePage from "./pages/StorePage/StorePage.jsx";
 import SBCPage from "./pages/SBCPage/SBCPage.jsx";
 import SettingsPage from "./pages/SettingsPage/SettingsPage.jsx";
 import ClubPage from "./pages/ClubPage/ClubPage.jsx";
+import SquadPage from "./pages/SquadPage/SquadPage.jsx";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/sbc" element={<SBCPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/club" element={<ClubPage />} />
+          <Route path="/squad" element={<SquadPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

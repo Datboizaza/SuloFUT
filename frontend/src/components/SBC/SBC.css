@@ -19,10 +19,15 @@
 }
 
 .sbcCard {
+  position: relative;
   background: #0000008c;
   border-radius: 15px;
-  padding: 40px;
+  padding: 60px;
   transition: 0.2s ease-in-out;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .sbcCard:hover {
@@ -35,7 +40,78 @@
 }
 
 .sbcTitle {
-  font-family: bristone;
+  font-weight: bolder;
+  font-size: 23px;
+}
+
+.sbcImage {
+  position: absolute;
+  width: 150px;
+  right: 10%;
+  top: 20%;
+}
+
+.sbcInfo {
+  margin-top: 4%;
+  margin-bottom: 15px;
+  font-size: 14px;
+  opacity: 0.9;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 45%;
+}
+
+.startBtn {
+  margin-top: 10px;
+  width: 100%;
+  height: 40px;
+  border-radius: 20px;
+  box-shadow: 1px 1px 100px 10px rgba(0, 0, 0, 0.76);
+  border: 3px rgba(0, 255, 149, 0.727) solid;
+  background: linear-gradient(90deg, #3da5a7, #00c3ff);
+  color: white;
+  transition: all 150ms ease-in-out;
+}
+
+.startBtn:disabled {
+  background: rgba(2, 97, 53, 0.1);
+  color: rgba(0, 255, 85, 0.274);
+  cursor: not-allowed;
+}
+
+.startBtn:hover {
+  transform: scale(1.01);
+  background: linear-gradient(90deg, #53d9db, #6affab);
+  border: 1px rgb(0, 254, 156) solid;
+  color: rgba(6, 92, 85, 0.856);
+}
+
+.rewardPack {
+  height: 70px;
+  margin-right: 10px;
+}
+
+.rewardDiv {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 40%;
+  min-width: 300px;
+}
+
+.rewardDiv p {
+  margin: 0;
+}
+
+.packDiv {
+  display: flex;
+  align-items: center;
+}
+
+.packDiv p {
+  margin: 0;
 }
 
 /* Tabok */
@@ -61,35 +137,135 @@
   color: rgb(44, 82, 69);
 }
 
-/* Reward */
-.reward {
-  display: flex;
-  gap: 10px;
-  align-items: center;
+/* Háttér */
+.sbcBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  height: 100vh;
+  width: 100vw;
+  background-image: url("../../assets/stadium.jpg");
+  background-repeat: no-repeat;
+  background-size: 3000px 2400px;
+  background-position-x: center;
+  background-position-y: 80%;
 }
 
-.coinImg {
-  height: 30px;
-}
+/* Player kiválasztása */
 
-.packImg {
-  height: 60px;
-}
-
-.claimBtn {
-  margin-top: 10px;
+.sbcPlayersModal {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 40px;
-  border-radius: 20px;
-  border: 3px rgba(0, 255, 149, 0.7) solid;
-  background: linear-gradient(90deg, #3da5a7, #00c3ff);
-  color: white;
+  height: 100%;
+  backdrop-filter: blur(2px);
+  background-color: rgba(0, 0, 0, 0.423);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  align-items: center;
+  gap: 20px;
+  overflow-y: scroll;
+  z-index: 9999;
+  animation: fadeIn 0.4s ease;
 }
 
-.claimed {
+.completeBtn {
+  position: absolute;
+  top: 20%;
+  left: 1%;
+  height: 5vh;
+  width: 12vw;
+  min-width: 180px;
+  border-radius: 20px;
+  box-shadow: 1px 1px 100px 10px rgba(0, 0, 0, 0.76);
+  border: 3px rgba(0, 255, 251, 0.548) solid;
+  background-color: rgb(0, 165, 121);
+  color: white;
+  transition: all 150ms ease-in-out;
+  font-family: bristone;
+  font-size: 70%;
+  animation: glowPulse 1s infinite alternate;
+}
+
+.completeBtn:hover {
+  transform: scale(1.05);
+  background-color: rgb(1, 123, 91);
+  border: 1px rgb(0, 254, 156) solid;
+  color: rgba(0, 255, 221, 0.856);
+}
+
+/* Modal */
+.sbcRewardOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.sbcReward {
+  width: 350px;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  color: white;
+  animation: scalePopIn 0.4s ease forwards;
+}
+
+.sbcRewardTitle {
+  font-family: easportsfc;
+  color: rgb(113, 255, 212);
+  font-size: 120%;
+}
+
+.sbcRewardBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.sbcRewardImg {
+  width: 120px;
+}
+
+.sbcRewardText {
+  font-size: 120%;
+  font-weight: bolder;
+  text-align: center;
+}
+
+.exitButton {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border-radius: 10px;
   border: none;
-  background: rgb(48, 255, 172);
-  color: rgb(65, 65, 65);
+  background: rgb(0, 255, 179);
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.exitButton:hover {
+  background: rgb(0, 200, 140);
 }
 
 /* Animáciuók */
@@ -97,5 +273,90 @@
   to {
     transform: scale(1);
     opacity: 1;
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+
+  to {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+}
+
+@keyframes glowPulse {
+  from {
+    box-shadow: 0 0 5px #00fff2;
+  }
+  to {
+    box-shadow: 0 0 20px #00fff2;
+  }
+}
+
+/*------------------Media queries---------------------*/
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  .completeBtn {
+    top: 83%;
+    left: 1%;
+    height: 5vh;
+    width: 12vw;
+    min-width: 180px;
+  }
+  .sbcContainer {
+    width: 90vw;
+    height: 90vh;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .completeBtn {
+    top: 84%;
+    left: 6%;
+    height: 5vh;
+    width: 5vw;
+    min-width: 100px;
+    font-size: 70%;
+  }
+  .sbcContainer {
+    height: 90vh;
+    width: 96vw;
+  }
+
+  .sbcGrid {
+    gap: 10px;
+  }
+
+  .sbcCard {
+    padding: 30px;
+    height: 400px;
+  }
+
+  .sbcHeader {
+    text-align: center;
+  }
+
+  .sbcImage {
+    position: absolute;
+    width: 70px;
+    top: 30%;
+  }
+
+  .rewardPack {
+    height: 40px;
+  }
+
+  .rewardDiv {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 40%;
+    min-width: none;
+  }
+
+  .packDiv p {
+    margin: 0;
+    font-size: 80%;
   }
 }

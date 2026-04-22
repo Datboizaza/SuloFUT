@@ -3,6 +3,7 @@ const router = express.Router();
 const database = require("../sql/database.js");
 const rewardQueries = require("../sql/rewardQueries.js");
 const storeQueries = require("../sql/storeQueries.js");
+const sbcQueries = require("../sql/sbcQueries.js");
 const fs = require("fs/promises");
 const bcrypt = require("bcrypt");
 
@@ -116,6 +117,32 @@ router.post("/draftrewards/claim", async (request, response) => {
     response.status(200).json({ message: "Draft reward claimed!" });
   } catch (error) {
     console.log("POST /api/draftrewards/claim error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//! SBC reward claim-elése
+router.post("/sbc/claim", async (request, response) => {
+  try {
+    const { sbcId } = request.body;
+    const userId = request.session.userId;
+    const rows = await sbcQueries.getSBCbyId(sbcId);
+
+    const sbc = rows[0];
+    const reward = {
+      packName: sbc.rewardPack,
+    };
+    const pack = await storeQueries.getPackByName(reward.packName);
+
+    await storeQueries.addPack(userId, pack[0].id);
+
+    await sbcQueries.updateSBCCompletion(userId, sbcId);
+
+    response.status(200).json({
+      message: "success",
+    });
+  } catch (error) {
+    console.log("POST /api/sbc/claim error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });

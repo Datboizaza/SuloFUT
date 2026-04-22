@@ -56,4 +56,28 @@ router.get("/allsbc", async (request, response) => {
   }
 });
 
+//! SBC user progress
+router.get("/userprogress", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const rows = await sbcQueries.getSBCCompletion(userId);
+    response.status(200).json({ results: rows });
+  } catch (error) {
+    console.log("GET /api/sbc/userprogress error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//! SBC id alapján
+router.get("/:id", async (request, response) => {
+  try {
+    const sbc = await sbcQueries.getSBCbyId(request.params.id);
+
+    response.status(200).json({ sbc });
+  } catch (error) {
+    console.log("GET /api/sbc/:id error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
 module.exports = router;
