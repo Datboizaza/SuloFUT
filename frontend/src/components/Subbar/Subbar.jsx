@@ -103,7 +103,7 @@ function Subbar({
         ))}
       </div>
     </div>,
-    document.querySelector(".draftBody"),
+    document.body,
   );
 }
 
