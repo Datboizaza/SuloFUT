@@ -16,6 +16,45 @@ import {
   displayedPosition,
   benchLayout,
 } from "../../utilities/utilities.js";
+import scream from "../../assets/screamSbc.png";
+import flashback from "../../assets/flashbackSbc.png";
+import toty from "../../assets/totySbc.png";
+import special from "../../assets/specialSbc.png";
+import bronze from "../../assets/bronzeSbc.png";
+import silver from "../../assets/silverSbc.png";
+import gold from "../../assets/goldSbc.png";
+import eightyPlus from "../../assets/80plusSbc.png";
+import eightyTwoPlus from "../../assets/82plusSbc.png";
+import eightyFivePlus from "../../assets/85plusSbc.png";
+import hero from "../../assets/87Hero.png";
+import iconHero from "../../assets/88iconOrheroSbc.png";
+import icon from "../../assets/90iconSbc.png";
+import start from "../../assets/gettingStartedSbc.png";
+import learn from "../../assets/chemistrySbc.png";
+import league from "../../assets/leaguesSbc.png";
+import nation from "../../assets/nationsSbc.png";
+import hybrid from "../../assets/hybridSbc.png";
+
+const sbcImages = {
+  scream,
+  flashback,
+  toty,
+  special,
+  bronze,
+  silver,
+  gold,
+  eightyPlus,
+  eightyTwoPlus,
+  eightyFivePlus,
+  hero,
+  iconHero,
+  icon,
+  start,
+  learn,
+  league,
+  nation,
+  hybrid,
+};
 
 function SBC() {
   const [data, setData] = useState({
@@ -49,7 +88,7 @@ function SBC() {
     const fetchData = async () => {
       try {
         const result = await getMethodFetch(
-          "http://127.0.0.1:3000/api/sbc/allsbc",
+          "http://127.0.0.1:3000/api/sbc/allsbc"
         );
         setData(result.results);
       } catch (error) {
@@ -60,7 +99,7 @@ function SBC() {
     const fetchProgress = async () => {
       try {
         const result = await getMethodFetch(
-          "http://127.0.0.1:3000/api/sbc/userprogress",
+          "http://127.0.0.1:3000/api/sbc/userprogress"
         );
 
         const map = {};
@@ -85,11 +124,11 @@ function SBC() {
   const getLayoutByFormation = async (formationName) => {
     try {
       const result = await getMethodFetch(
-        "http://127.0.0.1:3000/api/formations",
+        "http://127.0.0.1:3000/api/formations"
       );
 
       const found = result.formations.find(
-        (f) => f.formation === formationName,
+        (f) => f.formation === formationName
       );
 
       return found ? found.layout : null;
@@ -106,7 +145,7 @@ function SBC() {
       });
 
       const result = await getMethodFetch(
-        `http://127.0.0.1:3000/api/sbc/${id}`,
+        `http://127.0.0.1:3000/api/sbc/${id}`
       );
 
       setCurrentSBC(result.sbc[0]);
@@ -130,11 +169,11 @@ function SBC() {
       const result = await getMethodFetch(`http://127.0.0.1:3000/api/myclub`);
 
       const assignedIds = Object.values(assignedPlayers).map(
-        (p) => p.player_id,
+        (p) => p.player_id
       );
 
       const filteredPlayers = result.filter(
-        (player) => !assignedIds.includes(player.player_id),
+        (player) => !assignedIds.includes(player.player_id)
       );
 
       setClubPlayers(filteredPlayers);
@@ -173,7 +212,7 @@ function SBC() {
             starting11,
             resIndex,
             slotPos,
-          },
+          }
         );
       }
 
@@ -232,13 +271,13 @@ function SBC() {
         console.log(error);
       }
     },
-    [assignedPlayers, gameLayout],
+    [assignedPlayers, gameLayout]
   );
 
   //! Usedrag használata
   const { isDragging, dragKey, dragPos, startDrag } = useDrag(
     assignedPlayers,
-    handleSwapPlayers,
+    handleSwapPlayers
   );
 
   //! SBC requirement-ek
@@ -344,14 +383,14 @@ function SBC() {
   const handleSubmitSbc = async () => {
     try {
       const playersRemove = Object.values(assignedPlayers).map(
-        (player) => player.player_id,
+        (player) => player.player_id
       );
 
       await postMethodFetch(
         "http://127.0.0.1:3000/api/myclub/deleteClubPlayers",
         {
           players: playersRemove,
-        },
+        }
       );
 
       setShowSbcReward(true);
@@ -413,10 +452,13 @@ function SBC() {
                   : Math.max(repeat - completions, 0);
               const isDisabled = completions >= repeat;
 
+              const img = sbcImages[element.sbcData.design];
+
               return (
                 <div key={sbc.id} className="sbcCard">
                   <div className="sbcHeader">
                     <p className="sbcTitle">{sbc.sbcName}</p>
+                    <img src={img} alt="Sbc Image" className="sbcImage" />
                   </div>
 
                   <div className="sbcInfo">
@@ -496,7 +538,7 @@ function SBC() {
               </div>
             ))}
           </div>,
-          document.body,
+          document.body
         )}
 
       {/* Rating & Chemistry Display */}
@@ -559,7 +601,7 @@ function SBC() {
               </button>
             </div>
           </div>,
-          document.body,
+          document.body
         )}
     </>
   );

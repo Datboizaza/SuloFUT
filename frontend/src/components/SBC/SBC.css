@@ -19,6 +19,7 @@
 }
 
 .sbcCard {
+  position: relative;
   background: #0000008c;
   border-radius: 15px;
   padding: 60px;
@@ -41,6 +42,13 @@
 .sbcTitle {
   font-weight: bolder;
   font-size: 23px;
+}
+
+.sbcImage {
+  position: absolute;
+  width: 150px;
+  right: 10%;
+  top: 20%;
 }
 
 .sbcInfo {
@@ -90,6 +98,7 @@
   align-items: center;
   justify-content: space-between;
   width: 40%;
+  min-width: 300px;
 }
 
 .rewardDiv p {
@@ -296,6 +305,10 @@
     width: 12vw;
     min-width: 180px;
   }
+  .sbcContainer {
+    width: 90vw;
+    height: 90vh;
+  }
 }
 
 @media screen and (max-width: 767px) {
@@ -306,5 +319,44 @@
     width: 5vw;
     min-width: 100px;
     font-size: 70%;
+  }
+  .sbcContainer {
+    height: 90vh;
+    width: 96vw;
+  }
+
+  .sbcGrid {
+    gap: 10px;
+  }
+
+  .sbcCard {
+    padding: 30px;
+    height: 400px;
+  }
+
+  .sbcHeader {
+    text-align: center;
+  }
+
+  .sbcImage {
+    position: absolute;
+    width: 70px;
+    top: 30%;
+  }
+
+  .rewardPack {
+    height: 40px;
+  }
+
+  .rewardDiv {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 40%;
+    min-width: none;
+  }
+
+  .packDiv p {
+    margin: 0;
+    font-size: 80%;
   }
 }
