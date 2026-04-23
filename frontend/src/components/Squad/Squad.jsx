@@ -6,6 +6,7 @@ import RatingChemDisplay from "../RatingChemDisplay/RatingChemDisplay.jsx";
 import Gamelayout from "../Gamelayout/Gamelayout.jsx";
 import Subbar from "../Subbar/Subbar.jsx";
 import Grab from "../Grab/Grab.jsx";
+import PlayersModal from "../PlayersModal/PlayersModal.jsx";
 import { useDrag } from "../../utilities/useDrag.js";
 import {
   chemImg,
@@ -365,31 +366,12 @@ function Squad() {
       </div>
 
       {/* Modal */}
-      {showModal &&
-        createPortal(
-          <div className="sbcPlayersModal">
-            {clubPlayers.map((player) => (
-              <div key={player.player_id} className="cardRow">
-                <div
-                  className="cardWrapper"
-                  onClick={() => handlePlayerSelect(player)}
-                >
-                  <PlayerCard
-                    player={player}
-                    isModal={true}
-                    displayedPosition={(p) => p.player_positions.split(", ")[0]}
-                    slotPos={null}
-                    playerChemMap={{}}
-                    chemImg={() => null}
-                  />
-                </div>
-
-                <p className="packPlayerName">{player.long_name}</p>
-              </div>
-            ))}
-          </div>,
-          document.body,
-        )}
+      {showModal && (
+        <PlayersModal
+          handlePlayerSelect={handlePlayerSelect}
+          clubPlayers={clubPlayers}
+        />
+      )}
 
       {/* Drag */}
       {isDragging && dragKey !== null && assignedPlayers[dragKey] && (

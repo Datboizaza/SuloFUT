@@ -86,10 +86,94 @@ router.get("/", async (request, response) => {
   }
 });
 
-router.get("/sortBy/:userId", async (request, response) => {
+//! User klubból törlés
+router.post("/deleteClubPlayers", async (request, response) => {
   try {
     const userId = request.session.userId;
-    const condId = request.params.condId;
+    const playersToRemove = request.body.players;
+
+    const rows = await myClubQueries.currentClub(userId);
+    let currentPlayers = [];
+    if (rows[0].userPlayers) {
+      currentPlayers = JSON.parse(rows[0].userPlayers);
+    }
+    const updatedPlayers = currentPlayers.filter(
+      (player) => !playersToRemove.includes(String(player.player_id)),
+    );
+
+    await myClubQueries.updateClub(updatedPlayers, userId);
+
+    response.status(200).json({ message: "players removed" });
+  } catch (error) {
+    console.log("POST /api/deleteClubPlayers error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//! User squad
+router.get("/squad", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+
+    const squadRow = await myClubQueries.getSquad(userId);
+
+    response.status(200).json({ squad: squadRow[0] });
+  } catch (error) {
+    console.log("GET /api/squad error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//! Update squad players
+router.post("/squad/save", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const { players } = request.body;
+
+    await myClubQueries.updateSquadPlayers(players, userId);
+
+    response.status(200).json({ message: "success" });
+  } catch (error) {
+    console.log("POST /api/squad/save error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//! Update squad name
+router.post("/squad/updatename", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const { squadName } = request.body;
+
+    await myClubQueries.updateSquadName(squadName, userId);
+
+    response.status(200).json({ message: "success" });
+  } catch (error) {
+    console.log("POST /api/squad/updatename error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//! Update formation
+router.post("/squad/updateformation", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const { formation } = request.body;
+
+    await myClubQueries.updateFormation(formation, userId);
+
+    response.status(200).json({ message: "success" });
+  } catch (error) {
+    console.log("POST /api/squad/updateformation error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//! Sort by
+router.post("/sortBy", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const condId = request.body.condId;
     const rows = await myClubQueries.currentClub(userId);
 
     if (!rows || rows.length === 0) {
@@ -97,7 +181,6 @@ router.get("/sortBy/:userId", async (request, response) => {
     }
 
     let players = [];
-
     if (rows[0].userPlayers) {
       players = JSON.parse(rows[0].userPlayers);
     }
@@ -109,7 +192,6 @@ router.get("/sortBy/:userId", async (request, response) => {
     );
     const valueASC = players.sort((a, b) => Number(a.value) - Number(b.value));
     const valueDESC = players.sort((a, b) => Number(b.value) - Number(a.value));
-
     const conds = {
       0: rateASC,
       1: rateDESC,
@@ -126,11 +208,12 @@ router.get("/sortBy/:userId", async (request, response) => {
   }
 });
 
-router.get("/ovrRange/:userId", async (request, response) => {
+//! Rating range szűrés
+router.post("/ovrRange", async (request, response) => {
   try {
     const userId = request.session.userId;
-    const condMin = request.params.condMin;
-    const condMax = request.params.condMax;
+    const condMin = request.body.condMin;
+    const condMax = request.body.condMax;
     const rows = await myClubQueries.currentClub(userId);
 
     if (!rows || rows.length === 0) {
@@ -153,10 +236,11 @@ router.get("/ovrRange/:userId", async (request, response) => {
   }
 });
 
-router.get("/playerName/:userId", async (request, response) => {
+//! Player név szűrés
+router.post("/playerName", async (request, response) => {
   try {
     const userId = request.session.userId;
-    const name = request.params.name.toLowerCase();
+    const name = request.body.name.toLowerCase();
     const rows = await myClubQueries.currentClub(userId);
 
     if (!rows || rows.length === 0) {
@@ -184,10 +268,11 @@ router.get("/playerName/:userId", async (request, response) => {
   }
 });
 
-router.get("/playerRarity/:userId", async (request, response) => {
+//! Rarity szűrés
+router.post("/playerRarity", async (request, response) => {
   try {
     const userId = request.session.userId;
-    const rarity = request.params.rarity.toLowerCase();
+    const rarity = request.body.rarity.toLowerCase();
     const rows = await myClubQueries.currentClub(userId);
 
     if (!rows || rows.length === 0) {
@@ -200,82 +285,24 @@ router.get("/playerRarity/:userId", async (request, response) => {
       players = JSON.parse(rows[0].userPlayers);
     }
     const condition = players.filter((p) => {
-      const rarity = String(p.rarity).toLowerCase().includes(rarity);
+      const Rarity = String(p.rarity).toLowerCase().includes(rarity);
 
-      if (rarity === true) {
+      if (Rarity === true) {
         return p;
       }
     });
     response.status(200).json({ byFeltetel: condition });
   } catch (error) {
     console.log("GET /api/packplayers error:", error);
-//! User klubból törlés
-router.post("/deleteClubPlayers", async (request, response) => {
-  try {
-    const userId = request.session.userId;
-    const playersToRemove = request.body.players;
-
-    const rows = await myClubQueries.currentClub(userId);
-    let currentPlayers = [];
-    if (rows[0].userPlayers) {
-      currentPlayers = JSON.parse(rows[0].userPlayers);
-    }
-    const updatedPlayers = currentPlayers.filter(
-      (player) => !playersToRemove.includes(String(player.player_id)),
-    );
-
-    await myClubQueries.updateClub(updatedPlayers, userId);
-
-    response.status(200).json({ message: "players removed" });
-  } catch (error) {
-    console.log("POST /api/deleteClubPlayers error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
 
-router.get("/playerRarity/:userId", async (request, response) => {
+//! Position szűrés
+router.post("/playerPosition", async (request, response) => {
   try {
     const userId = request.session.userId;
-    const rarity = request.params.rarity.toLowerCase();
-    const rows = await myClubQueries.currentClub(userId);
-
-    if (!rows || rows.length === 0) {
-      return response.json([]);
-    }
-
-    let players = [];
-
-    if (rows[0].userPlayers) {
-      players = JSON.parse(rows[0].userPlayers);
-    }
-    const condition = players.filter((p) => {
-      const rarity = String(p.rarity).toLowerCase().includes(rarity);
-
-      if (rarity === true) {
-        return p;
-      }
-    });
-    response.status(200).json({ byFeltetel: condition });
-  } catch (error) {
-    console.log("GET /api/packplayers error:", error);
-//! User squad
-router.get("/squad", async (request, response) => {
-  try {
-    const userId = request.session.userId;
-
-    const squadRow = await myClubQueries.getSquad(userId);
-
-    response.status(200).json({ squad: squadRow[0] });
-  } catch (error) {
-    console.log("GET /api/squad error:", error);
-    response.status(500).json({ message: "Internal server error" });
-  }
-});
-
-router.get("/playerPosition/:userId", async (request, response) => {
-  try {
-    const userId = request.session.userId;
-    const Position = request.params.position.toLowerCase();
+    const Position = request.body.position.toLowerCase();
     const rows = await myClubQueries.currentClub(userId);
 
     if (!rows || rows.length === 0) {
@@ -311,25 +338,15 @@ router.get("/playerPosition/:userId", async (request, response) => {
     response.status(200).json({ byFeltetel: condition });
   } catch (error) {
     console.log("GET /api/packplayers error:", error);
-//! Update squad name
-router.post("/squad/updatename", async (request, response) => {
-  try {
-    const userId = request.session.userId;
-    const { squadName } = request.body;
-
-    await myClubQueries.updateSquadName(squadName, userId);
-
-    response.status(200).json({ message: "success" });
-  } catch (error) {
-    console.log("POST /api/squad/updatename error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
 
-router.get("/playerNationality/:userId", async (request, response) => {
+//! Nemzetiség szűrés
+router.post("/playerNationality", async (request, response) => {
   try {
     const userId = request.session.userId;
-    const nationality = request.params.nationality.toLowerCase();
+    const nationality = request.body.nationality.toLowerCase();
     const rows = await myClubQueries.currentClub(userId);
 
     if (!rows || rows.length === 0) {
@@ -342,36 +359,26 @@ router.get("/playerNationality/:userId", async (request, response) => {
       players = JSON.parse(rows[0].userPlayers);
     }
     const condition = players.filter((p) => {
-      const nationality = String(p.nationality_name)
+      const Nationality = String(p.nationality_name)
         .toLowerCase()
         .includes(nationality);
 
-      if (nationality === true) {
+      if (Nationality === true) {
         return p;
       }
     });
     response.status(200).json({ byFeltetel: condition });
   } catch (error) {
     console.log("GET /api/packplayers error:", error);
-//! Update formation
-router.post("/squad/updateformation", async (request, response) => {
-  try {
-    const userId = request.session.userId;
-    const { formation } = request.body;
-
-    await myClubQueries.updateFormation(formation, userId);
-
-    response.status(200).json({ message: "success" });
-  } catch (error) {
-    console.log("POST /api/squad/updateformation error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
 
-router.get("/playerLeague/:userId", async (request, response) => {
+//! Liga szűrés
+router.post("/playerLeague", async (request, response) => {
   try {
     const userId = request.session.userId;
-    const league = request.params.league.toLowerCase();
+    const league = request.body.league.toLowerCase();
     const rows = await myClubQueries.currentClub(userId);
 
     if (!rows || rows.length === 0) {
@@ -384,34 +391,24 @@ router.get("/playerLeague/:userId", async (request, response) => {
       players = JSON.parse(rows[0].userPlayers);
     }
     const condition = players.filter((p) => {
-      const league = String(p.league_name).toLowerCase().includes(league);
+      const League = String(p.league_name).toLowerCase().includes(league);
 
-      if (league === true) {
+      if (League === true) {
         return p;
       }
     });
     response.status(200).json({ byFeltetel: condition });
   } catch (error) {
     console.log("GET /api/packplayers error:", error);
-//! Update squad players
-router.post("/squad/save", async (request, response) => {
-  try {
-    const userId = request.session.userId;
-    const { players } = request.body;
-
-    await myClubQueries.updateSquadPlayers(players, userId);
-
-    response.status(200).json({ message: "success" });
-  } catch (error) {
-    console.log("POST /api/squad/save error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
 
-router.get("/playerClub/:userId", async (request, response) => {
+//! Csapat szűrés
+router.post("/playerClub", async (request, response) => {
   try {
     const userId = request.session.userId;
-    const club = request.params.club.toLowerCase();
+    const club = request.body.club.toLowerCase();
     const rows = await myClubQueries.currentClub(userId);
 
     if (!rows || rows.length === 0) {
@@ -424,9 +421,9 @@ router.get("/playerClub/:userId", async (request, response) => {
       players = JSON.parse(rows[0].userPlayers);
     }
     const condition = players.filter((p) => {
-      const club = String(p.club_name).toLowerCase().includes(club);
+      const Club = String(p.club_name).toLowerCase().includes(club);
 
-      if (club === true) {
+      if (Club === true) {
         return p;
       }
     });
@@ -436,4 +433,5 @@ router.get("/playerClub/:userId", async (request, response) => {
     response.status(500).json({ message: "Internal server error" });
   }
 });
+
 module.exports = router;

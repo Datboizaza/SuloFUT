@@ -6,6 +6,7 @@ import PlayerCard from "../PlayerCard/PlayerCard.jsx";
 import RatingChemDisplay from "../RatingChemDisplay/RatingChemDisplay.jsx";
 import Gamelayout from "../Gamelayout/Gamelayout.jsx";
 import Grab from "../Grab/Grab.jsx";
+import PlayersModal from "../PlayersModal/PlayersModal.jsx";
 import SbcRequirementDisplay from "../sbcRequirementDisplay/sbcRequirementDisplay.jsx";
 import { useDrag } from "../../utilities/useDrag.js";
 import {
@@ -88,7 +89,7 @@ function SBC() {
     const fetchData = async () => {
       try {
         const result = await getMethodFetch(
-          "http://127.0.0.1:3000/api/sbc/allsbc"
+          "http://127.0.0.1:3000/api/sbc/allsbc",
         );
         setData(result.results);
       } catch (error) {
@@ -99,7 +100,7 @@ function SBC() {
     const fetchProgress = async () => {
       try {
         const result = await getMethodFetch(
-          "http://127.0.0.1:3000/api/sbc/userprogress"
+          "http://127.0.0.1:3000/api/sbc/userprogress",
         );
 
         const map = {};
@@ -124,11 +125,11 @@ function SBC() {
   const getLayoutByFormation = async (formationName) => {
     try {
       const result = await getMethodFetch(
-        "http://127.0.0.1:3000/api/formations"
+        "http://127.0.0.1:3000/api/formations",
       );
 
       const found = result.formations.find(
-        (f) => f.formation === formationName
+        (f) => f.formation === formationName,
       );
 
       return found ? found.layout : null;
@@ -145,7 +146,7 @@ function SBC() {
       });
 
       const result = await getMethodFetch(
-        `http://127.0.0.1:3000/api/sbc/${id}`
+        `http://127.0.0.1:3000/api/sbc/${id}`,
       );
 
       setCurrentSBC(result.sbc[0]);
@@ -169,11 +170,11 @@ function SBC() {
       const result = await getMethodFetch(`http://127.0.0.1:3000/api/myclub`);
 
       const assignedIds = Object.values(assignedPlayers).map(
-        (p) => p.player_id
+        (p) => p.player_id,
       );
 
       const filteredPlayers = result.filter(
-        (player) => !assignedIds.includes(player.player_id)
+        (player) => !assignedIds.includes(player.player_id),
       );
 
       setClubPlayers(filteredPlayers);
@@ -212,7 +213,7 @@ function SBC() {
             starting11,
             resIndex,
             slotPos,
-          }
+          },
         );
       }
 
@@ -271,13 +272,13 @@ function SBC() {
         console.log(error);
       }
     },
-    [assignedPlayers, gameLayout]
+    [assignedPlayers, gameLayout],
   );
 
   //! Usedrag használata
   const { isDragging, dragKey, dragPos, startDrag } = useDrag(
     assignedPlayers,
-    handleSwapPlayers
+    handleSwapPlayers,
   );
 
   //! SBC requirement-ek
@@ -383,14 +384,14 @@ function SBC() {
   const handleSubmitSbc = async () => {
     try {
       const playersRemove = Object.values(assignedPlayers).map(
-        (player) => player.player_id
+        (player) => player.player_id,
       );
 
       await postMethodFetch(
         "http://127.0.0.1:3000/api/myclub/deleteClubPlayers",
         {
           players: playersRemove,
-        }
+        },
       );
 
       setShowSbcReward(true);
@@ -515,31 +516,12 @@ function SBC() {
       )}
 
       {/* Player kiválasztó modal */}
-      {showModal &&
-        createPortal(
-          <div className="sbcPlayersModal">
-            {clubPlayers.map((player) => (
-              <div key={player.player_id} className="cardRow">
-                <div
-                  className="cardWrapper"
-                  onClick={() => handlePlayerSelect(player)}
-                >
-                  <PlayerCard
-                    player={player}
-                    isModal={true}
-                    displayedPosition={(p) => p.player_positions.split(", ")[0]}
-                    slotPos={null}
-                    playerChemMap={{}}
-                    chemImg={() => null}
-                  />
-                </div>
-
-                <p className="packPlayerName">{player.long_name}</p>
-              </div>
-            ))}
-          </div>,
-          document.body
-        )}
+      {showModal && (
+        <PlayersModal
+          handlePlayerSelect={handlePlayerSelect}
+          clubPlayers={clubPlayers}
+        />
+      )}
 
       {/* Rating & Chemistry Display */}
       {sbcGameStarted && gameLayout && (
@@ -601,7 +583,7 @@ function SBC() {
               </button>
             </div>
           </div>,
-          document.body
+          document.body,
         )}
     </>
   );
