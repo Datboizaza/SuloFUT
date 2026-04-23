@@ -86,6 +86,129 @@ router.get("/", async (request, response) => {
   }
 });
 
+router.get("/sortBy/:userId", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const condId = request.params.condId;
+    const rows = await myClubQueries.currentClub(userId);
+
+    if (!rows || rows.length === 0) {
+      return response.json([]);
+    }
+
+    let players = [];
+
+    if (rows[0].userPlayers) {
+      players = JSON.parse(rows[0].userPlayers);
+    }
+    const rateASC = players.sort(
+      (a, b) => Number(a.overall) - Number(b.overall),
+    );
+    const rateDESC = players.sort(
+      (a, b) => Number(b.overall) - Number(a.overall),
+    );
+    const valueASC = players.sort((a, b) => Number(a.value) - Number(b.value));
+    const valueDESC = players.sort((a, b) => Number(b.value) - Number(a.value));
+
+    const conds = {
+      0: rateASC,
+      1: rateDESC,
+      2: valueASC,
+      3: valueDESC,
+      4: players,
+    };
+
+    const condition = conds[condId];
+    response.status(200).json({ byFeltetel: condition });
+  } catch (error) {
+    console.log("GET /api/packplayers error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.get("/ovrRange/:userId", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const condMin = request.params.condMin;
+    const condMax = request.params.condMax;
+    const rows = await myClubQueries.currentClub(userId);
+
+    if (!rows || rows.length === 0) {
+      return response.json([]);
+    }
+
+    let players = [];
+
+    if (rows[0].userPlayers) {
+      players = JSON.parse(rows[0].userPlayers);
+    }
+    const condition = players.filter((p) => {
+      const ovr = Number(p.overall);
+      return ovr >= condMin && ovr <= condMax;
+    });
+    response.status(200).json({ byFeltetel: condition });
+  } catch (error) {
+    console.log("GET /api/packplayers error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.get("/playerName/:userId", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const name = request.params.name.toLowerCase();
+    const rows = await myClubQueries.currentClub(userId);
+
+    if (!rows || rows.length === 0) {
+      return response.json([]);
+    }
+
+    let players = [];
+
+    if (rows[0].userPlayers) {
+      players = JSON.parse(rows[0].userPlayers);
+    }
+    const condition = players.filter((p) => {
+      const playerName =
+        String(p.long_name).toLowerCase().includes(name) ||
+        String(p.short_name).toLowerCase().includes(name);
+
+      if (playerName === true) {
+        return p;
+      }
+    });
+    response.status(200).json({ byFeltetel: condition });
+  } catch (error) {
+    console.log("GET /api/packplayers error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.get("/playerRarity/:userId", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const rarity = request.params.rarity.toLowerCase();
+    const rows = await myClubQueries.currentClub(userId);
+
+    if (!rows || rows.length === 0) {
+      return response.json([]);
+    }
+
+    let players = [];
+
+    if (rows[0].userPlayers) {
+      players = JSON.parse(rows[0].userPlayers);
+    }
+    const condition = players.filter((p) => {
+      const rarity = String(p.rarity).toLowerCase().includes(rarity);
+
+      if (rarity === true) {
+        return p;
+      }
+    });
+    response.status(200).json({ byFeltetel: condition });
+  } catch (error) {
+    console.log("GET /api/packplayers error:", error);
 //! User klubból törlés
 router.post("/deleteClubPlayers", async (request, response) => {
   try {
@@ -110,6 +233,31 @@ router.post("/deleteClubPlayers", async (request, response) => {
   }
 });
 
+router.get("/playerRarity/:userId", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const rarity = request.params.rarity.toLowerCase();
+    const rows = await myClubQueries.currentClub(userId);
+
+    if (!rows || rows.length === 0) {
+      return response.json([]);
+    }
+
+    let players = [];
+
+    if (rows[0].userPlayers) {
+      players = JSON.parse(rows[0].userPlayers);
+    }
+    const condition = players.filter((p) => {
+      const rarity = String(p.rarity).toLowerCase().includes(rarity);
+
+      if (rarity === true) {
+        return p;
+      }
+    });
+    response.status(200).json({ byFeltetel: condition });
+  } catch (error) {
+    console.log("GET /api/packplayers error:", error);
 //! User squad
 router.get("/squad", async (request, response) => {
   try {
@@ -124,6 +272,45 @@ router.get("/squad", async (request, response) => {
   }
 });
 
+router.get("/playerPosition/:userId", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const Position = request.params.position.toLowerCase();
+    const rows = await myClubQueries.currentClub(userId);
+
+    if (!rows || rows.length === 0) {
+      return response.json([]);
+    }
+
+    let players = [];
+
+    if (rows[0].userPlayers) {
+      players = JSON.parse(rows[0].userPlayers);
+    }
+
+    const condition = players.filter((p) => {
+      const position =
+        String(p.player_positions).toLowerCase().includes(Position) ||
+        (Position === "defender" &&
+          String(p.player_positions)
+            .toLowerCase()
+            .includes("cb" || "lb" || "rb")) ||
+        (Position === "midfielder" &&
+          String(p.player_positions)
+            .toLowerCase()
+            .includes("cdm" || "cm" || "cam" || "lm" || "rm")) ||
+        (Position === "attacker" &&
+          String(p.player_positions)
+            .toLowerCase()
+            .includes("st" || "lw" || "rw"));
+
+      if (position === true) {
+        return p;
+      }
+    });
+    response.status(200).json({ byFeltetel: condition });
+  } catch (error) {
+    console.log("GET /api/packplayers error:", error);
 //! Update squad name
 router.post("/squad/updatename", async (request, response) => {
   try {
@@ -139,6 +326,33 @@ router.post("/squad/updatename", async (request, response) => {
   }
 });
 
+router.get("/playerNationality/:userId", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const nationality = request.params.nationality.toLowerCase();
+    const rows = await myClubQueries.currentClub(userId);
+
+    if (!rows || rows.length === 0) {
+      return response.json([]);
+    }
+
+    let players = [];
+
+    if (rows[0].userPlayers) {
+      players = JSON.parse(rows[0].userPlayers);
+    }
+    const condition = players.filter((p) => {
+      const nationality = String(p.nationality_name)
+        .toLowerCase()
+        .includes(nationality);
+
+      if (nationality === true) {
+        return p;
+      }
+    });
+    response.status(200).json({ byFeltetel: condition });
+  } catch (error) {
+    console.log("GET /api/packplayers error:", error);
 //! Update formation
 router.post("/squad/updateformation", async (request, response) => {
   try {
@@ -154,6 +368,31 @@ router.post("/squad/updateformation", async (request, response) => {
   }
 });
 
+router.get("/playerLeague/:userId", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const league = request.params.league.toLowerCase();
+    const rows = await myClubQueries.currentClub(userId);
+
+    if (!rows || rows.length === 0) {
+      return response.json([]);
+    }
+
+    let players = [];
+
+    if (rows[0].userPlayers) {
+      players = JSON.parse(rows[0].userPlayers);
+    }
+    const condition = players.filter((p) => {
+      const league = String(p.league_name).toLowerCase().includes(league);
+
+      if (league === true) {
+        return p;
+      }
+    });
+    response.status(200).json({ byFeltetel: condition });
+  } catch (error) {
+    console.log("GET /api/packplayers error:", error);
 //! Update squad players
 router.post("/squad/save", async (request, response) => {
   try {
@@ -169,4 +408,32 @@ router.post("/squad/save", async (request, response) => {
   }
 });
 
+router.get("/playerClub/:userId", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const club = request.params.club.toLowerCase();
+    const rows = await myClubQueries.currentClub(userId);
+
+    if (!rows || rows.length === 0) {
+      return response.json([]);
+    }
+
+    let players = [];
+
+    if (rows[0].userPlayers) {
+      players = JSON.parse(rows[0].userPlayers);
+    }
+    const condition = players.filter((p) => {
+      const club = String(p.club_name).toLowerCase().includes(club);
+
+      if (club === true) {
+        return p;
+      }
+    });
+    response.status(200).json({ byFeltetel: condition });
+  } catch (error) {
+    console.log("GET /api/packplayers error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
 module.exports = router;
