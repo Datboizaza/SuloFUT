@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 import "./Draft.css";
 import Gamelayout from "../Gamelayout/Gamelayout.jsx";
 import Subbar from "../Subbar/Subbar.jsx";
+import PlayerCard from "../PlayerCard/PlayerCard.jsx";
 import RatingChemDisplay from "../RatingChemDisplay/RatingChemDisplay.jsx";
 import Reward from "../Reward/Reward.jsx";
 import Grab from "../Grab/Grab.jsx";
@@ -39,7 +40,6 @@ function Draft() {
 
   const [playerChemMap, setPlayerChemMap] = useState({});
 
-  const [draftComplete, setDraftComplete] = useState(false);
   const [showDraftSummary, setShowDraftSummary] = useState(false);
 
   const [rewardData, setRewardData] = useState(null);
@@ -321,21 +321,11 @@ function Draft() {
   );
 
   //! Draft vége
-  useEffect(() => {
-    if (!draftStarted || !gameLayout) {
-      setDraftComplete(false);
-      return;
-    }
-
-    const starting11Full = gameLayout.every((_, i) =>
-      Boolean(assignedPlayers[i]),
-    );
-    const benchFull = benchLayout.every((slot) =>
-      Boolean(assignedPlayers[slot.id]),
-    );
-
-    setDraftComplete(starting11Full && benchFull);
-  }, [draftStarted, gameLayout, assignedPlayers]);
+  const draftComplete =
+    draftStarted &&
+    gameLayout &&
+    gameLayout.every((_, i) => Boolean(assignedPlayers[i])) &&
+    benchLayout.every((slot) => Boolean(assignedPlayers[slot.id]));
 
   //! Draft befejezése
   const handleSubmitDraft = async () => {
@@ -499,13 +489,39 @@ function Draft() {
           chemImg={chemImg}
           playerChemMap={playerChemMap}
           displayedPosition={displayedPosition}
-          showPlayerSelectionModal={showPlayerSelectionModal}
-          playerOptons={playerOptons}
-          captainPick={captainPick}
-          handleCaptainSelect={handleCaptainSelect}
-          handlePlayerSelect={handlePlayerSelect}
+          allowReplace={false}
         />
       )}
+
+      {/* Player selection modal */}
+      {showPlayerSelectionModal &&
+        createPortal(
+          <div className="modalOverlay">
+            <div className="playerSelectionModal">
+              {playerOptons.map((player, i) => (
+                <div
+                  className="cardSlot"
+                  key={i}
+                  onClick={() =>
+                    captainPick
+                      ? handleCaptainSelect(player)
+                      : handlePlayerSelect(player)
+                  }
+                >
+                  <PlayerCard
+                    player={player}
+                    chemImg={chemImg}
+                    playerChemMap={playerChemMap}
+                    displayedPosition={displayedPosition}
+                    slotPos={null}
+                    isModal={true}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>,
+          document.body,
+        )}
 
       {/* Kispad */}
       {draftStarted && gameLayout && (
@@ -521,6 +537,7 @@ function Draft() {
           chemImg={chemImg}
           playerChemMap={playerChemMap}
           displayedPosition={displayedPosition}
+          allowReplace={false}
         />
       )}
 
@@ -530,6 +547,7 @@ function Draft() {
           teamRating={teamRating}
           teamChemistry={teamChemistry}
           ratingStars={ratingStars}
+          title={"draft squad"}
         />
       )}
 

@@ -219,6 +219,7 @@ router.post("/delete", async (request, response) => {
     await usersQueries.deleteUserSubobjProg(userId);
     await usersQueries.deleteUserClub(userId);
     await usersQueries.deleteUserStats(userId);
+    await usersQueries.deleteUserSbc(userId);
 
     request.session.destroy(() => {
       response.clearCookie("connect.sid");

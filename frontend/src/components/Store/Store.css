@@ -158,8 +158,8 @@
 
 .packPlayerName {
   color: rgb(203, 255, 252);
-  font-family: bristone;
-  font-size: 70%;
+  font-size: 100%;
+  font-weight: bolder;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -403,6 +403,15 @@
 .backIconBtn:hover {
   transform: scale(1.08);
   color: white;
+}
+
+.noText {
+  font-family: easportsfc;
+  color: rgba(255, 255, 255, 0.521);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 @keyframes fadeIn {

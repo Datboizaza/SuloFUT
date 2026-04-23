@@ -52,8 +52,8 @@
 
 .packPlayerName {
   color: rgb(203, 255, 252);
-  font-family: bristone;
-  font-size: 70%;
+  font-size: 100%;
+  font-weight: bolder;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

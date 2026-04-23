@@ -37,8 +37,61 @@ async function updateClub(userPlayers, userId) {
   }
 }
 
+//? User squad
+async function getSquad(userId) {
+  const query = `
+  SELECT squadName, squadFormation, squadPlayers
+  FROM userclub
+  WHERE user_id = ?`;
+  try {
+    const [rows] = await pool.execute(query, [userId]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+//? Update squad name
+async function updateSquadName(squadName, userId) {
+  const query = `
+  UPDATE userclub SET squadName = ? WHERE user_id = ?`;
+  try {
+    const [rows] = await pool.execute(query, [squadName, userId]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+//? Update formation
+async function updateFormation(formation, userId) {
+  const query = `
+  UPDATE userclub SET squadFormation = ? WHERE user_id = ?`;
+  try {
+    const [rows] = await pool.execute(query, [formation, userId]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+//? Update squad players
+async function updateSquadPlayers(players, userId) {
+  const query = `UPDATE userclub SET squadPlayers = ? WHERE user_id = ?`;
+  try {
+    const [rows] = await pool.execute(query, [JSON.stringify(players), userId]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
 //!Export
 module.exports = {
   currentClub,
   updateClub,
+  getSquad,
+  updateSquadName,
+  updateFormation,
+  updateSquadPlayers,
 };

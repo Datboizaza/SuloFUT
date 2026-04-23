@@ -21,6 +21,17 @@ async function getPackById(id) {
   }
 }
 
+//? Pack name szerint
+async function getPackByName(name) {
+  const query = "SELECT * FROM packs WHERE packName = ?";
+  try {
+    const [rows] = await pool.execute(query, [name]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
 //? Pack hozzáadása a user-hez
 async function addPack(userId, packId) {
   const query = `
@@ -104,4 +115,5 @@ module.exports = {
   getallWeightData,
   getStorePacks,
   deleteMyPack,
+  getPackByName,
 };

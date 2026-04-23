@@ -140,6 +140,17 @@ async function deleteUser(userId) {
     throw error;
   }
 }
+async function deleteUserSbc(userId) {
+  const query = `
+  DELETE FROM user_sbc WHERE user_id = ?;
+  `;
+  try {
+    const [rows] = await pool.execute(query, [userId]);
+    return rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
 
 //! User dolgai
 //? User Coin száma
@@ -195,6 +206,7 @@ module.exports = {
   deleteUserObjClaims,
   deleteUserSubobjProg,
   deleteUser,
+  deleteUserSbc,
   getUserCoinsById,
   getUserPacksById,
   updateBestDraftById,

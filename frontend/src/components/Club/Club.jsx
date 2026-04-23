@@ -55,37 +55,41 @@ function Club() {
   return (
     <>
       <div className="clubContainer">
-        {myClubPlayers.map((player) => (
-          <div key={player.player_id} className="cardRowClub">
-            <div className="cardWrapper">
-              <PlayerCard
-                player={player}
-                isModal={true}
-                displayedPosition={(p) => p.player_positions.split(", ")[0]}
-                slotPos={null}
-                playerChemMap={{}}
-                chemImg={() => null}
-              />
-            </div>
+        {myClubPlayers.length === 0 ? (
+          <p className="noText">YOUR CLUB IS EMPTY</p>
+        ) : (
+          myClubPlayers.map((player) => (
+            <div key={player.player_id} className="cardRowClub">
+              <div className="cardWrapper">
+                <PlayerCard
+                  player={player}
+                  isModal={true}
+                  displayedPosition={(p) => p.player_positions.split(", ")[0]}
+                  slotPos={null}
+                  playerChemMap={{}}
+                  chemImg={() => null}
+                />
+              </div>
 
-            <p className="packPlayerName">
-              {player.long_name}
-              <button
-                className="quickSellBtn"
-                onClick={() => {
-                  setSelectedPlayer(player);
-                  setModal(true);
-                }}
-              >
-                <p>Quick Sell</p>
-                <p className="quickSellText">
-                  {player.value.toLocaleString("hu-HU")}
-                  <img src={Coins} alt="coins" />
-                </p>
-              </button>
-            </p>
-          </div>
-        ))}
+              <p className="packPlayerName">
+                {player.long_name}
+                <button
+                  className="quickSellBtn"
+                  onClick={() => {
+                    setSelectedPlayer(player);
+                    setModal(true);
+                  }}
+                >
+                  <p>Quick Sell</p>
+                  <p className="quickSellText">
+                    {player.value.toLocaleString("hu-HU")}
+                    <img src={Coins} alt="coins" />
+                  </p>
+                </button>
+              </p>
+            </div>
+          ))
+        )}
       </div>
       {/* Confirm modal */}
       {modal &&
