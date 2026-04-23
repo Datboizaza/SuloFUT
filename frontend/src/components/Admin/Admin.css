@@ -1,0 +1,235 @@
+.adminContainer {
+  padding: 40px;
+  color: white;
+  backdrop-filter: blur(20px);
+  background-color: #003d3f3b;
+  border-radius: 20px;
+  height: 80vh;
+  width: 80vw;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: scalePopIn 0.4s ease forwards;
+  overflow-y: scroll;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+  padding: 10px;
+}
+
+.tab {
+  padding: 10px 18px;
+  border-radius: 14px;
+  border: none;
+  background: rgba(0, 255, 200, 0.08);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab:hover {
+  background: rgba(0, 255, 200, 0.2);
+}
+
+.tab.active {
+  background: linear-gradient(90deg, #00fff7, #00f078);
+  color: #062c2b;
+  box-shadow: 0 0 10px rgba(0, 255, 200, 0.4);
+}
+
+.adminPanel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.07);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 255, 200, 0.15);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+  animation: scalePopIn 0.4s ease forwards;
+}
+
+.adminPanel h2 {
+  text-align: center;
+  color: #00fff7;
+  margin-bottom: 10px;
+}
+
+.adminInput {
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 165, 121, 0.5);
+  background: rgba(0, 255, 229, 0.08);
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
+}
+
+.adminInput::placeholder {
+  color: white;
+  opacity: 0.5;
+}
+
+.adminInput:hover {
+  border: 1px solid rgba(0, 255, 200, 0.6);
+  background: rgba(0, 255, 229, 0.12);
+}
+
+.adminInput:focus {
+  outline: none;
+  border: 1px solid rgb(0, 255, 200);
+  box-shadow:
+    0 0 10px rgba(0, 255, 200, 0.4),
+    0 0 20px rgba(0, 255, 200, 0.2);
+  background: rgba(0, 255, 229, 0.15);
+}
+
+select.adminInput {
+  appearance: none;
+  cursor: pointer;
+  padding-right: 30px;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #00ffc8 50%),
+    linear-gradient(135deg, #00ffc8 50%, transparent 50%);
+  background-position:
+    calc(100% - 15px) calc(50% - 3px),
+    calc(100% - 10px) calc(50% - 3px);
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+}
+
+select.adminInput option {
+  background: #020617;
+  color: #e2e8f0;
+}
+
+.adminBtn {
+  height: 40px;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 255, 200, 0.4);
+  background: linear-gradient(90deg, #00fff7, #00f078);
+  color: #062c2b;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adminBtn:hover {
+  transform: scale(1.01);
+  box-shadow: 0 0 15px rgba(0, 255, 200, 0.5);
+}
+
+.adminBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.adminField {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.adminLabel {
+  font-size: 11px;
+  color: rgba(0, 255, 200, 0.7);
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.adminPanel {
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.adminPanel h2 {
+  font-family: bristone;
+}
+
+.adminPanel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.adminPanel::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 200, 0.4);
+  border-radius: 10px;
+}
+
+.logoutBtn {
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: none;
+  background: rgba(255, 238, 0, 0.08);
+  border: 1px solid rgba(255, 196, 0, 0.144);
+  color: rgba(255, 255, 255, 0.637);
+  font-weight: bold;
+  font-family: easportsfc;
+  font-size: 80%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logoutBtn:hover {
+  background: rgba(255, 0, 0, 0.2);
+  border: 1px solid red;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+  color: rgba(255, 102, 0, 0.671);
+}
+
+.modalCloseBtn {
+  width: 50% !important;
+  border: none;
+  background: rgba(255, 166, 0, 0.301);
+  border: 1px solid rgba(255, 196, 0, 0.144);
+  color: rgba(255, 255, 255, 0.89);
+  font-size: 80%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modalCloseBtn:hover {
+  background: rgba(255, 166, 0, 0.575);
+  border: 1px solid rgba(255, 196, 0, 0.144);
+  color: rgb(255, 255, 255);
+  box-shadow: 0 0 10px rgba(255, 230, 0, 0.4);
+}
+
+/* Animáció */
+@keyframes scalePopIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/*------------------Media queries---------------------*/
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  .adminContainer {
+    height: 90vh;
+    width: 90vw;
+    padding: 25px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .adminContainer {
+    height: 98vh;
+    width: 97vw;
+    padding: 20px;
+  }
+}

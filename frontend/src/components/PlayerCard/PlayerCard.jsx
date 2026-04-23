@@ -77,9 +77,13 @@ function PlayerCard({
     <>
       <img
         loading="lazy"
-        src={rarityImgs[player.rarity]}
+        src={player.card_design_url || rarityImgs[player.rarity]}
         className={"cardDesign " + player.rarity}
         alt="Card"
+        onError={(e) => {
+          e.currentTarget.onerror = null;
+          e.currentTarget.src = rarityImgs[player.rarity] || Gold;
+        }}
       />
 
       <p className={`cardOverall ${textClass}`}>{player.overall}</p>

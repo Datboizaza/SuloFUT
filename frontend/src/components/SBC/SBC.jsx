@@ -65,24 +65,19 @@ function SBC() {
   });
 
   const [activeTab, setActiveTab] = useState("challenges");
-
   const [sbcGameStarted, setSbcGameStarted] = useState(false);
-
   const [gameLayout, setGameLayout] = useState(null);
   const [assignedPlayers, setAssignedPlayers] = useState({});
   const [clubPlayers, setClubPlayers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
-
   const [teamChemistry, setTeamChemistry] = useState(0);
   const [teamRating, setTeamRating] = useState(0);
   const [playerChemMap, setPlayerChemMap] = useState({});
-
   const [currentSBC, setCurrentSBC] = useState(null);
-
   const [showSbcReward, setShowSbcReward] = useState(false);
-
   const [userSbcProgress, setUserSbcProgress] = useState({});
+  const [selectedPosition, setSelectedPosition] = useState("");
 
   //! Sbc adatok lekérése
   useEffect(() => {
@@ -164,24 +159,25 @@ function SBC() {
 
   //! Position click
   const handlePosClick = async (index) => {
-    try {
-      setSelectedIndex(index);
-
-      const result = await getMethodFetch(`http://127.0.0.1:3000/api/myclub`);
-
-      const assignedIds = Object.values(assignedPlayers).map(
-        (p) => p.player_id,
-      );
-
-      const filteredPlayers = result.filter(
-        (player) => !assignedIds.includes(player.player_id),
-      );
-
-      setClubPlayers(filteredPlayers);
-      setShowModal(true);
-    } catch (error) {
-      console.log(error);
+    setSelectedIndex(index);
+    const isStarting11 = typeof index === "number";
+    if (isStarting11) {
+      const slotPos = gameLayout[index]?.pos;
+      setSelectedPosition(slotPos?.toLowerCase());
+    } else {
+      setSelectedPosition("");
     }
+
+    const result = await getMethodFetch("http://127.0.0.1:3000/api/myclub");
+    const assignedIds = Object.values(assignedPlayers).map(
+      (player) => player.player_id,
+    );
+    const filtered = result.filter(
+      (player) => !assignedIds.includes(player.player_id),
+    );
+
+    setClubPlayers(filtered);
+    setShowModal(true);
   };
 
   //! Player hozzáadása a layout-hoz
@@ -394,6 +390,31 @@ function SBC() {
         },
       );
 
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+        {
+          subId: 25,
+        },
+      );
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+        {
+          subId: 26,
+        },
+      );
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+        {
+          subId: 27,
+        },
+      );
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+        {
+          subId: 28,
+        },
+      );
+
       setShowSbcReward(true);
     } catch (error) {
       console.log(error);
@@ -520,6 +541,7 @@ function SBC() {
         <PlayersModal
           handlePlayerSelect={handlePlayerSelect}
           clubPlayers={clubPlayers}
+          selectedPosition={selectedPosition}
         />
       )}
 

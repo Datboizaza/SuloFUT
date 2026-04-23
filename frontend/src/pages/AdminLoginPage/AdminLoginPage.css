@@ -1,0 +1,14 @@
+/* Login/register oldal formázása */
+body {
+  height: 100vh;
+}
+
+/* Login/register oldal elrendezések */
+#root {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}

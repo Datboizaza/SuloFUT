@@ -83,7 +83,19 @@ async function getallWeightData(id) {
 
 //? Store packjei
 async function getStorePacks() {
-  const query = "SELECT * FROM packs";
+  const query = `
+    SELECT * FROM packs 
+    WHERE packName IN (
+      'Bronze Pack',
+      'Silver Pack',
+      'Gold Pack',
+      'Jumbo Gold Pack',
+      'Mixed Players Pack',
+      'Mega Pack',
+      'Icon Pack',
+      'Hero Pack',
+      'TOTY Grind Pack'
+    )`;
   try {
     const [rows] = await pool.execute(query);
     return rows;

@@ -86,6 +86,31 @@ async function updateSquadPlayers(players, userId) {
   }
 }
 
+//? Quick sell
+async function removePlayer(userId, playerId) {
+  try {
+    const [rows] = await pool.execute(
+      "SELECT userPlayers FROM userclub WHERE id = ?",
+      [userId],
+    );
+    if (!rows.length) return;
+    let club = rows[0].userPlayers;
+    if (typeof club === "string") {
+      club = JSON.parse(club);
+    }
+    const updatedClub = club.filter(
+      (player) => String(player.player_id) !== String(playerId),
+    );
+    await pool.execute("UPDATE userclub SET userPlayers = ? WHERE id = ?", [
+      JSON.stringify(updatedClub),
+      userId,
+    ]);
+    return updatedClub;
+  } catch (error) {
+    throw error;
+  }
+}
+
 //!Export
 module.exports = {
   currentClub,
@@ -94,4 +119,5 @@ module.exports = {
   updateSquadName,
   updateFormation,
   updateSquadPlayers,
+  removePlayer,
 };

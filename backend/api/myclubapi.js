@@ -110,6 +110,21 @@ router.post("/deleteClubPlayers", async (request, response) => {
   }
 });
 
+//! Quick sell
+router.post("/removeplayer", async (request, response) => {
+  try {
+    const userId = request.session.userId;
+    const { playerId } = request.body;
+
+    await myClubQueries.removePlayer(userId, playerId);
+
+    response.status(200).json({ message: "success" });
+  } catch (error) {
+    console.log("POST /removePlayer error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 //! User squad
 router.get("/squad", async (request, response) => {
   try {
@@ -169,29 +184,38 @@ router.post("/squad/updateformation", async (request, response) => {
   }
 });
 
-//! Sort by
+//! Order by
 router.post("/sortBy", async (request, response) => {
   try {
     const userId = request.session.userId;
     const condId = request.body.condId;
-    const rows = await myClubQueries.currentClub(userId);
+    let players = request.body.players;
 
-    if (!rows || rows.length === 0) {
-      return response.json([]);
+    if (Array.isArray(players) && typeof players[0] !== "object") {
+      const rows = await myClubQueries.currentClub(userId);
+      const allPlayers = rows[0].userPlayers
+        ? JSON.parse(rows[0].userPlayers)
+        : [];
+      players = allPlayers.filter((p) => players.includes(p.player_id));
+    }
+    if (!Array.isArray(players)) {
+      const rows = await myClubQueries.currentClub(userId);
+
+      players = rows[0].userPlayers ? JSON.parse(rows[0].userPlayers) : [];
     }
 
-    let players = [];
-    if (rows[0].userPlayers) {
-      players = JSON.parse(rows[0].userPlayers);
-    }
-    const rateASC = players.sort(
+    const rateASC = [...players].sort(
       (a, b) => Number(a.overall) - Number(b.overall),
     );
-    const rateDESC = players.sort(
+    const rateDESC = [...players].sort(
       (a, b) => Number(b.overall) - Number(a.overall),
     );
-    const valueASC = players.sort((a, b) => Number(a.value) - Number(b.value));
-    const valueDESC = players.sort((a, b) => Number(b.value) - Number(a.value));
+    const valueASC = [...players].sort(
+      (a, b) => Number(a.value) - Number(b.value),
+    );
+    const valueDESC = [...players].sort(
+      (a, b) => Number(b.value) - Number(a.value),
+    );
     const conds = {
       0: rateASC,
       1: rateDESC,
@@ -214,20 +238,27 @@ router.post("/ovrRange", async (request, response) => {
     const userId = request.session.userId;
     const condMin = request.body.condMin;
     const condMax = request.body.condMax;
-    const rows = await myClubQueries.currentClub(userId);
+    let players = request.body.players;
 
-    if (!rows || rows.length === 0) {
-      return response.json([]);
+    if (Array.isArray(players) && typeof players[0] !== "object") {
+      const rows = await myClubQueries.currentClub(userId);
+      const allPlayers = rows[0].userPlayers
+        ? JSON.parse(rows[0].userPlayers)
+        : [];
+      players = allPlayers.filter((p) => players.includes(p.player_id));
+    }
+    if (!Array.isArray(players)) {
+      const rows = await myClubQueries.currentClub(userId);
+
+      players = rows[0].userPlayers ? JSON.parse(rows[0].userPlayers) : [];
     }
 
-    let players = [];
-
-    if (rows[0].userPlayers) {
-      players = JSON.parse(rows[0].userPlayers);
-    }
     const condition = players.filter((p) => {
       const ovr = Number(p.overall);
-      return ovr >= condMin && ovr <= condMax;
+      const min = Number(condMin);
+      const max = Number(condMax);
+
+      return (!min || ovr >= min) && (!max || ovr <= max);
     });
     response.status(200).json({ byFeltetel: condition });
   } catch (error) {
@@ -240,26 +271,28 @@ router.post("/ovrRange", async (request, response) => {
 router.post("/playerName", async (request, response) => {
   try {
     const userId = request.session.userId;
-    const name = request.body.name.toLowerCase();
-    const rows = await myClubQueries.currentClub(userId);
+    const name = (request.body.name || "").toLowerCase();
+    let players = request.body.players;
 
-    if (!rows || rows.length === 0) {
-      return response.json([]);
+    if (Array.isArray(players) && typeof players[0] !== "object") {
+      const rows = await myClubQueries.currentClub(userId);
+      const allPlayers = rows[0].userPlayers
+        ? JSON.parse(rows[0].userPlayers)
+        : [];
+      players = allPlayers.filter((p) => players.includes(p.player_id));
+    }
+    if (!Array.isArray(players)) {
+      const rows = await myClubQueries.currentClub(userId);
+
+      players = rows[0].userPlayers ? JSON.parse(rows[0].userPlayers) : [];
     }
 
-    let players = [];
-
-    if (rows[0].userPlayers) {
-      players = JSON.parse(rows[0].userPlayers);
-    }
     const condition = players.filter((p) => {
       const playerName =
         String(p.long_name).toLowerCase().includes(name) ||
         String(p.short_name).toLowerCase().includes(name);
 
-      if (playerName === true) {
-        return p;
-      }
+      return playerName;
     });
     response.status(200).json({ byFeltetel: condition });
   } catch (error) {
@@ -272,24 +305,26 @@ router.post("/playerName", async (request, response) => {
 router.post("/playerRarity", async (request, response) => {
   try {
     const userId = request.session.userId;
-    const rarity = request.body.rarity.toLowerCase();
-    const rows = await myClubQueries.currentClub(userId);
+    const rarity = (request.body.rarity || "").toLowerCase();
+    let players = request.body.players;
 
-    if (!rows || rows.length === 0) {
-      return response.json([]);
+    if (Array.isArray(players) && typeof players[0] !== "object") {
+      const rows = await myClubQueries.currentClub(userId);
+      const allPlayers = rows[0].userPlayers
+        ? JSON.parse(rows[0].userPlayers)
+        : [];
+      players = allPlayers.filter((p) => players.includes(p.player_id));
+    }
+    if (!Array.isArray(players)) {
+      const rows = await myClubQueries.currentClub(userId);
+
+      players = rows[0].userPlayers ? JSON.parse(rows[0].userPlayers) : [];
     }
 
-    let players = [];
-
-    if (rows[0].userPlayers) {
-      players = JSON.parse(rows[0].userPlayers);
-    }
     const condition = players.filter((p) => {
       const Rarity = String(p.rarity).toLowerCase().includes(rarity);
 
-      if (Rarity === true) {
-        return p;
-      }
+      return Rarity;
     });
     response.status(200).json({ byFeltetel: condition });
   } catch (error) {
@@ -302,38 +337,35 @@ router.post("/playerRarity", async (request, response) => {
 router.post("/playerPosition", async (request, response) => {
   try {
     const userId = request.session.userId;
-    const Position = request.body.position.toLowerCase();
-    const rows = await myClubQueries.currentClub(userId);
+    const Position = (request.body.position || "").toLowerCase();
+    let players = request.body.players;
 
-    if (!rows || rows.length === 0) {
-      return response.json([]);
+    if (Array.isArray(players) && typeof players[0] !== "object") {
+      const rows = await myClubQueries.currentClub(userId);
+      const allPlayers = rows[0].userPlayers
+        ? JSON.parse(rows[0].userPlayers)
+        : [];
+      players = allPlayers.filter((p) => players.includes(p.player_id));
     }
+    if (!Array.isArray(players)) {
+      const rows = await myClubQueries.currentClub(userId);
 
-    let players = [];
-
-    if (rows[0].userPlayers) {
-      players = JSON.parse(rows[0].userPlayers);
+      players = rows[0].userPlayers ? JSON.parse(rows[0].userPlayers) : [];
     }
 
     const condition = players.filter((p) => {
-      const position =
-        String(p.player_positions).toLowerCase().includes(Position) ||
-        (Position === "defender" &&
-          String(p.player_positions)
-            .toLowerCase()
-            .includes("cb" || "lb" || "rb")) ||
-        (Position === "midfielder" &&
-          String(p.player_positions)
-            .toLowerCase()
-            .includes("cdm" || "cm" || "cam" || "lm" || "rm")) ||
-        (Position === "attacker" &&
-          String(p.player_positions)
-            .toLowerCase()
-            .includes("st" || "lw" || "rw"));
+      const position = String(p.player_positions).toLowerCase();
 
-      if (position === true) {
-        return p;
-      }
+      const matchesPosition =
+        position.includes(Position) ||
+        (Position === "defender" &&
+          ["cb", "lb", "rb"].some((x) => position.includes(x))) ||
+        (Position === "midfielder" &&
+          ["cdm", "cm", "cam", "lm", "rm"].some((x) => position.includes(x))) ||
+        (Position === "attacker" &&
+          ["st", "lw", "rw"].some((x) => position.includes(x)));
+
+      return matchesPosition;
     });
     response.status(200).json({ byFeltetel: condition });
   } catch (error) {
@@ -346,26 +378,28 @@ router.post("/playerPosition", async (request, response) => {
 router.post("/playerNationality", async (request, response) => {
   try {
     const userId = request.session.userId;
-    const nationality = request.body.nationality.toLowerCase();
-    const rows = await myClubQueries.currentClub(userId);
+    const nationality = (request.body.nationality || "").toLowerCase();
+    let players = request.body.players;
 
-    if (!rows || rows.length === 0) {
-      return response.json([]);
+    if (Array.isArray(players) && typeof players[0] !== "object") {
+      const rows = await myClubQueries.currentClub(userId);
+      const allPlayers = rows[0].userPlayers
+        ? JSON.parse(rows[0].userPlayers)
+        : [];
+      players = allPlayers.filter((p) => players.includes(p.player_id));
+    }
+    if (!Array.isArray(players)) {
+      const rows = await myClubQueries.currentClub(userId);
+
+      players = rows[0].userPlayers ? JSON.parse(rows[0].userPlayers) : [];
     }
 
-    let players = [];
-
-    if (rows[0].userPlayers) {
-      players = JSON.parse(rows[0].userPlayers);
-    }
     const condition = players.filter((p) => {
       const Nationality = String(p.nationality_name)
         .toLowerCase()
         .includes(nationality);
 
-      if (Nationality === true) {
-        return p;
-      }
+      return Nationality;
     });
     response.status(200).json({ byFeltetel: condition });
   } catch (error) {
@@ -378,24 +412,26 @@ router.post("/playerNationality", async (request, response) => {
 router.post("/playerLeague", async (request, response) => {
   try {
     const userId = request.session.userId;
-    const league = request.body.league.toLowerCase();
-    const rows = await myClubQueries.currentClub(userId);
+    const league = (request.body.league || "").toLowerCase();
+    let players = request.body.players;
 
-    if (!rows || rows.length === 0) {
-      return response.json([]);
+    if (Array.isArray(players) && typeof players[0] !== "object") {
+      const rows = await myClubQueries.currentClub(userId);
+      const allPlayers = rows[0].userPlayers
+        ? JSON.parse(rows[0].userPlayers)
+        : [];
+      players = allPlayers.filter((p) => players.includes(p.player_id));
+    }
+    if (!Array.isArray(players)) {
+      const rows = await myClubQueries.currentClub(userId);
+
+      players = rows[0].userPlayers ? JSON.parse(rows[0].userPlayers) : [];
     }
 
-    let players = [];
-
-    if (rows[0].userPlayers) {
-      players = JSON.parse(rows[0].userPlayers);
-    }
     const condition = players.filter((p) => {
       const League = String(p.league_name).toLowerCase().includes(league);
 
-      if (League === true) {
-        return p;
-      }
+      return League;
     });
     response.status(200).json({ byFeltetel: condition });
   } catch (error) {
@@ -408,24 +444,26 @@ router.post("/playerLeague", async (request, response) => {
 router.post("/playerClub", async (request, response) => {
   try {
     const userId = request.session.userId;
-    const club = request.body.club.toLowerCase();
-    const rows = await myClubQueries.currentClub(userId);
+    const club = (request.body.club || "").toLowerCase();
+    let players = request.body.players;
 
-    if (!rows || rows.length === 0) {
-      return response.json([]);
+    if (Array.isArray(players) && typeof players[0] !== "object") {
+      const rows = await myClubQueries.currentClub(userId);
+      const allPlayers = rows[0].userPlayers
+        ? JSON.parse(rows[0].userPlayers)
+        : [];
+      players = allPlayers.filter((p) => players.includes(p.player_id));
+    }
+    if (!Array.isArray(players)) {
+      const rows = await myClubQueries.currentClub(userId);
+
+      players = rows[0].userPlayers ? JSON.parse(rows[0].userPlayers) : [];
     }
 
-    let players = [];
-
-    if (rows[0].userPlayers) {
-      players = JSON.parse(rows[0].userPlayers);
-    }
     const condition = players.filter((p) => {
       const Club = String(p.club_name).toLowerCase().includes(club);
 
-      if (Club === true) {
-        return p;
-      }
+      return Club;
     });
     response.status(200).json({ byFeltetel: condition });
   } catch (error) {

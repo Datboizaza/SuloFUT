@@ -40,9 +40,31 @@ async function login(username) {
   }
 }
 
+//? Admin Login
+async function adminLogin(username) {
+  const query = "SELECT * FROM admin WHERE username = ?";
+  try {
+    const [rows] = await pool.execute(query, [username]);
+    return rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+
 //? User by id
 async function getUserById(id) {
   const query = "SELECT id, username FROM users WHERE id = ?";
+  try {
+    const [rows] = await pool.execute(query, [id]);
+    return rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+
+//? Admin by id
+async function getAdminById(id) {
+  const query = "SELECT id, username FROM admin WHERE id = ?";
   try {
     const [rows] = await pool.execute(query, [id]);
     return rows[0];
@@ -192,6 +214,41 @@ async function updateBestDraftById(actualDraft, id) {
   }
 }
 
+//? User legjobb squad update
+async function updateTopSquadById(actualSquad, id) {
+  const query =
+    "UPDATE stats SET top_squad = IF(top_squad < ?, ?, top_squad) WHERE user_id = ?;";
+  try {
+    const [rows] = await pool.execute(query, [actualSquad, actualSquad, id]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+//? User club value update
+async function updateClubValueById(actualValue, id) {
+  const query = "UPDATE stats SET club_value = ? WHERE user_id = ?;";
+  try {
+    const [rows] = await pool.execute(query, [actualValue, id]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+//? User cards opened update
+async function updateCardsOpenedById(cards, id) {
+  const query =
+    "UPDATE stats SET cards_opened = cards_opened+? WHERE user_id = ?;";
+  try {
+    const [rows] = await pool.execute(query, [cards, id]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
 //!Export
 module.exports = {
   selectall,
@@ -210,4 +267,9 @@ module.exports = {
   getUserCoinsById,
   getUserPacksById,
   updateBestDraftById,
+  adminLogin,
+  getAdminById,
+  updateTopSquadById,
+  updateClubValueById,
+  updateCardsOpenedById,
 };

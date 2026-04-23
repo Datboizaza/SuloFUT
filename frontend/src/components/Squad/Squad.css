@@ -12,14 +12,23 @@
   background-position-y: 80%;
 }
 
-.squadHeader {
+.controls {
   position: absolute;
-  top: 10%;
-  left: 12%;
+  top: 12%;
+  left: 15vw;
   transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  z-index: 10;
+  width: 280px;
+}
+
+.squadHeader {
   text-align: center;
   z-index: 5;
-  width: 20%;
+  width: 100%;
   height: 50px;
   border-radius: 16px;
   backdrop-filter: blur(5px);
@@ -36,6 +45,7 @@
   transition: 0.2s;
   color: white;
   font-weight: bolder;
+  margin: 0;
 }
 
 .squadHeader h2:hover {
@@ -57,9 +67,6 @@
 }
 
 .formationSelect {
-  position: absolute;
-  top: 18%;
-  left: 9%;
   z-index: 5;
 }
 
@@ -84,7 +91,8 @@
 }
 
 .formationDropdown {
-  margin-top: 8px;
+  position: absolute;
+  margin-top: 3px;
   border-radius: 16px;
   backdrop-filter: blur(5px);
   background-color: rgba(255, 255, 255, 0.034);
@@ -97,6 +105,7 @@
   flex-direction: column;
   align-items: center;
   color: rgb(3, 255, 192);
+  z-index: 10;
 }
 
 .formationDropdown::-webkit-scrollbar {
@@ -117,9 +126,6 @@
 }
 
 .saveBtn {
-  position: absolute;
-  top: 25%;
-  left: 6.3%;
   height: 40px;
   width: 180px;
   border-radius: 20px;
@@ -150,7 +156,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding-top: 40px;
+  padding-top: 10px;
   padding-bottom: 40px;
   align-items: center;
   gap: 20px;
@@ -188,6 +194,25 @@
 }
 
 /* Media queries */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  .squadHeader {
+    position: absolute;
+    top: 70vh;
+    left: 6vw;
+  }
+
+  .formationSelect {
+    position: absolute;
+    top: 10vh;
+    left: 6vw;
+  }
+
+  .saveBtn {
+    position: absolute;
+    top: 71vh;
+    left: 75vw;
+  }
+}
 @media screen and (max-width: 767px) {
   .sbcContainer {
     height: 90vh;
@@ -195,7 +220,7 @@
   }
 
   .squadHeader h2 {
-    font-size: 20px;
+    font-size: 10px;
   }
 
   .formationSelected {
@@ -206,5 +231,39 @@
   .completeBtn {
     min-width: 120px;
     font-size: 60%;
+  }
+
+  .squadHeader {
+    position: absolute;
+    top: 65vh;
+    left: 25vw;
+    width: 120px;
+    height: 45px;
+  }
+
+  .squadNameInput {
+    font-size: 10px;
+  }
+
+  .formationSelect {
+    position: absolute;
+    top: 71vh;
+    left: 27vw;
+  }
+
+  .formationDropdown {
+    position: absolute;
+    bottom: 110%;
+    top: auto;
+    margin-top: 0;
+  }
+
+  .saveBtn {
+    position: absolute;
+    top: 75.5vh;
+    left: 27vw;
+    width: 100px;
+    height: 30px;
+    font-size: 50%;
   }
 }

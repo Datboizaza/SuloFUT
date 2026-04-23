@@ -1,0 +1,15 @@
+/* Háttér */
+.adminPage {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Tartalom */
+.adminBody {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
