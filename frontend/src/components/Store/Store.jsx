@@ -254,42 +254,49 @@ function Store() {
         </div>
 
         <div key={activeTab} className="storeGrid">
-          {current.map((pack) => {
-            const img = packImages[pack.packDesign] || special;
+          {current.length === 0 ? (
+            <p className="noText">NO PACKS</p>
+          ) : (
+            current.map((pack) => {
+              const img = packImages[pack.packDesign] || special;
 
-            return (
-              <div key={pack.id} className="packCard">
-                <img src={img} alt="pack" className="packImage" />
+              return (
+                <div key={pack.id} className="packCard">
+                  <img src={img} alt="pack" className="packImage" />
 
-                <p>{pack.packName}</p>
+                  <p>{pack.packName}</p>
 
-                {activeTab === "mypacks" && (
-                  <button className="storeBtn" onClick={() => handleOpen(pack)}>
-                    Open
-                  </button>
-                )}
-
-                {activeTab === "buypacks" && (
-                  <>
-                    <p className="price">
-                      {pack.packPrice.toLocaleString("hu-HU")}
-                      <img src={Coins} alt="coins" />
-                    </p>
-
+                  {activeTab === "mypacks" && (
                     <button
                       className="storeBtn"
-                      onClick={() => {
-                        setSelectedPack(pack);
-                        setModal("buy");
-                      }}
+                      onClick={() => handleOpen(pack)}
                     >
-                      Buy
+                      Open
                     </button>
-                  </>
-                )}
-              </div>
-            );
-          })}
+                  )}
+
+                  {activeTab === "buypacks" && (
+                    <>
+                      <p className="price">
+                        {pack.packPrice.toLocaleString("hu-HU")}
+                        <img src={Coins} alt="coins" />
+                      </p>
+
+                      <button
+                        className="storeBtn"
+                        onClick={() => {
+                          setSelectedPack(pack);
+                          setModal("buy");
+                        }}
+                      >
+                        Buy
+                      </button>
+                    </>
+                  )}
+                </div>
+              );
+            })
+          )}
         </div>
       </div>
 

@@ -877,7 +877,8 @@
   .subBarContent {
     height: 150px;
     flex-wrap: wrap;
-    overflow: scroll;
+    overflow-x: scroll;
+    overflow-y: hidden;
     flex-direction: column;
     scroll-behavior: smooth;
   }
@@ -1114,7 +1115,8 @@
 
   .subBarContent {
     height: 150px;
-    overflow: scroll;
+    overflow-x: scroll;
+    overflow-y: hidden;
     flex-direction: row;
     scroll-behavior: smooth;
     gap: 40px;
