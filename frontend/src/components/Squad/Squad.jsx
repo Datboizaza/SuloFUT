@@ -14,6 +14,7 @@ import {
   fetchRatingWOSub,
   displayedPosition,
   benchLayout,
+  fetchRating,
 } from "../../utilities/utilities.js";
 
 function Squad() {
@@ -31,27 +32,6 @@ function Squad() {
   const [squadName, setSquadName] = useState("");
   const [isEditingName, setIsEditingName] = useState(false);
   const [openFormationSelect, setOpenFormationSelect] = useState(false);
-
-  //! Játékosok betöltése és backendre küldése
-  const loadPlayersToDraft = async (playersObj) => {
-    const players = Object.entries(playersObj);
-    for (const [key, player] of players) {
-      const starting11 = typeof key === "number";
-      const slotPos = starting11
-        ? gameLayout[Number(key)]?.pos
-        : benchLayout.find((s) => s.id === key)?.pos;
-      const resIndex = null;
-      await postMethodFetch(
-        "http://127.0.0.1:3000/api/draft/draftselectedplayers",
-        {
-          ...player,
-          starting11,
-          resIndex,
-          slotPos,
-        },
-      );
-    }
-  };
 
   //! Betöltés squad és formations
   useEffect(() => {
@@ -75,25 +55,57 @@ function Squad() {
         if (squad.squadPlayers) {
           const parsed = JSON.parse(squad.squadPlayers);
           setAssignedPlayers(parsed);
-
-          await fetch("http://127.0.0.1:3000/api/draft/draftselectedplayers", {
-            method: "DELETE",
-          });
-
-          await loadPlayersToDraft(parsed);
-
-          const { teamChemistry, playerChemMap } = await fetchChemistry();
-          setTeamChemistry(teamChemistry);
-          setPlayerChemMap(playerChemMap);
-
-          const rating = await fetchRatingWOSub();
-          setTeamRating(rating);
         }
       }
     };
 
     fetchData();
-  });
+  }, []);
+
+  //! Játékosok betöltése az adatbázisból
+  useEffect(() => {
+    if (!gameLayout || Object.keys(assignedPlayers).length === 0) return;
+    const loadPlayersToDraft = async (playersObj) => {
+      const players = Object.entries(playersObj);
+      for (const [key, player] of players) {
+        const parsedKey = Number(key);
+        const starting11 = !isNaN(parsedKey);
+        const resIndex =
+          key === "RES1" ||
+          key === "RES2" ||
+          key === "RES3" ||
+          key === "RES4" ||
+          key === "RES5";
+        const slotPos = starting11
+          ? gameLayout[parsedKey]?.pos
+          : benchLayout.find((s) => s.id === key || s.id === parsedKey)?.pos;
+
+        await postMethodFetch(
+          "http://127.0.0.1:3000/api/draft/draftselectedplayers",
+          {
+            ...player,
+            starting11,
+            resIndex,
+            slotPos,
+          },
+        );
+      }
+    };
+
+    const load = async () => {
+      await fetch("http://127.0.0.1:3000/api/draft/draftselectedplayers", {
+        method: "DELETE",
+      });
+      await loadPlayersToDraft(assignedPlayers);
+      const { teamChemistry, playerChemMap } = await fetchChemistry();
+      setTeamChemistry(teamChemistry);
+      setPlayerChemMap(playerChemMap);
+      const rating = await fetchRatingWOSub();
+      setTeamRating(rating);
+    };
+
+    load();
+  }, [gameLayout, assignedPlayers]);
 
   //! Squad name mentés
   const handleSaveName = async () => {
@@ -139,7 +151,13 @@ function Squad() {
       const existingPlayer = assignedPlayers[selectedIndex];
 
       const starting11 = typeof selectedIndex === "number";
-      const resIndex = null;
+      const resIndex =
+        selectedIndex === "RES1" ||
+        selectedIndex === "RES2" ||
+        selectedIndex === "RES3" ||
+        selectedIndex === "RES4" ||
+        selectedIndex === "RES5";
+
       const slotPos = starting11
         ? gameLayout[selectedIndex].pos
         : benchLayout.find((s) => s.id === selectedIndex)?.pos;
@@ -169,15 +187,12 @@ function Squad() {
       const { teamChemistry, playerChemMap } = await fetchChemistry();
       setTeamChemistry(teamChemistry);
       setPlayerChemMap(playerChemMap);
-
-      const rating = await fetchRatingWOSub();
+      const rating = await fetchRating();
       setTeamRating(rating);
-
       setAssignedPlayers((prev) => ({
         ...prev,
         [selectedIndex]: player,
       }));
-
       setShowModal(false);
       setSelectedIndex(null);
     } catch (error) {
