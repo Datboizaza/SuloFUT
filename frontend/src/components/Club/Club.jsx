@@ -4,10 +4,11 @@ import "./Club.css";
 import Coins from "../../assets/coins.png";
 import PlayerCard from "../PlayerCard/PlayerCard.jsx";
 import { calculateClubValue } from "../../utilities/utilities.js";
+import PlayersModal from "../PlayersModal/PlayersModal.jsx";
 
 function Club() {
   const [myClubPlayers, setMyClubPlayers] = useState([]);
-  const [modal, setModal] = useState(false);
+  const [confirmModal, setConfirmModal] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState(null);
 
   //!Club fetch
@@ -29,6 +30,12 @@ function Club() {
     };
     init();
   }, []);
+
+  //! Confirm modal meghívása
+  const handleQuickSellButton = (player) => {
+    setSelectedPlayer(player);
+    setConfirmModal(true);
+  };
 
   //! Quick sell 1 játékos
   const handleQuickSell = async (player) => {
@@ -62,46 +69,16 @@ function Club() {
 
   return (
     <>
-      <div className="clubContainer">
-        {myClubPlayers.length === 0 ? (
-          <p className="noText">YOUR CLUB IS EMPTY</p>
-        ) : (
-          myClubPlayers.map((player) => (
-            <div key={player.player_id} className="cardRowClub">
-              <div className="cardWrapper">
-                <PlayerCard
-                  player={player}
-                  isModal={true}
-                  displayedPosition={(p) => p.player_positions.split(", ")[0]}
-                  slotPos={null}
-                  playerChemMap={{}}
-                  chemImg={() => null}
-                />
-              </div>
-
-              <p className="packPlayerName">
-                {player.long_name}
-                <button
-                  className="quickSellBtn"
-                  onClick={() => {
-                    setSelectedPlayer(player);
-                    setModal(true);
-                  }}
-                >
-                  <p>Quick Sell</p>
-                  <p className="quickSellText">
-                    {player.value.toLocaleString("hu-HU")}
-                    <img src={Coins} alt="coins" />
-                  </p>
-                </button>
-              </p>
-            </div>
-          ))
-        )}
-      </div>
+      <PlayersModal
+        clubPlayers={myClubPlayers}
+        selectedPosition={""}
+        enableQuickSell={true}
+        onQuickSell={handleQuickSellButton}
+        handlePlayerSelect={null}
+      />
 
       {/* Confirm modal */}
-      {modal &&
+      {confirmModal &&
         createPortal(
           <div className="confirmModalOverlay">
             <div className="confirmModal">
@@ -111,13 +88,16 @@ function Club() {
               </p>
 
               <div className="modalBtns">
-                <button onClick={() => setModal(false)} className="noButton">
+                <button
+                  onClick={() => setConfirmModal(false)}
+                  className="noButton"
+                >
                   No
                 </button>
                 <button
                   onClick={() => {
                     handleQuickSell(selectedPlayer);
-                    setModal(false);
+                    setConfirmModal(false);
                   }}
                   className="yesButton"
                 >
