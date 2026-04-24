@@ -1,0 +1,182 @@
+/* Fontok */
+@font-face {
+  font-family: bristone;
+  src: url("../../assets/Bristone.otf");
+}
+
+@font-face {
+  font-family: easportsfc;
+  src: url("../../assets/EaSportsFc_FontByGibsfut-Regular.ttf");
+}
+
+/* Login formázás */
+.loginContainer {
+  background: rgba(0, 0, 0, 0.07);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.27);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.136);
+  height: 80vh;
+  width: 45vw;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  color: white;
+  font-family: bristone;
+  transform: scale(0.8);
+  opacity: 0;
+  animation: scalePopIn 0.4s ease forwards;
+}
+
+.adminloginTitle {
+  width: 100%;
+  height: 20%;
+  font-size: 2.7vw;
+  text-align: center;
+  font-family: easportsfc;
+  color: rgb(136, 255, 0);
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  height: 45%;
+  width: 70%;
+  justify-content: space-around;
+}
+
+.adminFormLabel {
+  margin-bottom: -10px;
+  color: rgba(102, 255, 0, 0.733);
+}
+
+.adminLoginInput {
+  height: 40px;
+  border: 1px rgba(5, 165, 0, 0.616) solid;
+  background-color: rgba(0, 255, 55, 0.093);
+  color: white;
+  border-radius: 10px;
+  text-align: center;
+  font-family: "Franklin Gothic Medium";
+  font-size: 130%;
+}
+
+.adminLoginInput::placeholder {
+  color: white;
+  opacity: 50%;
+  font-family: bristone;
+  font-size: 80%;
+}
+
+.adminLoginButton {
+  margin-top: 20px;
+  width: 40%;
+  height: 45px;
+  align-self: center;
+  border: 3px rgba(94, 255, 0, 0.114) solid;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.173);
+  border-radius: 30px;
+  background-color: rgba(33, 165, 0, 0.241);
+  color: white;
+  transition: all 150ms ease-in-out;
+}
+
+.adminLoginButton:hover {
+  transform: scale(1.05);
+  background-color: rgba(1, 123, 17, 0.6);
+  border: 1px rgb(93, 254, 0) solid;
+  color: rgba(94, 255, 0, 0.856);
+}
+
+.passwordError {
+  color: rgb(204, 0, 0);
+  font-size: 90%;
+  text-align: center;
+}
+
+.successMessage {
+  color: rgb(0, 168, 0);
+}
+
+.usernameError {
+  color: rgb(204, 0, 0);
+  font-size: 90%;
+  text-align: center;
+}
+
+.shake {
+  animation: horizontal-shaking 0.4s ease-in-out 2;
+}
+
+/* Animációk */
+@keyframes scalePopIn {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes horizontal-shaking {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/*------------------Media queries---------------------*/
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  /* login formázás */
+  .loginContainer {
+    width: 60vw;
+  }
+
+  .loginTitle {
+    font-size: 4vw;
+  }
+
+  .formLabel {
+    margin-bottom: -10px;
+  }
+
+  .loginInput {
+    font-size: 100%;
+  }
+
+  .loginInput::placeholder {
+    font-size: 80%;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  /* login formázás */
+  .loginContainer {
+    width: 90vw;
+    height: 90vh;
+  }
+
+  .loginTitle {
+    font-size: 7.5vw;
+  }
+
+  .formLabel {
+    margin-bottom: -10px;
+  }
+
+  .loginInput {
+    font-size: 100%;
+  }
+
+  .loginInput::placeholder {
+    font-size: 80%;
+  }
+
+  .loginButton {
+    min-width: 150px;
+  }
+}

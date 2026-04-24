@@ -405,6 +405,33 @@ function Draft() {
     }
   };
 
+  //! Objective progress-ek
+  useEffect(() => {
+    const players = Object.values(assignedPlayers);
+
+    const hasToty = players.some((p) => p?.rarity === "toty");
+    const hasFlashback = players.some((p) => p?.rarity === "flashback");
+    const hasScream = players.some((p) => p?.rarity === "scream");
+
+    if (hasToty) {
+      postMethodFetch("http://127.0.0.1:3000/api/users/me/objectiveprogress", {
+        subId: 35,
+      });
+    }
+
+    if (hasFlashback) {
+      postMethodFetch("http://127.0.0.1:3000/api/users/me/objectiveprogress", {
+        subId: 38,
+      });
+    }
+
+    if (hasScream) {
+      postMethodFetch("http://127.0.0.1:3000/api/users/me/objectiveprogress", {
+        subId: 41,
+      });
+    }
+  }, [assignedPlayers]);
+
   return (
     <>
       {/* Formáció kiválasztása */}

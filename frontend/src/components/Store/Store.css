@@ -282,7 +282,6 @@
   justify-content: center;
   align-items: center;
   height: 100%;
-  animation: fadeIn 0.8s ease;
 }
 
 .reveal {
@@ -414,26 +413,6 @@
   transform: translate(-50%, -50%);
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes zoomIn {
-  from {
-    transform: scale(0.6);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 5px;
@@ -453,6 +432,26 @@
 
 /* Animáció */
 @keyframes scalePopIn {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
   to {
     transform: scale(1);
     opacity: 1;

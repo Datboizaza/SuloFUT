@@ -84,6 +84,23 @@ router.post("/login", async (request, response) => {
   }
 });
 
+//! Admin Login
+router.post("/login/admin", async (request, response) => {
+  try {
+    const user = await usersQueries.adminLogin(request.body.username);
+
+    if (!user)
+      return response.status(400).json({ message: "Invalid username" });
+    const valid = await bcrypt.compare(request.body.password, user.password);
+    if (!valid) return response.status(403).json({ message: "Wrong password" });
+    request.session.adminId = user.id;
+    response.status(200).json({ message: "Logged in" });
+  } catch (error) {
+    console.log("POST /users/login error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
 //! Bejelentkezett user adatai
 router.get("/me", async (request, response) => {
   try {
@@ -93,6 +110,23 @@ router.get("/me", async (request, response) => {
     response.status(200).json(user);
   } catch (error) {
     console.log("GET /users/me error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//! Admin adatai
+router.get("/admin/me", async (request, response) => {
+  try {
+    if (!request.session.adminId) {
+      return response.status(400).json({ message: "Hiba történt." });
+    }
+    const admin = await usersQueries.getAdminById(request.session.adminId);
+    response.status(200).json({
+      id: admin.id,
+      username: admin.username,
+    });
+  } catch (error) {
+    console.log("GET /users/admin/me error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -134,6 +168,60 @@ router.post("/me/bestdraft", async (request, response) => {
 
     return response.status(200).json({
       bestDraft: rating,
+    });
+  } catch (error) {
+    console.log("POST /users/me/bestdraft error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//! Bejelentkezett user top squad-ja
+router.post("/me/topsquad", async (request, response) => {
+  try {
+    const rating = request.body.rating;
+    const result = await usersQueries.updateTopSquadById(
+      rating,
+      request.session.userId,
+    );
+
+    return response.status(200).json({
+      topSquad: rating,
+    });
+  } catch (error) {
+    console.log("POST /users/me/bestdraft error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//! Bejelentkezett user club value-ja
+router.post("/me/clubvalue", async (request, response) => {
+  try {
+    const value = request.body.value;
+    const result = await usersQueries.updateClubValueById(
+      value,
+      request.session.userId,
+    );
+
+    return response.status(200).json({
+      clubValue: value,
+    });
+  } catch (error) {
+    console.log("POST /users/me/bestdraft error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//! Bejelentkezett user kinyitott kártyáinak száma
+router.post("/me/cardsopened", async (request, response) => {
+  try {
+    const cards = request.body.cards;
+    const result = await usersQueries.updateCardsOpenedById(
+      cards,
+      request.session.userId,
+    );
+
+    return response.status(200).json({
+      cardsOpenedNow: cards,
     });
   } catch (error) {
     console.log("POST /users/me/bestdraft error:", error);
@@ -208,6 +296,20 @@ router.post("/logout", async (request, response) => {
   }
 });
 
+//! Admin kijelentkezés
+router.post("/admin/logout", async (request, response) => {
+  try {
+    request.session.destroy(() => {
+      response.clearCookie("connect.sid");
+
+      response.status(200).json({ message: "Logged out" });
+    });
+  } catch (error) {
+    console.log("POST /users/logout error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
 //! Bejelentkezett user törlése
 router.post("/delete", async (request, response) => {
   try {
@@ -225,6 +327,26 @@ router.post("/delete", async (request, response) => {
       response.clearCookie("connect.sid");
       response.status(200).json({ message: "User deleted" });
     });
+  } catch (error) {
+    console.log("POST /users/delete error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//! User törlése
+router.post("/admin/delete", async (request, response) => {
+  try {
+    const userId = request.body.userId;
+
+    await usersQueries.deleteUser(userId);
+    await usersQueries.deleteUserPacks(userId);
+    await usersQueries.deleteUserObjClaims(userId);
+    await usersQueries.deleteUserSubobjProg(userId);
+    await usersQueries.deleteUserClub(userId);
+    await usersQueries.deleteUserStats(userId);
+    await usersQueries.deleteUserSbc(userId);
+
+    response.status(200).json({ message: "User deleted" });
   } catch (error) {
     console.log("POST /users/delete error:", error);
     response.status(500).json({ message: "Internal server error" });

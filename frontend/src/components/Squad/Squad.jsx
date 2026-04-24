@@ -1,11 +1,11 @@
 import { useEffect, useState, useCallback } from "react";
-import { createPortal } from "react-dom";
 import "./Squad.css";
 import PlayerCard from "../PlayerCard/PlayerCard.jsx";
 import RatingChemDisplay from "../RatingChemDisplay/RatingChemDisplay.jsx";
 import Gamelayout from "../Gamelayout/Gamelayout.jsx";
 import Subbar from "../Subbar/Subbar.jsx";
 import Grab from "../Grab/Grab.jsx";
+import PlayersModal from "../PlayersModal/PlayersModal.jsx";
 import { useDrag } from "../../utilities/useDrag.js";
 import {
   chemImg,
@@ -32,6 +32,7 @@ function Squad() {
   const [squadName, setSquadName] = useState("");
   const [isEditingName, setIsEditingName] = useState(false);
   const [openFormationSelect, setOpenFormationSelect] = useState(false);
+  const [selectedPosition, setSelectedPosition] = useState("");
 
   //! Betöltés squad és formations
   useEffect(() => {
@@ -114,6 +115,13 @@ function Squad() {
     await postMethodFetch("http://127.0.0.1:3000/api/myclub/squad/updatename", {
       squadName,
     });
+
+    await postMethodFetch(
+      "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+      {
+        subId: 19,
+      },
+    );
   };
 
   //! Formáció váltás és mentés
@@ -127,11 +135,25 @@ function Squad() {
         formation: formation.formation,
       },
     );
+
+    await postMethodFetch(
+      "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+      {
+        subId: 18,
+      },
+    );
   };
 
   //! Pozíció click
   const handlePosClick = async (index) => {
     setSelectedIndex(index);
+    const isStarting11 = typeof index === "number";
+    if (isStarting11) {
+      const slotPos = gameLayout[index]?.pos;
+      setSelectedPosition(slotPos?.toLowerCase());
+    } else {
+      setSelectedPosition("");
+    }
 
     const result = await getMethodFetch("http://127.0.0.1:3000/api/myclub");
     const assignedIds = Object.values(assignedPlayers).map(
@@ -251,10 +273,127 @@ function Squad() {
       await postMethodFetch("http://127.0.0.1:3000/api/myclub/squad/save", {
         players: assignedPlayers,
       });
+
+      const rating = teamRating + teamChemistry;
+
+      await postMethodFetch("http://127.0.0.1:3000/api/users/me/topsquad", {
+        rating: rating,
+      });
     } catch (error) {
       console.log(error);
     }
   };
+
+  //! Objective progress-ek
+  useEffect(() => {
+    const updateObjective = async () => {
+      if (teamChemistry >= 10) {
+        await postMethodFetch(
+          "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+          {
+            subId: 10,
+          },
+        );
+      }
+      if (teamChemistry >= 20) {
+        await postMethodFetch(
+          "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+          {
+            subId: 11,
+          },
+        );
+      }
+      if (teamChemistry >= 28) {
+        await postMethodFetch(
+          "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+          {
+            subId: 12,
+          },
+        );
+      }
+      if (teamChemistry === 33) {
+        await postMethodFetch(
+          "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+          {
+            subId: 13,
+          },
+        );
+      }
+
+      if (teamRating >= 75) {
+        await postMethodFetch(
+          "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+          {
+            subId: 14,
+          },
+        );
+      }
+      if (teamRating >= 80) {
+        await postMethodFetch(
+          "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+          {
+            subId: 15,
+          },
+        );
+      }
+      if (teamRating >= 85) {
+        await postMethodFetch(
+          "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+          {
+            subId: 16,
+          },
+        );
+      }
+      if (teamRating >= 90) {
+        await postMethodFetch(
+          "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+          {
+            subId: 17,
+          },
+        );
+      }
+
+      const hasToty = Object.values(assignedPlayers).some(
+        (p) => p?.rarity === "toty",
+      );
+
+      if (hasToty) {
+        await postMethodFetch(
+          "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+          {
+            subId: 37,
+          },
+        );
+      }
+
+      const hasFlashback = Object.values(assignedPlayers).some(
+        (p) => p?.rarity === "flashback",
+      );
+
+      if (hasFlashback) {
+        await postMethodFetch(
+          "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+          {
+            subId: 40,
+          },
+        );
+      }
+
+      const hasScream = Object.values(assignedPlayers).some(
+        (p) => p?.rarity === "scream",
+      );
+
+      if (hasScream) {
+        await postMethodFetch(
+          "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+          {
+            subId: 43,
+          },
+        );
+      }
+    };
+    updateObjective();
+  }, [teamChemistry, teamRating, assignedPlayers]);
 
   return (
     <>
@@ -262,52 +401,58 @@ function Squad() {
       <div className="sbcBackground"></div>
 
       <div className="squadContainer">
-        <div className="squadHeader">
-          {isEditingName ? (
-            <input
-              className="squadNameInput"
-              value={squadName}
-              onChange={(e) => setSquadName(e.target.value)}
-              onBlur={handleSaveName}
-              autoFocus
-              maxLength={15}
-            />
-          ) : (
-            <h2 onClick={() => setIsEditingName(true)}>
-              {squadName || "My Squad"}
-            </h2>
-          )}
-        </div>
-
-        {/* Formation select */}
-        <div
-          className="formationSelect"
-          onMouseEnter={() => setOpenFormationSelect(true)}
-          onMouseLeave={() => setOpenFormationSelect(false)}
-        >
-          <div
-            className="formationSelected"
-            onClick={() => setOpenFormationSelect((prev) => !prev)}
-          >
-            {selectedFormation?.formation}
+        <div className="controls">
+          <div className="squadHeader">
+            {isEditingName ? (
+              <input
+                className="squadNameInput"
+                value={squadName}
+                onChange={(e) => setSquadName(e.target.value)}
+                onBlur={handleSaveName}
+                autoFocus
+                maxLength={15}
+              />
+            ) : (
+              <h2 onClick={() => setIsEditingName(true)}>
+                {squadName || "My Squad"}
+              </h2>
+            )}
           </div>
 
-          {openFormationSelect && (
-            <div className="formationDropdown">
-              {formations.map((formation) => (
-                <div
-                  key={formation.formation}
-                  className="formationOption"
-                  onClick={() => {
-                    handleFormationChange(formation);
-                    setOpenFormationSelect(false);
-                  }}
-                >
-                  {formation.formation}
-                </div>
-              ))}
+          {/* Formation select */}
+          <div
+            className="formationSelect"
+            onMouseEnter={() => setOpenFormationSelect(true)}
+            onMouseLeave={() => setOpenFormationSelect(false)}
+          >
+            <div
+              className="formationSelected"
+              onClick={() => setOpenFormationSelect((prev) => !prev)}
+            >
+              {selectedFormation?.formation}
             </div>
-          )}
+
+            {openFormationSelect && (
+              <div className="formationDropdown">
+                {formations.map((formation) => (
+                  <div
+                    key={formation.formation}
+                    className="formationOption"
+                    onClick={() => {
+                      handleFormationChange(formation);
+                      setOpenFormationSelect(false);
+                    }}
+                  >
+                    {formation.formation}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <button className="saveBtn" onClick={handleSave}>
+            Save Squad
+          </button>
         </div>
 
         {/* Layout */}
@@ -353,43 +498,16 @@ function Squad() {
             title={"my squad"}
           />
         )}
-
-        {/* Save button */}
-        {gameLayout &&
-          createPortal(
-            <button className="saveBtn" onClick={handleSave}>
-              Save Squad
-            </button>,
-            document.body,
-          )}
       </div>
 
       {/* Modal */}
-      {showModal &&
-        createPortal(
-          <div className="sbcPlayersModal">
-            {clubPlayers.map((player) => (
-              <div key={player.player_id} className="cardRow">
-                <div
-                  className="cardWrapper"
-                  onClick={() => handlePlayerSelect(player)}
-                >
-                  <PlayerCard
-                    player={player}
-                    isModal={true}
-                    displayedPosition={(p) => p.player_positions.split(", ")[0]}
-                    slotPos={null}
-                    playerChemMap={{}}
-                    chemImg={() => null}
-                  />
-                </div>
-
-                <p className="packPlayerName">{player.long_name}</p>
-              </div>
-            ))}
-          </div>,
-          document.body,
-        )}
+      {showModal && (
+        <PlayersModal
+          handlePlayerSelect={handlePlayerSelect}
+          clubPlayers={clubPlayers}
+          selectedPosition={selectedPosition}
+        />
+      )}
 
       {/* Drag */}
       {isDragging && dragKey !== null && assignedPlayers[dragKey] && (

@@ -102,6 +102,43 @@ function Store() {
         packId: pack.id,
       });
 
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+        {
+          subId: 29,
+        },
+      );
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+        {
+          subId: 30,
+        },
+      );
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+        {
+          subId: 31,
+        },
+      );
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+        {
+          subId: 32,
+        },
+      );
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+        {
+          subId: 33,
+        },
+      );
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+        {
+          subId: 34,
+        },
+      );
+
       await fetchMyPacks();
 
       const packPlayers = await getMethodFetch(
@@ -144,11 +181,52 @@ function Store() {
 
       window.dispatchEvent(new Event("coinsUpdated"));
 
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+        {
+          subId: 29,
+        },
+      );
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+        {
+          subId: 30,
+        },
+      );
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+        {
+          subId: 31,
+        },
+      );
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+        {
+          subId: 32,
+        },
+      );
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+        {
+          subId: 33,
+        },
+      );
+      await postMethodFetch(
+        "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+        {
+          subId: 34,
+        },
+      );
+
       const packPlayers = await getMethodFetch(
         `http://127.0.0.1:3000/api/store/generatePack/${pack.id}`,
       );
 
       const players = packPlayers.randomjatekosok;
+
+      await postMethodFetch("http://127.0.0.1:3000/api/users/me/cardsopened", {
+        cards: players.length,
+      });
 
       setCurrentPack(pack);
       setPackPlayersArr(players);
@@ -236,6 +314,90 @@ function Store() {
 
   //! Csak duplicate ellenőrzése
   const onlyDuplicates = nonDuplicates.length === 0;
+
+  //! Objective progress-ek
+  useEffect(() => {
+    const updateObjective = async () => {
+      const hasToty = Object.values(packPlayersArr).some(
+        (p) => p?.rarity === "toty",
+      );
+
+      if (hasToty) {
+        await postMethodFetch(
+          "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+          {
+            subId: 36,
+          },
+        );
+      }
+
+      const hasFlashback = Object.values(packPlayersArr).some(
+        (p) => p?.rarity === "flashback",
+      );
+
+      if (hasFlashback) {
+        await postMethodFetch(
+          "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+          {
+            subId: 39,
+          },
+        );
+      }
+
+      const hasScream = Object.values(packPlayersArr).some(
+        (p) => p?.rarity === "scream",
+      );
+
+      if (hasScream) {
+        await postMethodFetch(
+          "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+          {
+            subId: 42,
+          },
+        );
+      }
+
+      const hasIcon = Object.values(packPlayersArr).some(
+        (p) => p?.rarity === "icon",
+      );
+
+      if (hasIcon) {
+        await postMethodFetch(
+          "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+          {
+            subId: 46,
+          },
+        );
+      }
+
+      const hasWalkout = Object.values(packPlayersArr).some(
+        (p) => Number(p?.overall) >= 86,
+      );
+
+      if (hasWalkout) {
+        await postMethodFetch(
+          "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+          {
+            subId: 44,
+          },
+        );
+      }
+
+      const hasNinety = Object.values(packPlayersArr).some(
+        (p) => Number(p?.overall) >= 90,
+      );
+
+      if (hasNinety) {
+        await postMethodFetch(
+          "http://127.0.0.1:3000/api/users/me/objectiveprogress",
+          {
+            subId: 45,
+          },
+        );
+      }
+    };
+    updateObjective();
+  }, [packPlayersArr]);
 
   return (
     <>

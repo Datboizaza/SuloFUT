@@ -40,8 +40,8 @@ function Club() {
         coins: player.value,
       });
 
-      await postMethodFetch("http://127.0.0.1:3000/api/myclub/setClubPlayers", {
-        players: updated,
+      await postMethodFetch("http://127.0.0.1:3000/api/myclub/removeplayer", {
+        playerId: player.player_id,
       });
 
       setMyClubPlayers(updated);
@@ -51,6 +51,18 @@ function Club() {
       console.log(error);
     }
   };
+
+  //! Club value kiszámolása
+  useEffect(() => {
+    const clubValue = myClubPlayers.reduce(
+      (sum, player) => sum + (player.value || 0),
+      0,
+    );
+
+    postMethodFetch("http://127.0.0.1:3000/api/users/me/clubvalue", {
+      value: clubValue,
+    });
+  }, [myClubPlayers]);
 
   return (
     <>
@@ -91,6 +103,7 @@ function Club() {
           ))
         )}
       </div>
+
       {/* Confirm modal */}
       {modal &&
         createPortal(
