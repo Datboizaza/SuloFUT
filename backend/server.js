@@ -1,3 +1,6 @@
+//! .env
+require("dotenv").config();
+
 //!Module-ok importálása
 const express = require("express"); //?npm install express
 const session = require("express-session"); //?npm install express-session
@@ -23,7 +26,7 @@ app.set("trust proxy", 1); //?Middleware Proxy
 //!Session beállítása:
 app.use(
   session({
-    secret: "titkos_kulcs", //?Ezt generálni kell a későbbiekben
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
