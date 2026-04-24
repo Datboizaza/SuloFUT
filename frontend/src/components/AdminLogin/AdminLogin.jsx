@@ -49,26 +49,26 @@ function AdminLogin() {
   return (
     <>
       <div className="loginContainer">
-        <h1 className="loginTitle">ADMIN login</h1>
+        <h1 className="adminloginTitle">ADMIN login</h1>
         <form className="loginForm" onSubmit={login}>
-          <label htmlFor="usernameInput" className="formLabel">
+          <label htmlFor="usernameInput" className="adminFormLabel">
             Username
           </label>
           <input
             type="text"
             placeholder="Username"
-            className="loginInput"
+            className="adminLoginInput"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
           <span className="usernameError">{usernameError}</span>
-          <label htmlFor="passwordInput" className="formLabel">
+          <label htmlFor="passwordInput" className="adminFormLabel">
             Password
           </label>
           <input
             type="password"
             placeholder="Password"
-            className="loginInput"
+            className="adminLoginInput"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -79,7 +79,7 @@ function AdminLogin() {
           >
             {passwordError}
           </span>
-          <button type="submit" className="loginButton">
+          <button type="submit" className="adminLoginButton">
             Login
           </button>
         </form>

@@ -9,7 +9,9 @@ function AdminLoginPage() {
   });
   return (
     <div>
-      <AdminLogin />
+      <div className="adminBody">
+        <AdminLogin />
+      </div>
     </div>
   );
 }

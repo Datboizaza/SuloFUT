@@ -11,6 +11,8 @@ function Admin() {
   const [promoData, setPromoData] = useState({});
   const [cardImage, setCardImage] = useState(null);
   const [showPromoAddedModal, setShowPromoAddedModal] = useState(false);
+  const [search, setSearch] = useState("");
+  const [filteredPlayers, setFilteredPlayers] = useState([]);
 
   //! User-ek fetchelése
   const fetchUsers = async () => {
@@ -91,6 +93,28 @@ function Admin() {
     }
   };
 
+  //!Kereső
+  useEffect(() => {
+    const timeout = setTimeout(async () => {
+      if (!search) {
+        setFilteredPlayers([]);
+        return;
+      }
+      try {
+        const filterRes = await postMethodFetch(
+          "http://127.0.0.1:3000/api/playerNameAdmin",
+          {
+            name: search,
+          },
+        );
+        setFilteredPlayers(filterRes.byFeltetel || []);
+      } catch (error) {
+        console.log(error);
+      }
+    }, 300);
+    return () => clearTimeout(timeout);
+  }, [search, players]);
+
   //! Logout
   const handleLogout = async () => {
     try {
@@ -153,21 +177,27 @@ function Admin() {
         <div className="adminPanel">
           <h2>Add Promo Player</h2>
 
-          <select
-            className="adminInput"
-            value={selectedPlayerId}
-            onChange={(e) => handleSelectPlayer(e.target.value)}
-          >
-            <option value="">Select player</option>
-            {players.map((p) => (
-              <option
+          <div className="adminField">
+            <label className="adminLabel">Search player</label>
+            <input
+              type="text"
+              className="adminInput"
+              placeholder="Search player..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+          <div className="searchResults">
+            {filteredPlayers.map((p) => (
+              <div
                 key={`${p.player_id}-${p.rarity}`}
-                value={`${p.player_id}-${p.rarity}`}
+                className="searchItem"
+                onClick={() => handleSelectPlayer(`${p.player_id}-${p.rarity}`)}
               >
                 {p.short_name} ({p.overall}) - {p.rarity}
-              </option>
+              </div>
             ))}
-          </select>
+          </div>
           {selectedPlayerId &&
             Object.keys(promoData).map((key) => (
               <div key={key} className="adminField">

@@ -29,16 +29,13 @@
   animation: scalePopIn 0.4s ease forwards;
 }
 
-.loginTitle {
+.adminloginTitle {
   width: 100%;
   height: 20%;
   font-size: 2.7vw;
   text-align: center;
   font-family: easportsfc;
-}
-
-.sulofutTitle {
-  color: rgb(0, 165, 121);
+  color: rgb(136, 255, 0);
 }
 
 .loginForm {
@@ -49,14 +46,15 @@
   justify-content: space-around;
 }
 
-.formLabel {
+.adminFormLabel {
   margin-bottom: -10px;
+  color: rgba(102, 255, 0, 0.733);
 }
 
-.loginInput {
+.adminLoginInput {
   height: 40px;
-  border: 1px rgba(0, 165, 121, 0.616) solid;
-  background-color: rgba(0, 255, 229, 0.093);
+  border: 1px rgba(5, 165, 0, 0.616) solid;
+  background-color: rgba(0, 255, 55, 0.093);
   color: white;
   border-radius: 10px;
   text-align: center;
@@ -64,75 +62,31 @@
   font-size: 130%;
 }
 
-.loginInput::placeholder {
+.adminLoginInput::placeholder {
   color: white;
   opacity: 50%;
   font-family: bristone;
   font-size: 80%;
 }
 
-.loginButton {
+.adminLoginButton {
   margin-top: 20px;
   width: 40%;
   height: 45px;
   align-self: center;
-  border: 3px rgba(0, 255, 251, 0.114) solid;
+  border: 3px rgba(94, 255, 0, 0.114) solid;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.173);
   border-radius: 30px;
-  background-color: rgba(0, 165, 121, 0.241);
+  background-color: rgba(33, 165, 0, 0.241);
   color: white;
   transition: all 150ms ease-in-out;
 }
 
-.loginButton:hover {
+.adminLoginButton:hover {
   transform: scale(1.05);
-  background-color: rgba(1, 123, 90, 0.6);
-  border: 1px rgb(0, 254, 156) solid;
-  color: rgba(0, 255, 221, 0.856);
-}
-
-.registerLinkContainer {
-  height: 10%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.registerLinkText {
-  font-size: 80%;
-}
-
-.registerLink {
-  font-size: 80%;
-  position: relative;
-  display: inline-block;
-  text-decoration: none;
-  color: rgb(0, 254, 156);
-}
-
-.registerLink::after,
-.registerLink::before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(to right, #00fbff, #00ff55);
-  bottom: -5px;
-  left: 0;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.4s ease-out;
-}
-
-.registerLink::before {
-  top: -5px;
-  transform-origin: left;
-}
-
-.registerLink:hover::after,
-.registerLink:hover::before {
-  transform: scaleX(1);
+  background-color: rgba(1, 123, 17, 0.6);
+  border: 1px rgb(93, 254, 0) solid;
+  color: rgba(94, 255, 0, 0.856);
 }
 
 .passwordError {

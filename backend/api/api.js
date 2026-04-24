@@ -106,4 +106,40 @@ router.post(
   },
 );
 
+//! Player név szűrés admin
+router.post("/playerNameAdmin", async (request, response) => {
+  try {
+    const players = await readJsonFile(
+      path.join(__dirname, "./files/players.json"),
+    );
+    const userId = request.session.userId;
+    const name = (request.body.name || "").toLowerCase();
+
+    if (Array.isArray(players) && typeof players[0] !== "object") {
+      const rows = players;
+      const allPlayers = rows[0].userPlayers
+        ? JSON.parse(rows[0].userPlayers)
+        : [];
+      players = allPlayers.filter((p) => players.includes(p.player_id));
+    }
+    if (!Array.isArray(players)) {
+      const rows = await myClubQueries.currentClub(userId);
+
+      players = rows[0].userPlayers ? JSON.parse(rows[0].userPlayers) : [];
+    }
+
+    const condition = players.filter((p) => {
+      const playerName =
+        String(p.long_name).toLowerCase().includes(name) ||
+        String(p.short_name).toLowerCase().includes(name);
+
+      return playerName;
+    });
+    response.status(200).json({ byFeltetel: condition });
+  } catch (error) {
+    console.log("GET /api/packplayers error:", error);
+    response.status(500).json({ message: "Internal server error" });
+  }
+});
+
 module.exports = router;

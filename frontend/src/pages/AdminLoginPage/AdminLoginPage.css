@@ -1,6 +1,33 @@
 /* Login/register oldal formázása */
-body {
+.adminBody {
   height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background:
+    radial-gradient(
+      circle at 80% 50%,
+      rgba(229, 255, 0, 0.45) 0%,
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 75% 65%,
+      rgba(0, 255, 42, 0.401) 0%,
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 15% 30%,
+      rgba(0, 255, 136, 0.105) 0%,
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 35% 90%,
+      rgba(238, 255, 0, 0.34) 0%,
+      transparent 50%
+    ),
+    linear-gradient(160deg, #000000 0%, #102400 100%) !important;
+  background-size: 100vw 1800px !important;
 }
 
 /* Login/register oldal elrendezések */
