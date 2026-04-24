@@ -12,6 +12,10 @@ import scream from "../../assets/screamPack.png";
 import PlayerCard from "../PlayerCard/PlayerCard.jsx";
 import Confetti from "../../assets/confetti.gif";
 import BackIcon from "../../assets/back-icon.png";
+import {
+  calculateTotalValue,
+  hasOnlyDuplicates,
+} from "../../utilities/utilities.js";
 
 const packImages = {
   bronze,
@@ -270,10 +274,8 @@ function Store() {
   //! Quick sell összes játékos
   const handleQuickSellAll = async () => {
     try {
-      const total = packPlayersArr.reduce((sum, p) => sum + p.value, 0);
-
       await postMethodFetch("http://127.0.0.1:3000/api/updatecoins", {
-        coins: total,
+        coins: calculateTotalValue(packPlayersArr),
       });
 
       setPackPlayersArr([]);
@@ -315,9 +317,6 @@ function Store() {
       console.log(error);
     }
   };
-
-  //! Csak duplicate ellenőrzése
-  const onlyDuplicates = nonDuplicates.length === 0;
 
   //! Objective progress-ek
   useEffect(() => {
@@ -508,7 +507,7 @@ function Store() {
                   <button
                     className="storeBtnPack"
                     onClick={handleSendAllToClub}
-                    disabled={onlyDuplicates}
+                    disabled={hasOnlyDuplicates(nonDuplicates)}
                   >
                     Send all players to my club
                   </button>

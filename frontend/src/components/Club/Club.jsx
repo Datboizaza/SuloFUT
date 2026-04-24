@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import "./Club.css";
 import Coins from "../../assets/coins.png";
 import PlayerCard from "../PlayerCard/PlayerCard.jsx";
+import { calculateClubValue } from "../../utilities/utilities.js";
 
 function Club() {
   const [myClubPlayers, setMyClubPlayers] = useState([]);
@@ -54,13 +55,8 @@ function Club() {
 
   //! Club value kiszámolása
   useEffect(() => {
-    const clubValue = myClubPlayers.reduce(
-      (sum, player) => sum + (player.value || 0),
-      0,
-    );
-
     postMethodFetch("http://127.0.0.1:3000/api/users/me/clubvalue", {
-      value: clubValue,
+      value: calculateClubValue(myClubPlayers),
     });
   }, [myClubPlayers]);
 
