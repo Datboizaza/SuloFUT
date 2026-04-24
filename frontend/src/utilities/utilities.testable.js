@@ -1,31 +1,9 @@
-import ZeroChem from "../assets/zeroChem.png";
-import OneChem from "../assets/oneChem.png";
-import TwoChem from "../assets/twoChem.png";
-import ThreeChem from "../assets/threeChem.png";
-
-//! Kispad layout
-export const benchLayout = [
-  { id: "SUBGK", pos: "GK" },
-  { id: "SUBDEF1", pos: "DEF" },
-  { id: "SUBDEF2", pos: "DEF" },
-  { id: "SUBMID1", pos: "MID" },
-  { id: "SUBMID2", pos: "MID" },
-  { id: "SUBATT1", pos: "ATT" },
-  { id: "SUBATT2", pos: "ATT" },
-
-  { id: "RES1", pos: "ANY" },
-  { id: "RES2", pos: "ANY" },
-  { id: "RES3", pos: "ANY" },
-  { id: "RES4", pos: "ANY" },
-  { id: "RES5", pos: "ANY" },
-];
-
-//! Chemistry csillagok
+//! Chemistry képek érték alapján
 export const chemImg = (chem) => {
-  if (chem === 3) return ThreeChem;
-  if (chem === 2) return TwoChem;
-  if (chem === 1) return OneChem;
-  return ZeroChem;
+  if (chem === 3) return "three";
+  if (chem === 2) return "two";
+  if (chem === 1) return "one";
+  return "zero";
 };
 
 //!Rating csillagok

@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import "./Objectives.css";
 import Coins from "../../assets/coins.png";
 import SpecialPack from "../../assets/specialpack.png";
+import {
+  calculateProgressPercent,
+  isObjectiveCompleted,
+} from "../../utilities/utilities";
 
 function Objectives() {
   const [data, setData] = useState({
@@ -93,9 +97,6 @@ function Objectives() {
       {/* Grid */}
       <div className="objectivesGrid">
         {current.map((obj) => {
-          const isCompleted = obj.subobjectives.every(
-            (s) => s.progress >= s.requirement && s.claimed,
-          );
           return (
             <div key={obj.id} className="objectiveCard">
               <div
@@ -107,7 +108,7 @@ function Objectives() {
                 <Reward reward={obj.groupreward} />
               </div>
 
-              {isCompleted && !obj.claimed && (
+              {isObjectiveCompleted(obj.subobjectives) && !obj.claimed && (
                 <button
                   className="claimBtn"
                   onClick={() => handleGroupClaim(obj.id)}
@@ -167,11 +168,12 @@ function Objectives() {
 }
 
 function ProgressBar({ current, max }) {
-  const percent = Math.min((current / max) * 100, 100);
-
   return (
     <div className="progressBar">
-      <div className="progressFill" style={{ width: percent + "%" }} />
+      <div
+        className="progressFill"
+        style={{ width: calculateProgressPercent(current, max) + "%" }}
+      />
     </div>
   );
 }

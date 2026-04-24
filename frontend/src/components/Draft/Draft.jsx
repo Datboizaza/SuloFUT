@@ -15,6 +15,9 @@ import {
   displayedPosition,
   fetchChemistry,
   fetchRating,
+  getRewardValue,
+  calculateGraphProgress,
+  isDraftComplete,
 } from "../../utilities/utilities.js";
 import { useDrag } from "../../utilities/useDrag.js";
 
@@ -266,15 +269,6 @@ function Draft() {
     }
   };
 
-  //! RewardValue-k
-  const getRewardValue = (score) => {
-    if (score > 122) return "excellent";
-    if (score > 117) return "great";
-    if (score > 112) return "good";
-    if (score > 105) return "mid";
-    return "bad";
-  };
-
   //! Játékosok swap-olása
   const handleSwapPlayers = useCallback(
     async (from, to) => {
@@ -319,13 +313,6 @@ function Draft() {
     assignedPlayers,
     handleSwapPlayers,
   );
-
-  //! Draft vége
-  const draftComplete =
-    draftStarted &&
-    gameLayout &&
-    gameLayout.every((_, i) => Boolean(assignedPlayers[i])) &&
-    benchLayout.every((slot) => Boolean(assignedPlayers[slot.id]));
 
   //! Draft befejezése
   const handleSubmitDraft = async () => {
@@ -382,10 +369,6 @@ function Draft() {
       console.log(error);
     }
   };
-
-  //! Grafikon létrehozása
-  const graphProgress =
-    Math.max(0, Math.min((teamChemistry + teamRating) / 133, 1)) * 360;
 
   //! Visszatérés a menübe
   const handleExitToMenu = async () => {
@@ -579,7 +562,12 @@ function Draft() {
       )}
 
       {/* Draft vége */}
-      {draftComplete &&
+      {isDraftComplete(
+        draftStarted,
+        gameLayout,
+        assignedPlayers,
+        benchLayout,
+      ) &&
         createPortal(
           <button className="submitDraftBtn" onClick={handleSubmitDraft}>
             Submit Draft
@@ -600,7 +588,7 @@ function Draft() {
                       <div
                         className="draftGraph"
                         style={{
-                          background: `conic-gradient(rgb(0, 255, 251) ${graphProgress}deg, rgba(0, 255, 251, 0.26) ${graphProgress}deg)`,
+                          background: `conic-gradient(rgb(0, 255, 251) ${calculateGraphProgress(teamChemistry, teamRating)}deg, rgba(0, 255, 251, 0.26) ${calculateGraphProgress(teamChemistry, teamRating)}deg)`,
                         }}
                       >
                         <div className="ratingInner">

@@ -16,6 +16,10 @@ import {
   fetchRatingWOSub,
   displayedPosition,
   benchLayout,
+  getRequirements,
+  parseRequirement,
+  checkRequirement,
+  getSquadStats,
 } from "../../utilities/utilities.js";
 import scream from "../../assets/screamSbc.png";
 import flashback from "../../assets/flashbackSbc.png";
@@ -277,60 +281,6 @@ function SBC() {
     handleSwapPlayers,
   );
 
-  //! SBC requirement-ek
-  const getRequirements = (sbc) => {
-    return Object.entries(sbc).filter(([key, value]) => {
-      if (!value) return false;
-
-      if (
-        typeof value === "string" &&
-        (value.startsWith("min") || value.startsWith("max"))
-      ) {
-        return true;
-      }
-
-      if (key === "rarity") return true;
-
-      return false;
-    });
-  };
-
-  //! Min/max requirement
-  const parseRequirement = (value) => {
-    if (!value || typeof value !== "string") {
-      return { type: null, value: 0 };
-    }
-
-    const [type, num] = value.split(" ");
-    return {
-      type,
-      value: Number(num),
-    };
-  };
-
-  //! Aktuális sbc állás
-  const getSquadStats = (players) => {
-    const playerList = Object.values(players);
-
-    return {
-      rating: teamRating,
-      chemistry: teamChemistry,
-      leagues: new Set(playerList.map((p) => p.league_id)).size,
-      nations: new Set(playerList.map((p) => p.nationality_id)).size,
-      sameLeague: getMaxSame(playerList, "league_id"),
-      sameNation: getMaxSame(playerList, "nationality_id"),
-      sameClub: getMaxSame(playerList, "club_team_id"),
-      special: playerList.filter((p) => p.is_special).length,
-      chemPP: playerList.filter((p) => playerChemMap[p.player_id] >= 1).length,
-      rarity:
-        playerList.length > 0
-          ? playerList.every((p) => p.rarity === playerList[0].rarity)
-            ? playerList[0].rarity
-            : "mixed"
-          : null,
-    };
-  };
-
   //!Megszámolja a megadott dolog előfordulását
   const getMaxSame = (list, key) => {
     const count = {};
@@ -340,34 +290,14 @@ function SBC() {
     return Math.max(...Object.values(count), 0);
   };
 
-  //! Requirement-ek ellenőrzése
-  const checkRequirement = (requirementKey, requirementValue, stats) => {
-    if (!requirementValue) return true;
-
-    if (
-      !requirementValue.startsWith("min") &&
-      !requirementValue.startsWith("max")
-    ) {
-      const current = stats[requirementKey];
-
-      if (requirementKey === "rarity") {
-        return stats.rarity === requirementValue;
-      }
-
-      return current === requirementValue;
-    }
-
-    const { type, value } = parseRequirement(requirementValue);
-    const current = stats[requirementKey] || 0;
-
-    if (type === "min") return current >= value;
-    if (type === "max") return current <= value;
-
-    return false;
-  };
-
   //! Aktuális csapat statjai és aktuális sbc requirementjei és játékosainak megszámolása
-  const stats = getSquadStats(assignedPlayers);
+  const stats = getSquadStats(
+    assignedPlayers,
+    teamRating,
+    teamChemistry,
+    playerChemMap,
+    getMaxSame,
+  );
   const requirements = currentSBC ? getRequirements(currentSBC) : [];
   const playerCount = Object.keys(assignedPlayers).length;
 

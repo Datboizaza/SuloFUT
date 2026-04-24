@@ -14,6 +14,8 @@ import Flashback from "../../assets/Flashback.png";
 import ClubLeagueAlt from "../../assets/clubalt.png";
 import NationAlt from "../../assets/nationalt.png";
 
+import { getRarityClass } from "../../utilities/utilities";
+
 import "./PlayerCard.css";
 
 import { memo } from "react";
@@ -28,30 +30,6 @@ function PlayerCard({
 }) {
   if (!player) return null;
 
-  //! Card szövegek
-  const getText = (rarity) => {
-    switch (rarity) {
-      case "bronze":
-        return "text-bronze";
-      case "silver":
-        return "text-silver";
-      case "gold":
-        return "text-gold";
-      case "icon":
-        return "text-icon";
-      case "toty":
-        return "text-toty";
-      case "hero":
-        return "text-hero";
-      case "scream":
-        return "text-scream";
-      case "flashback":
-        return "text-flashback";
-      default:
-        return "text-gold";
-    }
-  };
-
   //! Card design-ok
   const rarityImgs = {
     bronze: Bronze,
@@ -65,7 +43,7 @@ function PlayerCard({
   };
 
   const isGK = player.player_positions === "GK";
-  const textClass = getText(player.rarity);
+  const textClass = getRarityClass(player.rarity);
   const altPositions = [];
   player.player_positions.split(", ").forEach((element) => {
     if (element !== displayedPosition(player, slotPos)) {
@@ -165,53 +143,73 @@ function PlayerCard({
         <div>
           {" "}
           <div className="cardPlayerDiving">
-            <p className={`cardPlayerDivingNumber ${getText(player.rarity)}`}>
+            <p
+              className={`cardPlayerDivingNumber ${getRarityClass(player.rarity)}`}
+            >
               {player.goalkeeping_diving}
             </p>
-            <p className={`cardPlayerDivingText ${getText(player.rarity)}`}>
+            <p
+              className={`cardPlayerDivingText ${getRarityClass(player.rarity)}`}
+            >
               DIV
             </p>
           </div>
           <div className="cardPlayerHandling">
-            <p className={`cardPlayerHandlingNumber ${getText(player.rarity)}`}>
+            <p
+              className={`cardPlayerHandlingNumber ${getRarityClass(player.rarity)}`}
+            >
               {player.goalkeeping_handling}
             </p>
-            <p className={`cardPlayerHandlingText ${getText(player.rarity)}`}>
+            <p
+              className={`cardPlayerHandlingText ${getRarityClass(player.rarity)}`}
+            >
               HAN
             </p>
           </div>
           <div className="cardPlayerKicking">
-            <p className={`cardPlayerKickingNumber ${getText(player.rarity)}`}>
+            <p
+              className={`cardPlayerKickingNumber ${getRarityClass(player.rarity)}`}
+            >
               {player.goalkeeping_kicking}
             </p>
-            <p className={`cardPlayerKickingText ${getText(player.rarity)}`}>
+            <p
+              className={`cardPlayerKickingText ${getRarityClass(player.rarity)}`}
+            >
               KIC
             </p>
           </div>
           <div className="cardPlayerReflexes">
-            <p className={`cardPlayerReflexesNumber ${getText(player.rarity)}`}>
+            <p
+              className={`cardPlayerReflexesNumber ${getRarityClass(player.rarity)}`}
+            >
               {player.goalkeeping_reflexes}
             </p>
-            <p className={`cardPlayerReflexesText ${getText(player.rarity)}`}>
+            <p
+              className={`cardPlayerReflexesText ${getRarityClass(player.rarity)}`}
+            >
               REF
             </p>
           </div>
           <div className="cardPlayerSpeed">
-            <p className={`cardPlayerSpeedNumber ${getText(player.rarity)}`}>
+            <p
+              className={`cardPlayerSpeedNumber ${getRarityClass(player.rarity)}`}
+            >
               {player.goalkeeping_speed}
             </p>
-            <p className={`cardPlayerSpeedText ${getText(player.rarity)}`}>
+            <p
+              className={`cardPlayerSpeedText ${getRarityClass(player.rarity)}`}
+            >
               SPD
             </p>
           </div>
           <div className="cardPlayerPositioning">
             <p
-              className={`cardPlayerPositioningNumber ${getText(player.rarity)}`}
+              className={`cardPlayerPositioningNumber ${getRarityClass(player.rarity)}`}
             >
               {player.goalkeeping_positioning}
             </p>
             <p
-              className={`cardPlayerPositioningText ${getText(player.rarity)}`}
+              className={`cardPlayerPositioningText ${getRarityClass(player.rarity)}`}
             >
               POS
             </p>
@@ -220,54 +218,74 @@ function PlayerCard({
       ) : (
         <div>
           <div className="cardPlayerPace">
-            <p className={`cardPlayerPaceNumber ${getText(player.rarity)}`}>
+            <p
+              className={`cardPlayerPaceNumber ${getRarityClass(player.rarity)}`}
+            >
               {player.pace}
             </p>
-            <p className={`cardPlayerPaceText ${getText(player.rarity)}`}>
+            <p
+              className={`cardPlayerPaceText ${getRarityClass(player.rarity)}`}
+            >
               PAC
             </p>
           </div>
           <div className="cardPlayerShooting">
-            <p className={`cardPlayerShootingNumber ${getText(player.rarity)}`}>
+            <p
+              className={`cardPlayerShootingNumber ${getRarityClass(player.rarity)}`}
+            >
               {player.shooting}
             </p>
-            <p className={`cardPlayerShootingText ${getText(player.rarity)}`}>
+            <p
+              className={`cardPlayerShootingText ${getRarityClass(player.rarity)}`}
+            >
               SHO
             </p>
           </div>
           <div className="cardPlayerDribbling">
             <p
-              className={`cardPlayerDribblingNumber ${getText(player.rarity)}`}
+              className={`cardPlayerDribblingNumber ${getRarityClass(player.rarity)}`}
             >
               {player.dribbling}
             </p>
-            <p className={`cardPlayerDribblingText ${getText(player.rarity)}`}>
+            <p
+              className={`cardPlayerDribblingText ${getRarityClass(player.rarity)}`}
+            >
               DRI
             </p>
           </div>
           <div className="cardPlayerPassing">
-            <p className={`cardPlayerPassingNumber ${getText(player.rarity)}`}>
+            <p
+              className={`cardPlayerPassingNumber ${getRarityClass(player.rarity)}`}
+            >
               {player.passing}
             </p>
-            <p className={`cardPlayerPassingText ${getText(player.rarity)}`}>
+            <p
+              className={`cardPlayerPassingText ${getRarityClass(player.rarity)}`}
+            >
               PAS
             </p>
           </div>
           <div className="cardPlayerDefending">
             <p
-              className={`cardPlayerDefendingNumber ${getText(player.rarity)}`}
+              className={`cardPlayerDefendingNumber ${getRarityClass(player.rarity)}`}
             >
               {player.defending}
             </p>
-            <p className={`cardPlayerDefendingText ${getText(player.rarity)}`}>
+            <p
+              className={`cardPlayerDefendingText ${getRarityClass(player.rarity)}`}
+            >
               DEF
             </p>
           </div>
           <div className="cardPlayerPhysic">
-            <p className={`cardPlayerPhysicNumber ${getText(player.rarity)}`}>
+            <p
+              className={`cardPlayerPhysicNumber ${getRarityClass(player.rarity)}`}
+            >
               {player.physic}
             </p>
-            <p className={`cardPlayerPhysicText ${getText(player.rarity)}`}>
+            <p
+              className={`cardPlayerPhysicText ${getRarityClass(player.rarity)}`}
+            >
               PHY
             </p>
           </div>
