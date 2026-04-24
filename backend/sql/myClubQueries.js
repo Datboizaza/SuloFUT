@@ -22,21 +22,6 @@ async function currentClub(userId) {
   }
 }
 
-//? User játékosainak update-elése
-async function updateClub(userPlayers, userId) {
-  const query = `
-  UPDATE userclub SET userPlayers = ? WHERE user_id = ?;`;
-  try {
-    const [rows] = await pool.execute(query, [
-      JSON.stringify(userPlayers),
-      userId,
-    ]);
-    return rows;
-  } catch (error) {
-    throw error;
-  }
-}
-
 //? User squad
 async function getSquad(userId) {
   const query = `
@@ -86,26 +71,44 @@ async function updateSquadPlayers(players, userId) {
   }
 }
 
-//? Quick sell
-async function removePlayer(userId, playerId) {
+//? Club és squad törlése
+async function removePlayersEverywhere(userId, playerIds) {
   try {
     const [rows] = await pool.execute(
-      "SELECT userPlayers FROM userclub WHERE id = ?",
+      "SELECT userPlayers, squadPlayers FROM userclub WHERE user_id = ?",
       [userId],
     );
     if (!rows.length) return;
-    let club = rows[0].userPlayers;
-    if (typeof club === "string") {
-      club = JSON.parse(club);
+    let club = [];
+    let squad = {};
+    if (rows[0].userPlayers) {
+      club = JSON.parse(rows[0].userPlayers);
     }
+    if (rows[0].squadPlayers) {
+      squad = JSON.parse(rows[0].squadPlayers);
+    }
+    const idsToRemove = playerIds.map(String);
+
     const updatedClub = club.filter(
-      (player) => String(player.player_id) !== String(playerId),
+      (p) => !idsToRemove.includes(String(p.player_id)),
     );
-    await pool.execute("UPDATE userclub SET userPlayers = ? WHERE id = ?", [
-      JSON.stringify(updatedClub),
-      userId,
-    ]);
-    return updatedClub;
+
+    const updatedSquad = Object.fromEntries(
+      Object.entries(squad).filter(
+        ([_, p]) => p && !idsToRemove.includes(String(p.player_id)),
+      ),
+    );
+
+    await pool.execute(
+      `
+      UPDATE userclub 
+      SET userPlayers = ?, squadPlayers = ?
+      WHERE user_id = ?
+      `,
+      [JSON.stringify(updatedClub), JSON.stringify(updatedSquad), userId],
+    );
+
+    return { updatedClub, updatedSquad };
   } catch (error) {
     throw error;
   }
@@ -114,10 +117,9 @@ async function removePlayer(userId, playerId) {
 //!Export
 module.exports = {
   currentClub,
-  updateClub,
+  removePlayersEverywhere,
   getSquad,
+  updateSquadPlayers,
   updateSquadName,
   updateFormation,
-  updateSquadPlayers,
-  removePlayer,
 };

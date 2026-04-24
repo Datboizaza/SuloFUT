@@ -86,24 +86,15 @@ router.get("/", async (request, response) => {
   }
 });
 
-//! User klubból törlés
+//! User klubból és squadból törlés
 router.post("/deleteClubPlayers", async (request, response) => {
   try {
     const userId = request.session.userId;
     const playersToRemove = request.body.players;
 
-    const rows = await myClubQueries.currentClub(userId);
-    let currentPlayers = [];
-    if (rows[0].userPlayers) {
-      currentPlayers = JSON.parse(rows[0].userPlayers);
-    }
-    const updatedPlayers = currentPlayers.filter(
-      (player) => !playersToRemove.includes(String(player.player_id)),
-    );
+    await myClubQueries.removePlayersEverywhere(userId, playersToRemove);
 
-    await myClubQueries.updateClub(updatedPlayers, userId);
-
-    response.status(200).json({ message: "players removed" });
+    response.status(200).json({ message: "success" });
   } catch (error) {
     console.log("POST /api/deleteClubPlayers error:", error);
     response.status(500).json({ message: "Internal server error" });
@@ -116,12 +107,12 @@ router.post("/removeplayer", async (request, response) => {
     const userId = request.session.userId;
     const { playerId } = request.body;
 
-    await myClubQueries.removePlayer(userId, playerId);
+    await myClubQueries.removePlayersEverywhere(userId, [playerId]);
 
     response.status(200).json({ message: "success" });
   } catch (error) {
     console.log("POST /removePlayer error:", error);
-    res.status(500).json({ message: "Internal server error" });
+    response.status(500).json({ message: "Internal server error" });
   }
 });
 
