@@ -130,14 +130,14 @@ function Admin() {
     <div className="adminContainer">
       <div className="tabs">
         <button
-          className={`tab ${activeTab === "delete" ? "active" : ""}`}
+          className={`adminTab ${activeTab === "delete" ? "active" : ""}`}
           onClick={() => setActiveTab("delete")}
         >
           DELETE USER
         </button>
 
         <button
-          className={`tab ${activeTab === "promo" ? "active" : ""}`}
+          className={`adminTab ${activeTab === "promo" ? "active" : ""}`}
           onClick={() => setActiveTab("promo")}
         >
           ADD PROMO

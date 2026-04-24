@@ -21,7 +21,7 @@
   padding: 10px;
 }
 
-.tab {
+.adminTab {
   padding: 10px 18px;
   border-radius: 14px;
   border: none;
@@ -32,11 +32,11 @@
   transition: all 0.2s ease;
 }
 
-.tab:hover {
+.adminTab:hover {
   background: rgba(0, 255, 0, 0.096);
 }
 
-.tab.active {
+.adminTab.active {
   background: linear-gradient(90deg, #00ff15, #e0f000);
   color: #062c2b;
   box-shadow: 0 0 10px rgba(0, 255, 200, 0.4);

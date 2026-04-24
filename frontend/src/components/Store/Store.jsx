@@ -147,6 +147,10 @@ function Store() {
 
       const players = packPlayers.randomjatekosok;
 
+      await postMethodFetch("http://127.0.0.1:3000/api/users/me/cardsopened", {
+        cards: players.length,
+      });
+
       setCurrentPack(pack);
       setPackPlayersArr(players);
 
