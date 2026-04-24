@@ -336,17 +336,21 @@ router.post("/delete", async (request, response) => {
 //! User törlése
 router.post("/admin/delete", async (request, response) => {
   try {
-    const userId = request.body.userId;
+    if (!request.session.adminId) {
+      return response.status(401).json({ message: "Not admin" });
+    } else {
+      const userId = request.body.userId;
 
-    await usersQueries.deleteUser(userId);
-    await usersQueries.deleteUserPacks(userId);
-    await usersQueries.deleteUserObjClaims(userId);
-    await usersQueries.deleteUserSubobjProg(userId);
-    await usersQueries.deleteUserClub(userId);
-    await usersQueries.deleteUserStats(userId);
-    await usersQueries.deleteUserSbc(userId);
+      await usersQueries.deleteUser(userId);
+      await usersQueries.deleteUserPacks(userId);
+      await usersQueries.deleteUserObjClaims(userId);
+      await usersQueries.deleteUserSubobjProg(userId);
+      await usersQueries.deleteUserClub(userId);
+      await usersQueries.deleteUserStats(userId);
+      await usersQueries.deleteUserSbc(userId);
 
-    response.status(200).json({ message: "User deleted" });
+      response.status(200).json({ message: "User deleted" });
+    }
   } catch (error) {
     console.log("POST /users/delete error:", error);
     response.status(500).json({ message: "Internal server error" });
