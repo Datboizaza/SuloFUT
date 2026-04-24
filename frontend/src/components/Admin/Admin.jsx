@@ -13,6 +13,7 @@ function Admin() {
   const [showPromoAddedModal, setShowPromoAddedModal] = useState(false);
   const [search, setSearch] = useState("");
   const [filteredPlayers, setFilteredPlayers] = useState([]);
+  const [showPromoErrorModal, setShowPromoErrorModal] = useState(false);
 
   //! User-ek fetchelése
   const fetchUsers = async () => {
@@ -74,20 +75,41 @@ function Admin() {
   //! Promo játékos hozzáadása
   const handleAddPromo = async () => {
     try {
-      const formData = new FormData();
-      formData.append("playerData", JSON.stringify(promoData));
-      if (cardImage) {
-        formData.append("image", cardImage);
+      const hasEmptyField = Object.values(promoData).some(
+        (value) => value === "" || value === null || value === undefined,
+      );
+      if (!selectedPlayerId) {
+        setShowPromoErrorModal(true);
+        return;
       }
-      const response = await fetch("http://127.0.0.1:3000/api/admin/addpromo", {
-        method: "POST",
-        credentials: "include",
-        body: formData,
-      });
-      if (!response.ok) {
-        throw new Error("Upload failed");
+      if (hasEmptyField) {
+        setShowPromoErrorModal(true);
+        return;
       }
-      setShowPromoAddedModal(true);
+      if (!cardImage) {
+        setShowPromoErrorModal(true);
+        return;
+      }
+
+      if (selectedPlayerId && !hasEmptyField && cardImage) {
+        const formData = new FormData();
+        formData.append("playerData", JSON.stringify(promoData));
+        if (cardImage) {
+          formData.append("image", cardImage);
+        }
+        const response = await fetch(
+          "http://127.0.0.1:3000/api/admin/addpromo",
+          {
+            method: "POST",
+            credentials: "include",
+            body: formData,
+          },
+        );
+        if (!response.ok) {
+          throw new Error("Upload failed");
+        }
+        setShowPromoAddedModal(true);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -240,6 +262,26 @@ function Admin() {
               <div className="modalBtns">
                 <button
                   onClick={() => setShowPromoAddedModal(false)}
+                  className="modalCloseBtn"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>,
+          document.body,
+        )}
+
+      {/* Error modal */}
+      {showPromoErrorModal &&
+        createPortal(
+          <div className="confirmModalOverlay">
+            <div className="confirmModal">
+              <p>Failed to add promo card!</p>
+
+              <div className="modalBtns">
+                <button
+                  onClick={() => setShowPromoErrorModal(false)}
                   className="modalCloseBtn"
                 >
                   Close
