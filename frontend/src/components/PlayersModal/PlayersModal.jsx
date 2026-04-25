@@ -2,6 +2,7 @@ import { createPortal } from "react-dom";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import PlayerCard from "../PlayerCard/PlayerCard";
 import "./PlayersModal.css";
+import Coin from "../../assets/coins.png";
 
 function PlayersModal({
   handlePlayerSelect,
@@ -328,7 +329,11 @@ function PlayersModal({
                   onQuickSell(player);
                 }}
               >
-                Quick Sell
+                Quick Sell<br></br>
+                <div className="quickSellDiv">
+                  {player.value.toLocaleString("hu-HU")}
+                  <img src={Coin} className="quickSellCoin" alt="Coin"></img>
+                </div>
               </button>
             )}
           </p>

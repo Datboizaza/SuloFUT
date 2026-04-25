@@ -506,7 +506,7 @@ function Draft() {
       {/* Player selection modal */}
       {showPlayerSelectionModal &&
         createPortal(
-          <div className="modalOverlay">
+          <div className="draftModalOverlay">
             <div className="playerSelectionModal">
               {playerOptons.map((player, i) => (
                 <div

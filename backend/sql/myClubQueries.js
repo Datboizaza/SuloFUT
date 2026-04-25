@@ -71,6 +71,20 @@ async function updateSquadPlayers(players, userId) {
   }
 }
 
+//? User játékosainak update-elése
+async function updateClub(userPlayers, userId) {
+  const query = `UPDATE userclub SET userPlayers = ? WHERE user_id = ?;`;
+  try {
+    const [rows] = await pool.execute(query, [
+      JSON.stringify(userPlayers),
+      userId,
+    ]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
 //? Club és squad törlése
 async function removePlayersEverywhere(userId, playerIds) {
   try {
@@ -122,4 +136,5 @@ module.exports = {
   updateSquadPlayers,
   updateSquadName,
   updateFormation,
+  updateClub,
 };

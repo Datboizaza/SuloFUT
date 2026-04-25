@@ -84,6 +84,16 @@
   font-weight: bold;
 }
 
+.quickSellDiv {
+  display: flex;
+  align-items: center;
+}
+
+.quickSellCoin {
+  height: 15px;
+  margin-left: 5px;
+}
+
 /* Animációk */
 @keyframes scalePopIn {
   from {
