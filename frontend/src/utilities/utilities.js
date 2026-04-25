@@ -47,10 +47,8 @@ export const calculateGraphProgress = (chem, rating) => {
 export const displayedPosition = (player, slotPos) => {
   const positions = player.player_positions.split(", ");
   const primary = positions[0];
-
   if (!slotPos || slotPos === "ANY") return primary;
   if (positions.includes(slotPos)) return slotPos;
-
   return primary;
 };
 
@@ -61,7 +59,6 @@ export const fetchChemistry = async () => {
   });
 
   const data = await response.json();
-
   const map = {};
   data.players.forEach((p) => {
     map[p.player_id] = p.chemistry;
@@ -78,9 +75,7 @@ export const fetchRating = async () => {
   const response = await fetch("http://127.0.0.1:3000/api/draft/rating", {
     credentials: "include",
   });
-
   const data = await response.json();
-
   return data.rating;
 };
 
@@ -92,9 +87,7 @@ export const fetchRatingWOSub = async () => {
       credentials: "include",
     },
   );
-
   const data = await response.json();
-
   return data.rating;
 };
 
@@ -168,16 +161,13 @@ export const getRarityClass = (rarity) => {
 export const getRequirements = (sbc) => {
   return Object.entries(sbc).filter(([key, value]) => {
     if (!value) return false;
-
     if (
       typeof value === "string" &&
       (value.startsWith("min") || value.startsWith("max"))
     ) {
       return true;
     }
-
     if (key === "rarity") return true;
-
     return false;
   });
 };
@@ -187,7 +177,6 @@ export const parseRequirement = (value) => {
   if (!value || typeof value !== "string") {
     return { type: null, value: 0 };
   }
-
   const [type, num] = value.split(" ");
   return {
     type,
@@ -198,7 +187,6 @@ export const parseRequirement = (value) => {
 //! Requirement-ek ellenőrzése
 export const checkRequirement = (key, value, stats) => {
   if (!value) return true;
-
   if (!value.startsWith("min") && !value.startsWith("max")) {
     if (key === "rarity") {
       return stats.rarity === value;
@@ -208,7 +196,6 @@ export const checkRequirement = (key, value, stats) => {
 
   const { type, value: num } = parseRequirement(value);
   const current = stats[key] || 0;
-
   if (type === "min") return current >= num;
   if (type === "max") return current <= num;
 
@@ -233,8 +220,15 @@ export const getSquadStats = (
     sameLeague: getMaxSame(list, "league_id"),
     sameNation: getMaxSame(list, "nationality_id"),
     sameClub: getMaxSame(list, "club_team_id"),
-    special: list.filter((p) => p.is_special).length,
-    chemPP: list.filter((p) => chemMap[p.player_id] >= 1).length,
+    special: list.filter(
+      (p) =>
+        p.rarity === "scream" ||
+        p.rarity === "flashback" ||
+        p.rarity === "toty" ||
+        p.rarity === "icon" ||
+        p.rarity === "hero",
+    ).length,
+    chemPP: Math.min(...list.map((p) => chemMap[p.player_id])),
     rarity:
       list.length > 0
         ? list.every((p) => p.rarity === list[0].rarity)
