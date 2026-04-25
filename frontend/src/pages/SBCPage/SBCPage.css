@@ -10,6 +10,7 @@
 /* StatBar */
 .SBCHeader {
   height: 8vh;
+  z-index: 99999;
 }
 
 /* Tartalom */

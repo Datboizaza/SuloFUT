@@ -2,8 +2,15 @@ import { createPortal } from "react-dom";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import PlayerCard from "../PlayerCard/PlayerCard";
 import "./PlayersModal.css";
+import Coin from "../../assets/coins.png";
 
-function PlayersModal({ handlePlayerSelect, clubPlayers, selectedPosition }) {
+function PlayersModal({
+  handlePlayerSelect,
+  clubPlayers,
+  selectedPosition,
+  enableQuickSell,
+  onQuickSell,
+}) {
   const [playerName, setPlayerName] = useState("");
   const [minRating, setMinRating] = useState("");
   const [maxRating, setMaxRating] = useState("");
@@ -298,7 +305,7 @@ function PlayersModal({ handlePlayerSelect, clubPlayers, selectedPosition }) {
         <div key={player.player_id} className="cardRow">
           <div
             className="cardWrapper"
-            onClick={() => handlePlayerSelect(player)}
+            onClick={() => handlePlayerSelect && handlePlayerSelect(player)}
           >
             <PlayerCard
               player={player}
@@ -312,7 +319,24 @@ function PlayersModal({ handlePlayerSelect, clubPlayers, selectedPosition }) {
             />
           </div>
 
-          <p className="packPlayerName">{player.long_name}</p>
+          <p className="packPlayerName">
+            {player.long_name}
+            {enableQuickSell && (
+              <button
+                className="quickSellBtn"
+                onClick={(e) => {
+                  e.stopPropagation(); // 👈 fontos, ne selecteljen
+                  onQuickSell(player);
+                }}
+              >
+                Quick Sell<br></br>
+                <div className="quickSellDiv">
+                  {player.value.toLocaleString("hu-HU")}
+                  <img src={Coin} className="quickSellCoin" alt="Coin"></img>
+                </div>
+              </button>
+            )}
+          </p>
         </div>
       ))}
     </div>,

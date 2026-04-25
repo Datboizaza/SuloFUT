@@ -19,6 +19,7 @@
 /* StatBar */
 .draftContent > *:first-child {
   height: 8vh;
+  z-index: 1;
 }
 
 .draftBody {

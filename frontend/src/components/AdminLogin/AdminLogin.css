@@ -179,4 +179,8 @@
   .loginButton {
     min-width: 150px;
   }
+
+  .adminloginTitle {
+    font-size: 30px;
+  }
 }

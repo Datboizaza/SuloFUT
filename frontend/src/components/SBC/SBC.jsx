@@ -472,6 +472,8 @@ function SBC() {
           handlePlayerSelect={handlePlayerSelect}
           clubPlayers={clubPlayers}
           selectedPosition={selectedPosition}
+          enableQuickSell={false}
+          onQuickSell={null}
         />
       )}
 
