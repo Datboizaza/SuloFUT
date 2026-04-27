@@ -23,7 +23,7 @@ const upload = multer({ storage });
 const readJsonFile = async (filePath) => {
   try {
     const raw = await fs.readFile(filePath, "utf-8");
-    return JSON.parse(raw); // JS objektum/tömb
+    return JSON.parse(raw);
   } catch (error) {
     throw new Error(`Olvasási hiba (json): ${error.message}`);
   }
@@ -138,7 +138,7 @@ router.get("/generatePack/:id", async (request, response) => {
       .status(200)
       .json({ randomjatekosok: randompack(data, playerCount, condition) });
   } catch (error) {
-    console.log("GET /api/packplayers error:", error);
+    console.log("GET /api/store/generatePack/:id error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -149,7 +149,7 @@ router.get("/storepacks", async (request, response) => {
     const packs = await storeQueries.getStorePacks();
     response.status(200).json(packs);
   } catch (error) {
-    console.log("GET /storepacks error:", error);
+    console.log("GET api/store/storepacks error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -162,9 +162,9 @@ router.post("/deletemypack", async (request, response) => {
 
     await storeQueries.deleteMyPack(userId, packId);
 
-    response.status(200).json({ message: "Pack deleted from user" });
+    response.status(200).json({ message: "success" });
   } catch (error) {
-    console.log("POST /api/deletemypack error:", error);
+    console.log("POST /api/store/deletemypack error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });

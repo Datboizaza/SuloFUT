@@ -20,7 +20,6 @@ function PlayersModal({
   const [nationality, setNationality] = useState("");
   const [league, setLeague] = useState("");
   const [club, setClub] = useState("");
-
   const [filteredPlayers, setFilteredPlayers] = useState(clubPlayers);
 
   //! Pozíció, amire klikkelt
@@ -324,8 +323,7 @@ function PlayersModal({
             {enableQuickSell && (
               <button
                 className="quickSellBtn"
-                onClick={(e) => {
-                  e.stopPropagation(); // 👈 fontos, ne selecteljen
+                onClick={() => {
                   onQuickSell(player);
                 }}
               >
@@ -345,18 +343,20 @@ function PlayersModal({
 }
 
 const postMethodFetch = async (url, data) => {
-  const response = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    throw new Error(`POST Hiba: ${response.status}`);
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error(`POST Hiba: ${response.status} ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    throw new Error(`Hiba történt: ${error.message}`);
   }
-
-  return response.json();
 };
 
 export default PlayersModal;

@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 
-export const useDrag = (assignedPlayers, handleSwapPlayers) => {
+export const Drag = (assignedPlayers, handleSwapPlayers) => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragKey, setDragKey] = useState(null);
   const [dragPos, setDragPos] = useState({ x: 0, y: 0 });
 
+  //! Mouse és touch egységesítése
   const getPoint = (e) => (e.touches ? e.touches[0] : e);
 
+  //! Drag elkezdése
   const startDrag = (e, key) => {
     if (e.type === "mousedown" && e.button !== 0) return;
     e.preventDefault();
@@ -19,11 +21,13 @@ export const useDrag = (assignedPlayers, handleSwapPlayers) => {
   useEffect(() => {
     if (!isDragging) return;
 
+    //! Pozíció frissítése
     const handleMove = (e) => {
       const point = getPoint(e);
       setDragPos({ x: point.clientX, y: point.clientY });
     };
 
+    //! Amikor elengedjük az elemet
     const handleUp = async (e) => {
       const point = getPoint(e);
       const element = document.elementFromPoint(point.clientX, point.clientY);
@@ -32,8 +36,8 @@ export const useDrag = (assignedPlayers, handleSwapPlayers) => {
       setIsDragging(false);
       setDragKey(null);
 
-      if (!to || dragKey === null) return;
-      await handleSwapPlayers(dragKey, isNaN(to) ? to : Number(to));
+      if (!to || dragKey === null || !assignedPlayers[to]) return;
+      await handleSwapPlayers(dragKey, to);
     };
 
     window.addEventListener("mousemove", handleMove);
@@ -46,7 +50,7 @@ export const useDrag = (assignedPlayers, handleSwapPlayers) => {
       window.removeEventListener("touchmove", handleMove);
       window.removeEventListener("touchend", handleUp);
     };
-  }, [isDragging, dragKey, handleSwapPlayers]);
+  }, [isDragging, dragKey, handleSwapPlayers, assignedPlayers]);
 
   return { isDragging, dragKey, dragPos, startDrag };
 };

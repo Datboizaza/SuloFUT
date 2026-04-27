@@ -44,9 +44,7 @@ router.get("/", async (request, response) => {
         objectivesMap[row.objective_id] = {
           id: row.objective_id,
           name: row.objective_name,
-
           claimed: !!row.objective_claimed,
-
           groupreward:
             row.group_coins || row.group_pack_id
               ? {
@@ -54,7 +52,6 @@ router.get("/", async (request, response) => {
                   packs: [],
                 }
               : null,
-
           subobjectives: [],
         };
 
@@ -88,9 +85,7 @@ router.get("/", async (request, response) => {
           task: row.task,
           requirement: row.requirement_int,
           progress: row.progress_int,
-
           claimed: !!row.sub_claimed,
-
           reward:
             row.sub_coins || row.sub_pack_id
               ? {
@@ -161,7 +156,7 @@ router.post("/claimsubobj", async (request, response) => {
 
     await objectivesQueries.setClaimed(userId, subId);
 
-    response.status(200).json({ message: "Reward claimed" });
+    response.status(200).json({ message: "success" });
   } catch (error) {
     console.log("POST /api//objectives/claimsubobj error:", error);
     response.status(500).json({ message: "Internal server error" });
@@ -210,7 +205,7 @@ router.post("/claimobjgroup", async (request, response) => {
 
     await objectivesQueries.setGroupClaimed(userId, objectiveId);
 
-    response.status(200).json({ message: "Group reward claimed" });
+    response.status(200).json({ message: "success" });
   } catch (error) {
     console.log("POST /api/objectives/claimobjgroup error:", error);
     response.status(500).json({ message: "Internal server error" });

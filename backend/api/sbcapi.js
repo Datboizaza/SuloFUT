@@ -25,7 +25,6 @@ const upload = multer({ storage });
 router.get("/allsbc", async (request, response) => {
   try {
     const rows = await sbcQueries.getSBC();
-
     const result = {
       challenges: [],
       upgrades: [],
@@ -51,7 +50,7 @@ router.get("/allsbc", async (request, response) => {
 
     response.status(200).json({ results: result });
   } catch (error) {
-    console.log("GET /api/allsbc error:", error);
+    console.log("GET /api/sbc/allsbc error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });

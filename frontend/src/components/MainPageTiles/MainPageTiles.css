@@ -14,7 +14,7 @@ h3 {
   font-size: 120% !important;
 }
 
-/*-------------Főoldal csempék------------------*/
+/* Főoldal csempék */
 #tileContainer {
   min-width: 60vw;
   padding-top: 5vh;
@@ -110,7 +110,7 @@ h3 {
   transition: transform 100ms ease-in-out;
 }
 
-/*----------------Ikonok/képek----------------------*/
+/* Ikonok/képek */
 #tileImages1 {
   width: max-content;
 }
@@ -163,7 +163,7 @@ h3 {
   max-height: fit-content;
 }
 
-/*-----------------Egyéb formázások-------------------*/
+/* Egyéb formázások */
 #tileTexts2 {
   width: 100%;
 }
@@ -174,7 +174,7 @@ h3 {
 
 /*------------------Media queries---------------------*/
 @media screen and (min-width: 768px) and (max-width: 991px) {
-  /*-------Tile elrendezések és formázások------*/
+  /* Tile elrendezések és formázások */
   #tileContainer {
     width: 98%;
     padding-top: 3vh;
@@ -217,7 +217,7 @@ h3 {
     row-gap: 10px;
   }
 
-  /*-----------------Egyéb formázások-------------------*/
+  /* Egyéb formázások */
   #tileTexts2 {
     max-width: max-content;
   }
@@ -226,7 +226,7 @@ h3 {
     font-size: 30px;
   }
 
-  /*------------Ikonok/képek--------------*/
+  /* Ikonok/képek */
   #tileImages2 {
     width: max-content;
   }
@@ -271,7 +271,7 @@ h3 {
 }
 
 @media screen and (max-width: 767px) {
-  /*-------Tile elrendezések és formázások------*/
+  /* Tile elrendezések és formázások */
   #tileContainer {
     width: 98%;
     padding-top: 3vh;
@@ -311,7 +311,7 @@ h3 {
     row-gap: 10px;
   }
 
-  /*-----------------Egyéb formázások-------------------*/
+  /* Egyéb formázások */
   #tileTexts2 {
     max-width: 250px;
   }
@@ -320,7 +320,7 @@ h3 {
     font-size: 25px;
   }
 
-  /*------------Ikonok/képek--------------*/
+  /* Ikonok/képek */
   #unassignedPacksIcon {
     width: 20vw;
     height: auto;

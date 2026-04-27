@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useCallback } from "react";
 import { createPortal } from "react-dom";
 import "./Draft.css";
 import Gamelayout from "../Gamelayout/Gamelayout.jsx";
@@ -19,32 +18,24 @@ import {
   calculateGraphProgress,
   isDraftComplete,
 } from "../../utilities/utilities.js";
-import { useDrag } from "../../utilities/useDrag.js";
+import { Drag } from "../../utilities/drag.js";
 
 function Draft() {
   const [formations, setFormations] = useState([]);
   const [selectedFormation, setSelectedFormation] = useState(null);
   const [gameLayout, setGameLayout] = useState(null);
-
   const [showPlayerSelectionModal, setShowPlayerSelectionModal] =
     useState(false);
   const [playerOptons, setPlayerOptions] = useState([]);
   const [assignedPlayers, setAssignedPlayers] = useState({});
-
   const [draftStarted, setDraftStarted] = useState(false);
-
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [captainPick, setCaptainPick] = useState(true);
-
   const [openSubs, setOpenSubs] = useState(false);
-
   const [teamChemistry, setTeamChemistry] = useState(0);
   const [teamRating, setTeamRating] = useState(0);
-
   const [playerChemMap, setPlayerChemMap] = useState({});
-
   const [showDraftSummary, setShowDraftSummary] = useState(false);
-
   const [rewardData, setRewardData] = useState(null);
   const [showReward, setShowReward] = useState(false);
 
@@ -59,10 +50,7 @@ function Draft() {
         const formationsData = result.randomformations;
 
         setFormations(formationsData);
-
-        if (formationsData.length > 0) {
-          setSelectedFormation(formationsData[0]);
-        }
+        setSelectedFormation(formationsData[0]);
       } catch (error) {
         console.log(error);
       }
@@ -95,7 +83,7 @@ function Draft() {
       setTimeout(async () => {
         await chooseCaptain();
         setShowPlayerSelectionModal(true);
-      }, 500);
+      }, 200);
     } catch (error) {
       console.log(error);
     }
@@ -164,10 +152,10 @@ function Draft() {
           let chosenRes = null;
 
           setAssignedPlayers((prev) => {
-            const next = { ...prev };
-            chosenRes = resSlots.find((id) => !next[id]);
-            next[chosenRes] = player;
-            return next;
+            const resSlot = { ...prev };
+            chosenRes = resSlots.find((id) => !resSlot[id]);
+            resSlot[chosenRes] = player;
+            return resSlot;
           });
 
           await fetch(
@@ -227,8 +215,6 @@ function Draft() {
   //! Játékosok kiválasztása + hozzárendelése a layout-hoz + kiválasztott játékos elküldése a backend-re
   const handlePlayerSelect = async (player) => {
     try {
-      if (assignedPlayers[selectedIndex]) return;
-
       const starting11 = typeof selectedIndex === "number";
       const resIndex =
         selectedIndex === "RES1" ||
@@ -270,46 +256,43 @@ function Draft() {
   };
 
   //! Játékosok swap-olása
-  const handleSwapPlayers = useCallback(
-    async (from, to) => {
-      try {
-        const a = assignedPlayers[from];
-        const b = assignedPlayers[to];
+  const handleSwapPlayers = async (from, to) => {
+    try {
+      const a = assignedPlayers[from];
+      const b = assignedPlayers[to];
 
-        setAssignedPlayers((prev) => {
-          const next = { ...prev };
-          next[from] = b;
-          next[to] = a;
-          return next;
-        });
+      setAssignedPlayers((prev) => {
+        const players = { ...prev };
+        players[from] = b;
+        players[to] = a;
+        return players;
+      });
 
-        const getSlotPosByKey = (key) => {
-          if (typeof key === "number") return gameLayout[key]?.pos;
-          return benchLayout.find((s) => s.id === key)?.pos;
-        };
+      const getSlotPosByKey = (key) => {
+        if (typeof key === "number") return gameLayout[key]?.pos;
+        return benchLayout.find((s) => s.id === key)?.pos;
+      };
 
-        await putMethodFetch("http://127.0.0.1:3000/api/draft/swap", {
-          aId: a.player_id,
-          bId: b.player_id,
-          aSlotPos: getSlotPosByKey(from),
-          bSlotPos: getSlotPosByKey(to),
-        });
+      await putMethodFetch("http://127.0.0.1:3000/api/draft/swap", {
+        aId: a.player_id,
+        bId: b.player_id,
+        aSlotPos: getSlotPosByKey(from),
+        bSlotPos: getSlotPosByKey(to),
+      });
 
-        const { teamChemistry, playerChemMap } = await fetchChemistry();
-        setTeamChemistry(teamChemistry);
-        setPlayerChemMap(playerChemMap);
+      const { teamChemistry, playerChemMap } = await fetchChemistry();
+      setTeamChemistry(teamChemistry);
+      setPlayerChemMap(playerChemMap);
 
-        const rating = await fetchRating();
-        setTeamRating(rating);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    [assignedPlayers, gameLayout],
-  );
+      const rating = await fetchRating();
+      setTeamRating(rating);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   //! Drag meghívása
-  const { isDragging, dragKey, dragPos, startDrag } = useDrag(
+  const { isDragging, dragKey, dragPos, startDrag } = Drag(
     assignedPlayers,
     handleSwapPlayers,
   );

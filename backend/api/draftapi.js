@@ -22,7 +22,7 @@ const upload = multer({ storage });
 const readJsonFile = async (filePath) => {
   try {
     const raw = await fs.readFile(filePath, "utf-8");
-    return JSON.parse(raw); // JS objektum/tömb
+    return JSON.parse(raw);
   } catch (error) {
     throw new Error(`Olvasási hiba (json): ${error.message}`);
   }
@@ -58,7 +58,7 @@ router.get("/randomformations", async (request, response) => {
 
     response.status(200).json({ randomformations: randomPick(data, 5) });
   } catch (error) {
-    console.log("GET /api/randomformations error:", error);
+    console.log("GET /api/draft/randomformations error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -106,7 +106,7 @@ router.get("/randomplayers", async (request, response) => {
 
     response.status(200).json({ randomjatekosok: randomPick(data, 5) });
   } catch (error) {
-    console.log("GET /api/randomplayers error:", error);
+    console.log("GET /api/draft/randomplayers error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -122,7 +122,7 @@ router.get("/draftselectedplayers", async (request, response) => {
       draftselectedplayers: draftselectedPlayers,
     });
   } catch (error) {
-    console.log("GET /api/draftselectedplayers error:", error);
+    console.log("GET /api/draft/draftselectedplayers error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -152,7 +152,7 @@ router.post("/draftselectedplayers", async (request, response) => {
       draftselectedPlayersRes: draftselectedPlayersRes,
     });
   } catch (error) {
-    console.log("POST /api/draftselectedplayers error:", error);
+    console.log("POST /api/draft/draftselectedplayers error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -164,7 +164,7 @@ router.get("/draftselectedplayers11", async (request, response) => {
       draftselectedplayers11: draftselectedPlayers11,
     });
   } catch (error) {
-    console.log("GET /api/draftselectedplayers11 error:", error);
+    console.log("GET /api/draft/draftselectedplayers11 error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -176,7 +176,7 @@ router.get("/draftselectedplayersSubs", async (request, response) => {
       draftselectedPlayersSubs: draftselectedPlayersSubs,
     });
   } catch (error) {
-    console.log("GET /api/draftselectedplayersSubs error:", error);
+    console.log("GET /api/draft/draftselectedplayersSubs error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -188,7 +188,7 @@ router.get("/draftselectedplayersRes", async (request, response) => {
       draftselectedPlayersRes: draftselectedPlayersRes,
     });
   } catch (error) {
-    console.log("GET /api/draftselectedplayersRes error:", error);
+    console.log("GET /api/draft/draftselectedplayersRes error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -204,7 +204,7 @@ router.delete("/draftselectedplayers", (request, response) => {
 
     response.status(200).json({ message: "Successful draft reset" });
   } catch (error) {
-    console.log("DELETE /api/draftselectedplayers error:", error);
+    console.log("DELETE /api/draft/draftselectedplayers error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -231,7 +231,6 @@ router.get("/random/:pos", async (request, response) => {
     );
 
     const selectedIds = draftselectedPlayers.map((p) => p.player_id);
-
     const posGroups = {
       DEF: ["LB", "CB", "RB"],
       MID: ["LM", "RM", "CM", "CDM", "CAM"],
@@ -251,7 +250,6 @@ router.get("/random/:pos", async (request, response) => {
         "GK",
       ],
     };
-
     const getPositions = (pos) => {
       return posGroups[pos] || [pos];
     };
@@ -316,7 +314,7 @@ router.get("/random/:pos", async (request, response) => {
 
     return response.status(200).json({ randomPlayers: randomPick(data, 5) });
   } catch (error) {
-    console.log("GET /api/random/:pos error:", error);
+    console.log("GET /api/draft/random/:pos error:", error);
     return response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -456,7 +454,7 @@ router.get("/chemistry", async (request, response) => {
       players: teamWithChemistry,
     });
   } catch (error) {
-    console.log("GET /api/chemistry error:", error);
+    console.log("GET /api/draft/chemistry error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -495,7 +493,7 @@ router.get("/rating", async (request, response) => {
       rating: finalRating,
     });
   } catch (error) {
-    console.log("GET /api/rating error:", error);
+    console.log("GET /api/draft/rating error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -524,7 +522,7 @@ router.get("/ratingwithoutsub", async (request, response) => {
       rating: finalRating,
     });
   } catch (error) {
-    console.log("GET /api/rating error:", error);
+    console.log("GET /api/draft/ratingwithoutsub error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -537,15 +535,15 @@ router.put("/swap", (request, response) => {
     const arrays = {
       starting11: draftselectedPlayers11,
       subs: draftselectedPlayersSubs,
-      response: draftselectedPlayersRes,
+      res: draftselectedPlayersRes,
     };
 
     const findPlayer = (playerId) => {
       for (const [name, arr] of Object.entries(arrays)) {
-        const idx = arr.findIndex(
+        const idPlayer = arr.findIndex(
           (p) => String(p.player_id) === String(playerId),
         );
-        if (idx !== -1) return { name, arr, idx };
+        if (idPlayer !== -1) return { name, arr, idPlayer };
       }
       return null;
     };
@@ -553,16 +551,16 @@ router.put("/swap", (request, response) => {
     const A = findPlayer(aId);
     const B = findPlayer(bId);
 
-    const temp = A.arr[A.idx];
-    A.arr[A.idx] = B.arr[B.idx];
-    B.arr[B.idx] = temp;
+    const temp = A.arr[A.idPlayer];
+    A.arr[A.idPlayer] = B.arr[B.idPlayer];
+    B.arr[B.idPlayer] = temp;
 
-    if (A.arr[A.idx]) A.arr[A.idx].slotPos = aSlotPos;
-    if (B.arr[B.idx]) B.arr[B.idx].slotPos = bSlotPos;
+    if (A.arr[A.idPlayer]) A.arr[A.idPlayer].slotPos = aSlotPos;
+    if (B.arr[B.idPlayer]) B.arr[B.idPlayer].slotPos = bSlotPos;
 
     return response.json({ message: "success" });
   } catch (error) {
-    console.log("PUT /api/swap error:", error);
+    console.log("PUT /api/draft/swap error:", error);
     return response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -584,7 +582,7 @@ router.put("/replace", (request, response) => {
 
     return response.json({ message: "success" });
   } catch (error) {
-    console.log("PUT /api/replace error:", error);
+    console.log("PUT /api/draft/replace error:", error);
     return response.status(500).json({ message: "Internal server error" });
   }
 });

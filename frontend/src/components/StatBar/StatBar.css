@@ -5,7 +5,7 @@
   src: url("../../assets/EaSportsFc_FontByGibsfut-Regular.ttf");
 }
 
-/*---------Elendezések és alapvető formázások-----------*/
+/* Elendezések és alapvető formázások */
 #statBarDiv {
   background-color: rgba(17, 38, 39, 0.459);
   backdrop-filter: blur(2px);
@@ -56,7 +56,7 @@
   font-size: 1.7vh;
 }
 
-/*---------------Képek------------------*/
+/* Képek */
 #coinsImage {
   height: 4vh;
 }
@@ -76,9 +76,9 @@
   }
 }
 
-/*------------------Media queries---------------------*/
+/* Media queries */
 @media screen and (min-width: 768px) and (max-width: 991px) {
-  /*---------Elendezések és alapvető formázások-----------*/
+  /* Elendezések és alapvető formázások */
   #statBarDiv {
     padding-left: 20px;
     padding-right: 20px;
@@ -100,7 +100,7 @@
     font-size: 1.7vh;
   }
 
-  /*---------------Képek------------------*/
+  /* Képek */
   #coinsImage {
     height: 3vh;
   }
@@ -111,7 +111,7 @@
 }
 
 @media screen and (max-width: 767px) {
-  /*---------Elendezések és alapvető formázások-----------*/
+  /* Elendezések és alapvető formázások */
   #statBarDiv {
     padding-left: 20px;
     padding-right: 20px;
@@ -133,7 +133,7 @@
     font-size: 1.7vh;
   }
 
-  /*---------------Képek------------------*/
+  /* Képek */
   #coinsImage {
     height: 3vh;
   }

@@ -29,28 +29,22 @@ const packImages = {
 
 function Store() {
   const [activeTab, setActiveTab] = useState("mypacks");
-
   const [data, setData] = useState({
     mypacks: [],
     buypacks: [],
   });
-
   const [packOpening, setPackOpening] = useState(false);
   const [packPlayersArr, setPackPlayersArr] = useState([]);
-
   const [openingStage, setOpeningStage] = useState("idle");
   const [currentPack, setCurrentPack] = useState(null);
-
   const [modal, setModal] = useState(null);
   const [selectedPack, setSelectedPack] = useState(null);
   const [selectedPlayer, setSelectedPlayer] = useState(null);
-
   const [clubPlayers, setClubPlayers] = useState([]);
 
   //! Club fetch
   const fetchClub = async () => {
     const result = await getMethodFetch("http://127.0.0.1:3000/api/myclub");
-
     setClubPlayers(result || []);
   };
 
@@ -713,19 +707,32 @@ function Store() {
 }
 
 const getMethodFetch = async (url) => {
-  const response = await fetch(url, { credentials: "include" });
-  if (!response.ok) throw new Error("GET hiba");
-  return await response.json();
+  try {
+    const response = await fetch(url, { credentials: "include" });
+    if (!response.ok) {
+      throw new Error(`GET hiba: ${response.status} ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    throw new Error(`Hiba történt: ${error.message}`);
+  }
 };
 
 const postMethodFetch = async (url, data) => {
-  const response = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify(data),
-  });
-  return await response.json();
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error(`POST Hiba: ${response.status} ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    throw new Error(`Hiba történt: ${error.message}`);
+  }
 };
 
 export default Store;

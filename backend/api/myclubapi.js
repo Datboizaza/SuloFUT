@@ -26,7 +26,6 @@ router.post("/addPlayersToClub", async (request, response) => {
   try {
     const userId = request.session.userId;
     const newPlayers = request.body.players;
-
     const rows = await myClubQueries.currentClub(userId);
 
     let currentPlayers = [];
@@ -41,7 +40,7 @@ router.post("/addPlayersToClub", async (request, response) => {
 
     response.status(200).json({ message: "success" });
   } catch (error) {
-    console.log("POST /api/addPlayersToClub error:", error);
+    console.log("POST /api/myclub/addPlayersToClub error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -56,7 +55,7 @@ router.post("/setClubPlayers", async (request, response) => {
 
     response.status(200).json({ message: "success" });
   } catch (error) {
-    console.log("POST /api/setClubPlayers error:", error);
+    console.log("POST /api/myclub/setClubPlayers error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -66,10 +65,6 @@ router.get("/", async (request, response) => {
   try {
     const userId = request.session.userId;
     const rows = await myClubQueries.currentClub(userId);
-
-    if (!rows || rows.length === 0) {
-      return response.json([]);
-    }
 
     let players = [];
 
@@ -81,7 +76,7 @@ router.get("/", async (request, response) => {
 
     response.status(200).json(players);
   } catch (error) {
-    console.log("GET /api/myClub error:", error);
+    console.log("GET /api/myclub error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -96,7 +91,7 @@ router.post("/deleteClubPlayers", async (request, response) => {
 
     response.status(200).json({ message: "success" });
   } catch (error) {
-    console.log("POST /api/deleteClubPlayers error:", error);
+    console.log("POST /api/myclub/deleteClubPlayers error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -111,7 +106,7 @@ router.post("/removeplayer", async (request, response) => {
 
     response.status(200).json({ message: "success" });
   } catch (error) {
-    console.log("POST /removePlayer error:", error);
+    console.log("POST /api/myclub/removePlayer error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -125,7 +120,7 @@ router.get("/squad", async (request, response) => {
 
     response.status(200).json({ squad: squadRow[0] });
   } catch (error) {
-    console.log("GET /api/squad error:", error);
+    console.log("GET /api/myclub/squad error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -140,7 +135,7 @@ router.post("/squad/save", async (request, response) => {
 
     response.status(200).json({ message: "success" });
   } catch (error) {
-    console.log("POST /api/squad/save error:", error);
+    console.log("POST /api/myclub/squad/save error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -155,7 +150,7 @@ router.post("/squad/updatename", async (request, response) => {
 
     response.status(200).json({ message: "success" });
   } catch (error) {
-    console.log("POST /api/squad/updatename error:", error);
+    console.log("POST /api/myclub/squad/updatename error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -170,7 +165,7 @@ router.post("/squad/updateformation", async (request, response) => {
 
     response.status(200).json({ message: "success" });
   } catch (error) {
-    console.log("POST /api/squad/updateformation error:", error);
+    console.log("POST /api/myclub/squad/updateformation error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -218,7 +213,7 @@ router.post("/sortBy", async (request, response) => {
     const condition = conds[condId];
     response.status(200).json({ byFeltetel: condition });
   } catch (error) {
-    console.log("GET /api/packplayers error:", error);
+    console.log("POST /api/myclub/sortBy error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -253,7 +248,7 @@ router.post("/ovrRange", async (request, response) => {
     });
     response.status(200).json({ byFeltetel: condition });
   } catch (error) {
-    console.log("GET /api/packplayers error:", error);
+    console.log("POST /api/myclub/ovrRange error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -287,7 +282,7 @@ router.post("/playerName", async (request, response) => {
     });
     response.status(200).json({ byFeltetel: condition });
   } catch (error) {
-    console.log("GET /api/packplayers error:", error);
+    console.log("POST /api/myclub/playerName error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -319,7 +314,7 @@ router.post("/playerRarity", async (request, response) => {
     });
     response.status(200).json({ byFeltetel: condition });
   } catch (error) {
-    console.log("GET /api/packplayers error:", error);
+    console.log("POST /api/myclub/playerRarity error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -360,7 +355,7 @@ router.post("/playerPosition", async (request, response) => {
     });
     response.status(200).json({ byFeltetel: condition });
   } catch (error) {
-    console.log("GET /api/packplayers error:", error);
+    console.log("POST /api/myclub/playerPosition error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -394,7 +389,7 @@ router.post("/playerNationality", async (request, response) => {
     });
     response.status(200).json({ byFeltetel: condition });
   } catch (error) {
-    console.log("GET /api/packplayers error:", error);
+    console.log("POST /api/myclub/playerNationality error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -426,7 +421,7 @@ router.post("/playerLeague", async (request, response) => {
     });
     response.status(200).json({ byFeltetel: condition });
   } catch (error) {
-    console.log("GET /api/packplayers error:", error);
+    console.log("POST /api/myclub/playerLeague error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -458,7 +453,7 @@ router.post("/playerClub", async (request, response) => {
     });
     response.status(200).json({ byFeltetel: condition });
   } catch (error) {
-    console.log("GET /api/packplayers error:", error);
+    console.log("POST /api/myclub/playerClub error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });

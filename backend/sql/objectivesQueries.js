@@ -55,7 +55,6 @@ ORDER BY
   objectives.id,
   subobjectives.id;
 `;
-
   try {
     const [rows] = await pool.execute(query, [userId, userId]);
     return rows;
@@ -72,8 +71,11 @@ async function updateSubobjectiveProgress(id, subId) {
     ON DUPLICATE KEY UPDATE 
       progress_int = progress_int + 1
   `;
-
-  await pool.execute(query, [id, subId]);
+  try {
+    await pool.execute(query, [id, subId]);
+  } catch (error) {
+    throw error;
+  }
 }
 
 //? Subobjective reward
@@ -88,7 +90,6 @@ async function getSubobjAndRew(subId) {
       LEFT JOIN rewards ON rewards.id = subobjectives.reward
       WHERE subobjectives.id = ?
   `;
-
   try {
     const [rows] = await pool.execute(query, [subId]);
     return rows;
@@ -105,7 +106,6 @@ async function isSubobjClaimed(userId, subId) {
       JOIN subobjectives ON subobjectives.id = user_subobjective_progress.subobjective_id
       WHERE user_subobjective_progress.user_id = ? AND user_subobjective_progress.subobjective_id = ?
   `;
-
   try {
     const [rows] = await pool.execute(query, [userId, subId]);
     return rows;
@@ -121,7 +121,6 @@ async function setClaimed(userId, subId) {
       SET claimed = TRUE
       WHERE user_id = ? AND subobjective_id = ?
   `;
-
   try {
     const [rows] = await pool.execute(query, [userId, subId]);
     return rows;
@@ -144,7 +143,6 @@ async function getSubobjectivesByObjective(userId, objectiveId) {
       AND user_subobjective_progress.user_id = ?
     WHERE subobjectives.objective_id = ?
   `;
-
   try {
     const [rows] = await pool.execute(query, [userId, objectiveId]);
     return rows;
@@ -160,7 +158,6 @@ async function isGroupClaimed(userId, objectiveId) {
     FROM user_objective_claims
     WHERE user_id = ? AND objective_id = ?
   `;
-
   try {
     const [rows] = await pool.execute(query, [userId, objectiveId]);
     return rows[0];
@@ -179,7 +176,6 @@ async function getGroupReward(objectiveId) {
     LEFT JOIN rewards ON rewards.id = objectives.group_reward
     WHERE objectives.id = ?
   `;
-
   try {
     const [rows] = await pool.execute(query, [objectiveId]);
     return rows;
@@ -195,7 +191,6 @@ async function setGroupClaimed(userId, objectiveId) {
     VALUES (?, ?, 1)
     ON DUPLICATE KEY UPDATE claimed = 1
   `;
-
   try {
     const [rows] = await pool.execute(query, [userId, objectiveId]);
     return rows;

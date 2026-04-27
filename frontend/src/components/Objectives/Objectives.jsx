@@ -5,7 +5,7 @@ import SpecialPack from "../../assets/specialpack.png";
 import {
   calculateProgressPercent,
   isObjectiveCompleted,
-} from "../../utilities/utilities";
+} from "../../utilities/utilities.js";
 
 function Objectives() {
   const [data, setData] = useState({
@@ -33,7 +33,7 @@ function Objectives() {
   }, []);
 
   //! Aktuális oldal
-  const current = data[activeTab] || [];
+  const current = data[activeTab];
 
   //! Claim-elés funkció
   const handleClaim = async (subId) => {

@@ -19,7 +19,6 @@ async function updateCoins(coins, userId) {
         SET coinNumber = coinNumber + ?
         WHERE user_id = ?
   `;
-
   try {
     const [rows] = await pool.execute(query, [coins, userId]);
     return rows;
@@ -38,7 +37,6 @@ async function getLeaderboard(type) {
     JOIN users ON users.id = stats.user_id
     ORDER BY stats.${type} DESC
   `;
-
   try {
     const [rows] = await pool.execute(query);
     return rows;

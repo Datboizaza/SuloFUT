@@ -11,11 +11,16 @@ const pool = mysql.createPool({
 });
 
 //! Loginhoz és profil műveletekhez szükséges lekérdezések
+
 //? Összes user
 async function selectall() {
   const query = "SELECT * FROM users;";
-  const [rows] = await pool.execute(query);
-  return rows;
+  try {
+    const [rows] = await pool.execute(query);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
 }
 
 //? Regisztráció

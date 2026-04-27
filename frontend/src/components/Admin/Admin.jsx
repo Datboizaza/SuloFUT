@@ -19,7 +19,7 @@ function Admin() {
   const fetchUsers = async () => {
     try {
       const userRes = await getMethodFetch("http://127.0.0.1:3000/api/users");
-      setUsers(userRes.results || []);
+      setUsers(userRes.results);
     } catch (error) {
       console.log(error);
     }
@@ -31,7 +31,7 @@ function Admin() {
       const playersRes = await getMethodFetch(
         "http://127.0.0.1:3000/api/players",
       );
-      setPlayers(playersRes.players || []);
+      setPlayers(playersRes.players);
     } catch (error) {
       console.log(error);
     }
@@ -49,7 +49,6 @@ function Admin() {
   //! Delete user
   const handleDeleteUser = async () => {
     try {
-      if (!userIdToDelete) return;
       await postMethodFetch("http://127.0.0.1:3000/api/users/admin/delete", {
         userId: Number(userIdToDelete),
       });
@@ -94,9 +93,8 @@ function Admin() {
       if (selectedPlayerId && !hasEmptyField && cardImage) {
         const formData = new FormData();
         formData.append("playerData", JSON.stringify(promoData));
-        if (cardImage) {
-          formData.append("image", cardImage);
-        }
+        formData.append("image", cardImage);
+
         const response = await fetch(
           "http://127.0.0.1:3000/api/admin/addpromo",
           {
@@ -129,7 +127,7 @@ function Admin() {
             name: search,
           },
         );
-        setFilteredPlayers(filterRes.byFeltetel || []);
+        setFilteredPlayers(filterRes.byFeltetel);
       } catch (error) {
         console.log(error);
       }
@@ -226,7 +224,7 @@ function Admin() {
                 <label className="adminLabel">{key}</label>
                 <input
                   className="adminInput"
-                  value={promoData[key] || ""}
+                  value={promoData[key]}
                   onChange={(e) =>
                     setPromoData({
                       ...promoData,
