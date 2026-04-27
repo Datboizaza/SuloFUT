@@ -28,8 +28,6 @@ function PlayerCard({
   slotPos,
   isModal,
 }) {
-  if (!player) return null;
-
   //! Card design-ok
   const rarityImgs = {
     bronze: Bronze,
@@ -42,6 +40,7 @@ function PlayerCard({
     flashback: Flashback,
   };
 
+  //! Ellenőrzések
   const isGK = player.player_positions === "GK";
   const textClass = getRarityClass(player.rarity);
   const altPositions = [];

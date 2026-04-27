@@ -6,7 +6,7 @@ import Gamelayout from "../Gamelayout/Gamelayout.jsx";
 import Subbar from "../Subbar/Subbar.jsx";
 import Grab from "../Grab/Grab.jsx";
 import PlayersModal from "../PlayersModal/PlayersModal.jsx";
-import { useDrag } from "../../utilities/useDrag.js";
+import { Drag } from "../../utilities/drag.js";
 import {
   chemImg,
   ratingStars,
@@ -50,13 +50,11 @@ function Squad() {
       const foundFormation = formationRes.formations.find(
         (f) => f.formation === squad.squadFormation,
       );
-      if (foundFormation) {
-        setSelectedFormation(foundFormation);
-        setGameLayout(foundFormation.layout);
-        if (squad.squadPlayers) {
-          const parsed = JSON.parse(squad.squadPlayers);
-          setAssignedPlayers(parsed);
-        }
+      setSelectedFormation(foundFormation);
+      setGameLayout(foundFormation.layout);
+      if (squad.squadPlayers) {
+        const parsed = JSON.parse(squad.squadPlayers);
+        setAssignedPlayers(parsed);
       }
     };
 
@@ -66,7 +64,8 @@ function Squad() {
   //! Játékosok betöltése az adatbázisból
   useEffect(() => {
     if (!gameLayout || Object.keys(assignedPlayers).length === 0) return;
-    const loadPlayersToDraft = async (playersObj) => {
+
+    const loadPlayersToSquad = async (playersObj) => {
       const players = Object.entries(playersObj);
       for (const [key, player] of players) {
         const parsedKey = Number(key);
@@ -97,7 +96,7 @@ function Squad() {
       await fetch("http://127.0.0.1:3000/api/draft/draftselectedplayers", {
         method: "DELETE",
       });
-      await loadPlayersToDraft(assignedPlayers);
+      await loadPlayersToSquad(assignedPlayers);
       const { teamChemistry, playerChemMap } = await fetchChemistry();
       setTeamChemistry(teamChemistry);
       setPlayerChemMap(playerChemMap);
@@ -149,8 +148,8 @@ function Squad() {
     setSelectedIndex(index);
     const isStarting11 = typeof index === "number";
     if (isStarting11) {
-      const slotPos = gameLayout[index]?.pos;
-      setSelectedPosition(slotPos?.toLowerCase());
+      const slotPos = gameLayout[index].pos;
+      setSelectedPosition(slotPos.toLowerCase());
     } else {
       setSelectedPosition("");
     }
@@ -182,7 +181,7 @@ function Squad() {
 
       const slotPos = starting11
         ? gameLayout[selectedIndex].pos
-        : benchLayout.find((s) => s.id === selectedIndex)?.pos;
+        : benchLayout.find((s) => s.id === selectedIndex).pos;
 
       if (existingPlayer) {
         await putMethodFetch("http://127.0.0.1:3000/api/draft/replace", {
@@ -230,10 +229,10 @@ function Squad() {
         const b = assignedPlayers[to];
 
         setAssignedPlayers((prev) => {
-          const next = { ...prev };
-          next[from] = b;
-          next[to] = a;
-          return next;
+          const players = { ...prev };
+          players[from] = b;
+          players[to] = a;
+          return players;
         });
 
         const getSlotPosByKey = (key) => {
@@ -262,7 +261,7 @@ function Squad() {
   );
 
   //! Drag-elés
-  const { isDragging, dragKey, dragPos, startDrag } = useDrag(
+  const { isDragging, dragKey, dragPos, startDrag } = Drag(
     assignedPlayers,
     handleSwapPlayers,
   );

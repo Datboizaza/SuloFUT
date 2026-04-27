@@ -1,38 +1,178 @@
 
-GET http://127.0.0.1:3000/api/draftselectedplayers HTTP/1.1
+GET http://127.0.0.1:3000/api/formations HTTP/1.1
 
 ###
 
-POST http://127.0.0.1:3000/api/objectiveprogress HTTP/1.1
+GET http://127.0.0.1:3000/api/players HTTP/1.1
+
+###
+
+POST http://127.0.0.1:3000/api/updatecoins HTTP/1.1
 content-type: application/json
 
 {
-    "subId": 20
+    "coins": 20
 }
 
 ###
 
-GET http://127.0.0.1:3000/api/random/DEF HTTP/1.1
+POST http://127.0.0.1:3000/api/admin/addpromo HTTP/1.1
+content-type: application/json
+
+{
+    "playerData": { "id": "20", "short_name": "Messi"}
+}
 
 ###
 
-GET http://127.0.0.1:3000/api/generatePack/1 HTTP/1.1
+POST http://127.0.0.1:3000/api/playerNameAdmin HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Messi"
+}
 
 ###
 
-GET http://127.0.0.1:3000/api/allsbc HTTP/1.1
+GET http://127.0.0.1:3000/api/draft/randomformations HTTP/1.1
 
 ###
 
-GET http://127.0.0.1:3000/api/myClub/sortBy/53 HTTP/1.1
-###
-
-GET http://127.0.0.1:3000/api/myClub/ovrRange/53 HTTP/1.1
+GET http://127.0.0.1:3000/api/draft/randomplayers HTTP/1.1
 
 ###
 
-GET http://127.0.0.1:3000/api/myClub/playerName/53 HTTP/1.1
+GET http://127.0.0.1:3000/api/draft/draftselectedplayers HTTP/1.1
 
 ###
 
-GET http://127.0.0.1:3000/api/myClub/playerPosition/53 HTTP/1.1
+GET http://127.0.0.1:3000/api/draft/draftselectedplayers11 HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/api/draft/draftselectedplayersSubs HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/api/draft/draftselectedplayersRes HTTP/1.1
+
+###
+
+DELETE  http://127.0.0.1:3000/api/draft/draftselectedplayers HTTP/1.1
+
+###
+
+DELETE  http://127.0.0.1:3000/api/draft/draftselectedplayers11 HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/api/draft/random/ST HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/api/draft/random/ATT HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/api/draft/chemistry HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/api/draft/rating HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/api/draft/ratingwithoutsub HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/api/leaderboard/club_value HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/api/myclub HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/api/myclub/squad HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/api/objectives HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/api/rewards/2 HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/api/rewards/draftrewards/bad HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/api/sbc/allsbc HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/api/sbc/userprogress HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/api/sbc/4 HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/api/store/generatePack/7 HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/api/store/storepacks HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/api/users HTTP/1.1
+
+###
+
+POST http://127.0.0.1:3000/api/users/login HTTP/1.1
+content-type: application/json
+
+{
+    "username": "bobberito",
+    "password": "Test1234"
+}
+
+###
+
+POST http://127.0.0.1:3000/api/users HTTP/1.1
+content-type: application/json
+
+{
+    "username": "Test",
+    "password": "Test1234"
+}
+
+###
+
+GET http://127.0.0.1:3000/api/users/me HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/api/users/admin/me HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/api/users/me/coins HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/api/users/me/packs HTTP/1.1
+
+###
+
+POST http://127.0.0.1:3000/api/users/me/bestdraft HTTP/1.1
+content-type: application/json
+
+{
+    "rating": 120
+}

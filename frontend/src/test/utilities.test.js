@@ -156,7 +156,6 @@ QUnit.test("SBC aktuális csapat állása", (assert) => {
   };
 
   const chemMap = { 1: 2, 2: 1 };
-
   const getMaxSame = (list, key) => {
     const count = {};
     list.forEach((p) => {
@@ -166,7 +165,6 @@ QUnit.test("SBC aktuális csapat állása", (assert) => {
   };
 
   const stats = getSquadStats(players, 80, 25, chemMap, getMaxSame);
-
   assert.strictEqual(stats.rating, 80);
   assert.strictEqual(stats.chemistry, 25);
   assert.strictEqual(stats.leagues, 1);

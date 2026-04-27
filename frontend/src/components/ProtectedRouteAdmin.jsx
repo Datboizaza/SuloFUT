@@ -4,6 +4,7 @@ import { Navigate, Outlet } from "react-router-dom";
 function ProtectedRouteAdmin() {
   const [isAdmin, setIsAdmin] = useState(null);
 
+  //! Login lecheckolása
   useEffect(() => {
     const checkAdmin = async () => {
       try {
@@ -21,11 +22,15 @@ function ProtectedRouteAdmin() {
     checkAdmin();
   }, []);
 
+  //! Null amíg nincs eredmény
   if (isAdmin === null) return null;
 
+  //! Átirányítás a login-hoz
   if (!isAdmin) {
     return <Navigate to="/adminlogin" replace />;
   }
+
+  //! Oldal renderelése ha be van jelentkezve
   return <Outlet />;
 }
 

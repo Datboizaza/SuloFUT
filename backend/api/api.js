@@ -17,6 +17,7 @@ const storage = multer.diskStorage({
   },
 });
 
+//! Fájl limitálása
 const upload = multer({
   storage,
   limits: {
@@ -37,7 +38,7 @@ const upload = multer({
 const readJsonFile = async (filePath) => {
   try {
     const raw = await fs.readFile(filePath, "utf-8");
-    return JSON.parse(raw); // JS objektum/tömb
+    return JSON.parse(raw);
   } catch (error) {
     throw new Error(`Olvasási hiba (json): ${error.message}`);
   }
@@ -120,7 +121,7 @@ router.post("/admin/addpromo", (request, response) => {
 
       response.status(200).json({ message: "success" });
     } catch (error) {
-      console.log("POST /admin/addpromo error:", error);
+      console.log("POST api/admin/addpromo error:", error);
       response.status(500).json({ message: "Internal server error" });
     }
   });

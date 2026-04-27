@@ -30,7 +30,6 @@ router.get("/:id", async (request, response) => {
     const id = request.params.id;
     const reward = await rewardQueries.getRewardById(id);
     response.status(200).json({
-      message: "Ez a végpont működik.",
       results: reward,
     });
   } catch (error) {
@@ -43,10 +42,9 @@ router.get("/:id", async (request, response) => {
 
 //! Draft reward value szerint
 router.get("/draftrewards/:rewardValue", async (request, response) => {
-  const rewardValue = request.params.rewardValue;
   try {
+    const rewardValue = request.params.rewardValue;
     const rows = await rewardQueries.getDraftRewards(rewardValue);
-
     const rewardsMap = {};
 
     for (const row of rows) {
@@ -76,7 +74,7 @@ router.get("/draftrewards/:rewardValue", async (request, response) => {
       results: draftrewards,
     });
   } catch (error) {
-    console.log("GET /api/draftrewards error:", error);
+    console.log("GET /api/rewards/draftrewards/:rewardVlaue error:", error);
     response.status(500).json({
       message: "Internal server error",
     });
@@ -85,9 +83,9 @@ router.get("/draftrewards/:rewardValue", async (request, response) => {
 
 //! Reward claim-elése
 router.post("/draftrewards/claim", async (request, response) => {
-  const { rewardId } = request.body;
-  const userId = request.session.userId;
   try {
+    const { rewardId } = request.body;
+    const userId = request.session.userId;
     const rows = await rewardQueries.getDraftRewardById(rewardId);
     const reward = {
       id: rows[0].draftRewardId,
@@ -114,9 +112,9 @@ router.post("/draftrewards/claim", async (request, response) => {
       await storeQueries.addPack(userId, pack.id);
     }
 
-    response.status(200).json({ message: "Draft reward claimed!" });
+    response.status(200).json({ message: "success" });
   } catch (error) {
-    console.log("POST /api/draftrewards/claim error:", error);
+    console.log("POST /api/rewards/draftrewards/claim error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -142,7 +140,7 @@ router.post("/sbc/claim", async (request, response) => {
       message: "success",
     });
   } catch (error) {
-    console.log("POST /api/sbc/claim error:", error);
+    console.log("POST /api/rewards/sbc/claim error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });

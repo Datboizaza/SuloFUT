@@ -1,79 +1,56 @@
 import { useState, useEffect } from "react";
 
-export const useDrag = (assignedPlayers, handleSwapPlayers) => {
+export const Drag = (assignedPlayers, handleSwapPlayers) => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragKey, setDragKey] = useState(null);
   const [dragPos, setDragPos] = useState({ x: 0, y: 0 });
 
+  //! Mouse és touch egységesítése
+  const getPoint = (e) => (e.touches ? e.touches[0] : e);
+
+  //! Drag elkezdése
   const startDrag = (e, key) => {
     if (e.type === "mousedown" && e.button !== 0) return;
-
     e.preventDefault();
-
+    const point = getPoint(e);
     setDragKey(key);
     setIsDragging(true);
-
-    const point = e.touches ? e.touches[0] : e;
-
-    setDragPos({
-      x: point.clientX,
-      y: point.clientY,
-    });
+    setDragPos({ x: point.clientX, y: point.clientY });
   };
 
   useEffect(() => {
     if (!isDragging) return;
 
+    //! Pozíció frissítése
     const handleMove = (e) => {
-      const point = e.touches ? e.touches[0] : e;
-
-      setDragPos({
-        x: point.clientX,
-        y: point.clientY,
-      });
+      const point = getPoint(e);
+      setDragPos({ x: point.clientX, y: point.clientY });
     };
 
+    //! Amikor elengedjük az elemet
     const handleUp = async (e) => {
-      const point = e.changedTouches ? e.changedTouches[0] : e;
-
-      const from = dragKey;
-
+      const point = getPoint(e);
+      const element = document.elementFromPoint(point.clientX, point.clientY);
+      const slot = element?.closest("[data-slotkey]");
+      const to = slot?.getAttribute("data-slotkey");
       setIsDragging(false);
       setDragKey(null);
 
-      if (!assignedPlayers[from]) return;
-
-      const element = document.elementFromPoint(point.clientX, point.clientY);
-      const slotElement = element?.closest("[data-slotkey]");
-
-      if (!slotElement) return;
-
-      const toKey = slotElement.getAttribute("data-slotkey");
-      const to = /^\d+$/.test(toKey) ? Number(toKey) : toKey;
-
-      if (!assignedPlayers[to]) return;
-
-      await handleSwapPlayers(from, to);
+      if (!to || dragKey === null || !assignedPlayers[to]) return;
+      await handleSwapPlayers(dragKey, to);
     };
 
     window.addEventListener("mousemove", handleMove);
     window.addEventListener("mouseup", handleUp);
-
     window.addEventListener("touchmove", handleMove);
     window.addEventListener("touchend", handleUp);
-
     return () => {
       window.removeEventListener("mousemove", handleMove);
       window.removeEventListener("mouseup", handleUp);
       window.removeEventListener("touchmove", handleMove);
       window.removeEventListener("touchend", handleUp);
     };
-  }, [isDragging, dragKey, assignedPlayers, handleSwapPlayers]);
+  }, [isDragging, dragKey, handleSwapPlayers, assignedPlayers]);
 
-  return {
-    isDragging,
-    dragKey,
-    dragPos,
-    startDrag,
-  };
+  return { isDragging, dragKey, dragPos, startDrag };
 };

@@ -1,6 +1,7 @@
 /* Háttér */
 .mainPage {
   height: 100vh;
+  overflow-x: hidden;
 }
 
 /* Layout */

@@ -1,14 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
 import "./SBC.css";
-import SpecialPack from "../../assets/specialpack.png";
 import PlayerCard from "../PlayerCard/PlayerCard.jsx";
 import RatingChemDisplay from "../RatingChemDisplay/RatingChemDisplay.jsx";
 import Gamelayout from "../Gamelayout/Gamelayout.jsx";
 import Grab from "../Grab/Grab.jsx";
 import PlayersModal from "../PlayersModal/PlayersModal.jsx";
 import SbcRequirementDisplay from "../sbcRequirementDisplay/sbcRequirementDisplay.jsx";
-import { useDrag } from "../../utilities/useDrag.js";
+import { Drag } from "../../utilities/drag.js";
 import {
   chemImg,
   ratingStars,
@@ -21,6 +20,8 @@ import {
   checkRequirement,
   getSquadStats,
 } from "../../utilities/utilities.js";
+
+import SpecialPack from "../../assets/specialpack.png";
 import scream from "../../assets/screamSbc.png";
 import flashback from "../../assets/flashbackSbc.png";
 import toty from "../../assets/totySbc.png";
@@ -67,7 +68,6 @@ function SBC() {
     upgrades: [],
     foundations: [],
   });
-
   const [activeTab, setActiveTab] = useState("challenges");
   const [sbcGameStarted, setSbcGameStarted] = useState(false);
   const [gameLayout, setGameLayout] = useState(null);
@@ -118,7 +118,7 @@ function SBC() {
   }, []);
 
   //! Aktuális tab
-  const current = data[activeTab] || [];
+  const current = data[activeTab];
 
   //! Formáció megkeresése a végponton
   const getLayoutByFormation = async (formationName) => {
@@ -131,7 +131,7 @@ function SBC() {
         (f) => f.formation === formationName,
       );
 
-      return found ? found.layout : null;
+      return found.layout;
     } catch (error) {
       console.log(error);
     }
@@ -166,8 +166,8 @@ function SBC() {
     setSelectedIndex(index);
     const isStarting11 = typeof index === "number";
     if (isStarting11) {
-      const slotPos = gameLayout[index]?.pos;
-      setSelectedPosition(slotPos?.toLowerCase());
+      const slotPos = gameLayout[index].pos;
+      setSelectedPosition(slotPos.toLowerCase());
     } else {
       setSelectedPosition("");
     }
@@ -193,7 +193,7 @@ function SBC() {
       const resIndex = null;
       const slotPos = starting11
         ? gameLayout[selectedIndex].pos
-        : benchLayout.find((s) => s.id === selectedIndex)?.pos;
+        : benchLayout.find((s) => s.id === selectedIndex).pos;
 
       if (existingPlayer) {
         await putMethodFetch("http://127.0.0.1:3000/api/draft/replace", {
@@ -244,10 +244,10 @@ function SBC() {
         const b = assignedPlayers[to];
 
         setAssignedPlayers((prev) => {
-          const next = { ...prev };
-          next[from] = b;
-          next[to] = a;
-          return next;
+          const players = { ...prev };
+          players[from] = b;
+          players[to] = a;
+          return players;
         });
 
         const getSlotPosByKey = (key) => {
@@ -275,8 +275,8 @@ function SBC() {
     [assignedPlayers, gameLayout],
   );
 
-  //! Usedrag használata
-  const { isDragging, dragKey, dragPos, startDrag } = useDrag(
+  //! Drag használata
+  const { isDragging, dragKey, dragPos, startDrag } = Drag(
     assignedPlayers,
     handleSwapPlayers,
   );

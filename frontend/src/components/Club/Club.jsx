@@ -12,23 +12,20 @@ function Club() {
   const [selectedPlayer, setSelectedPlayer] = useState(null);
 
   //!Club fetch
-  const myClubFetch = async () => {
-    try {
-      const clubPlayers = await getMethodFetch(
-        `http://127.0.0.1:3000/api/myclub`,
-      );
-
-      setMyClubPlayers(clubPlayers);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
-    const init = async () => {
-      await myClubFetch();
+    const myClubFetch = async () => {
+      try {
+        const clubPlayers = await getMethodFetch(
+          `http://127.0.0.1:3000/api/myclub`,
+        );
+
+        setMyClubPlayers(clubPlayers);
+      } catch (error) {
+        console.log(error);
+      }
     };
-    init();
+
+    myClubFetch();
   }, []);
 
   //! Confirm modal meghívása

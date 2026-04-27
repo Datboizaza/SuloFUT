@@ -55,8 +55,8 @@ function Leaderboard() {
       try {
         const user = await getMethodFetch("http://127.0.0.1:3000/api/users/me");
         setCurrentUser(user.username);
-      } catch (err) {
-        console.log(err);
+      } catch (error) {
+        console.log(error);
       }
     };
 

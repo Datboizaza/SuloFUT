@@ -31,10 +31,8 @@ router.get("/", async (request, response) => {
       results: users,
     });
   } catch (error) {
-    console.log("GET /users error:", error);
-    response.status(500).json({
-      message: "Ez a végpont nem működik.",
-    });
+    console.log("GET /api/users error:", error);
+    response.status(500).json({ message: "Internal server error" });
   }
 });
 
@@ -56,10 +54,8 @@ router.post("/", async (request, response) => {
         message: "This username is taken",
       });
     }
-    response.status(500).json({
-      message: "Ez a végpont nem működik.",
-    });
-    console.log("POST /users error:", error);
+    console.log("POST /api/users error:", error);
+    response.status(500).json({ message: "Internal server error" });
   }
 });
 
@@ -79,7 +75,7 @@ router.post("/login", async (request, response) => {
 
     response.status(200).json({ message: "Logged in" });
   } catch (error) {
-    console.log("POST /users/login error:", error);
+    console.log("POST /api/users/login error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -96,7 +92,7 @@ router.post("/login/admin", async (request, response) => {
     request.session.adminId = user.id;
     response.status(200).json({ message: "Logged in" });
   } catch (error) {
-    console.log("POST /users/login error:", error);
+    console.log("POST /api/users/login/admin error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -109,7 +105,7 @@ router.get("/me", async (request, response) => {
     const user = await usersQueries.getUserById(request.session.userId);
     response.status(200).json(user);
   } catch (error) {
-    console.log("GET /users/me error:", error);
+    console.log("GET /api/users/me error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -126,7 +122,7 @@ router.get("/admin/me", async (request, response) => {
       username: admin.username,
     });
   } catch (error) {
-    console.log("GET /users/admin/me error:", error);
+    console.log("GET /api/users/admin/me error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });
@@ -245,7 +241,7 @@ router.post("/me/objectiveprogress", async (request, response) => {
       message: "Progress updated",
     });
   } catch (error) {
-    console.log("GET /api/objectiveprogress error:", error);
+    console.log("POST /api/users/me/objectiveprogress error:", error);
     response.status(500).json({
       message: "Internal server error",
     });
@@ -352,7 +348,7 @@ router.post("/admin/delete", async (request, response) => {
       response.status(200).json({ message: "User deleted" });
     }
   } catch (error) {
-    console.log("POST /users/delete error:", error);
+    console.log("POST /users/admin/delete error:", error);
     response.status(500).json({ message: "Internal server error" });
   }
 });

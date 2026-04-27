@@ -6,19 +6,10 @@ function StatBarMainPage() {
   const [coinNumber, setCoinNumber] = useState(0);
 
   useEffect(() => {
-    const getMethodFetch = async (url) => {
-      const response = await fetch(url, { credentials: "include" });
-      if (!response.ok) {
-        throw new Error("GET hiba");
-      }
-      return await response.json();
-    };
-
     const fetchCoins = async () => {
       try {
         const data = await getMethodFetch(
           "http://127.0.0.1:3000/api/users/me/coins",
-          { credentials: "include" },
         );
         setCoinNumber(data.coinNumber);
       } catch (error) {
@@ -46,5 +37,17 @@ function StatBarMainPage() {
     </>
   );
 }
+
+const getMethodFetch = async (url) => {
+  try {
+    const response = await fetch(url, { credentials: "include" });
+    if (!response.ok) {
+      throw new Error(`GET hiba: ${response.status} ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    throw new Error(`Hiba történt: ${error.message}`);
+  }
+};
 
 export default StatBarMainPage;

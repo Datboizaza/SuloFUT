@@ -38,7 +38,6 @@ async function addPack(userId, packId) {
         INSERT INTO userpacks (user_id, pack_id)
         VALUES (?, ?)
   `;
-
   try {
     const [rows] = await pool.execute(query, [userId, packId]);
     return rows;

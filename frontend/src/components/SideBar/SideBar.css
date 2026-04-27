@@ -9,7 +9,7 @@
   src: url("../../assets/EaSportsFc_FontByGibsfut-Regular.ttf");
 }
 
-/*------------------Sidebar elrendezések--------------*/
+/* Sidebar elrendezések */
 #sideBar {
   height: 100vh;
   width: 20vw;
@@ -60,7 +60,7 @@
   margin-top: 10%;
 }
 
-/*------------------Szövegek------------------*/
+/* Szövegek */
 #navbarItem {
   color: white;
   width: 100%;
@@ -86,7 +86,7 @@
   transform: scale(1.1);
 }
 
-/*------------Ikonok/képek---------------*/
+/* Ikonok/képek */
 #navbarIcon {
   height: 4vh;
 }
@@ -144,7 +144,7 @@
 
 /*------------------Media queries---------------------*/
 @media screen and (min-width: 768px) and (max-width: 991px) {
-  /*------------Sidebar elrendezések-------------*/
+  /* Sidebar elrendezésekű */
   #sideBar {
     height: 13vh;
     width: 100vw;
@@ -172,7 +172,7 @@
     height: 13vh;
   }
 
-  /*------------------Szövegek------------------*/
+  /* Szövegek */
   #navbarItem:hover {
     border: none;
     transform: scale(1.05);
@@ -186,7 +186,7 @@
     font-size: 20px !important;
   }
 
-  /*------------Ikonok/képek---------------*/
+  /* Ikonok/képek */
   #navbarIcon {
     height: 4vh;
   }
@@ -199,7 +199,7 @@
 }
 
 @media screen and (max-width: 767px) {
-  /*------------Sidebar elrendezések-------------*/
+  /* Sidebar elrendezések */
   #sideBar {
     height: 13vh;
     width: 100vw;
@@ -227,7 +227,7 @@
     height: 13vh;
   }
 
-  /*------------------Szövegek------------------*/
+  /* Szövegek */
   #navbarItem:hover {
     border: none;
     transform: scale(1.05);
@@ -241,7 +241,7 @@
     font-size: 17px !important;
   }
 
-  /*------------Ikonok/képek---------------*/
+  /* Ikonok/képek */
   #navbarIcon {
     height: 4vh;
   }
