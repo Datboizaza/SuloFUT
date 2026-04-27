@@ -185,8 +185,9 @@
 }
 .claimed {
   border: none;
-  background: rgb(48, 255, 172);
+  background: rgb(0, 156, 122);
   color: rgb(65, 65, 65);
+  animation: none;
 }
 .claimed:hover {
   transform: none;
