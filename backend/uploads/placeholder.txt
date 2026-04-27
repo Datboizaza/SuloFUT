@@ -1,0 +1,1 @@
+Csak amiatt kell, hogy a mappa ne tűnjön el a repository-ból!
