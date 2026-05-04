@@ -12,7 +12,7 @@
 
 \- Ajánlott követelmény: Bármilyen négymagos processzor ( Intel Core i5 vagy Amd Ryzen 5)
 
-2.2 Videókártya (CPU)
+2.2 Videókártya (GPU)
 
 \- Minimum követelmény: Bármilyen hardver gyorsítást támogató beépített videókártya ( Intel UHD vagy Amd Radeon Graphics)
 
