@@ -350,16 +350,7 @@ router.get("/chemistry", async (request, response) => {
     function inPosition(player) {
       const slotPos = player.slotPos;
       const positions = player.player_positions.split(", ");
-      if (!slotPos || slotPos === "ANY") return true;
-
-      if (slotPos === "DEF")
-        return positions.some((p) => ["LB", "CB", "RB"].includes(p));
-      if (slotPos === "MID")
-        return positions.some((p) =>
-          ["CDM", "CM", "CAM", "LM", "RM"].includes(p),
-        );
-      if (slotPos === "ATT")
-        return positions.some((p) => ["ST", "LW", "RW"].includes(p));
+      if (!slotPos) return true;
 
       return positions.includes(slotPos);
     }
