@@ -311,13 +311,13 @@ router.post("/delete", async (request, response) => {
   try {
     const userId = request.session.userId;
 
-    await usersQueries.deleteUser(userId);
     await usersQueries.deleteUserPacks(userId);
     await usersQueries.deleteUserObjClaims(userId);
     await usersQueries.deleteUserSubobjProg(userId);
     await usersQueries.deleteUserClub(userId);
     await usersQueries.deleteUserStats(userId);
     await usersQueries.deleteUserSbc(userId);
+    await usersQueries.deleteUser(userId);
 
     request.session.destroy(() => {
       response.clearCookie("connect.sid");
