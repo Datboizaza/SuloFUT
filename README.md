@@ -62,4 +62,4 @@
 
 \- Az oldal használatához a felhasználónak egy böngészőre lesz szüksége, a keresősávban a következő link beírásával juthat el az oldalra: <http://127.0.0.1:3001/>
 
-\- Ezt követően a felhasználó regisztálni is tud (Aminek a módját a Fő funkciók ismertetésekor részletesen elmagyarázzuk)
+\- Ezt követően a felhasználó regisztálni is tud (Aminek a módját a Fő funkciók ismertetésekor részletesen elmagyarázzuk a Dokumentációban)
